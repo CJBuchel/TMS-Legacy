@@ -9,7 +9,6 @@ Future<int> timerStartRequest() async {
     var res = await Network.serverPost("timer/start", message.toJson());
 
     if (res.item1) {
-      Logger().i("Good Timer Start Request");
       return res.item2;
     } else {
       return res.item2;

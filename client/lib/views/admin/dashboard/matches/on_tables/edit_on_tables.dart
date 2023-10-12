@@ -18,7 +18,16 @@ class EditOnTables extends StatefulWidget {
 }
 
 class _EditOnTablesState extends State<EditOnTables> {
-  late GameMatch _match;
+  GameMatch _match = GameMatch(
+    complete: false,
+    matchNumber: "",
+    gameMatchDeferred: false,
+    startTime: "",
+    endTime: "",
+    exhibitionMatch: false,
+    roundNumber: 0,
+    matchTables: [],
+  );
 
   void _updateMatch() {
     updateMatchRequest(widget.matchNumber, _match).then((res) {
@@ -55,58 +64,49 @@ class _EditOnTablesState extends State<EditOnTables> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _getMatch();
-  }
-
-  void _editOnTabledDialog() {
+  void _editOnTablesDialog() {
     showDialog(
       context: context,
       builder: (context) {
-        return LayoutBuilder(
-          builder: ((context, constraints) {
-            double width = (Responsive.isMobile(context) || Responsive.isTablet(context)) ? constraints.maxWidth * 0.9 : constraints.maxWidth * 0.5;
-            double height =
-                (Responsive.isMobile(context) || Responsive.isTablet(context)) ? constraints.maxHeight * 0.9 : constraints.maxHeight * 0.5;
+        return LayoutBuilder(builder: (context, constraints) {
+          double width = (Responsive.isMobile(context) || Responsive.isTablet(context)) ? constraints.maxWidth * 0.9 : constraints.maxWidth * 0.5;
+          double height = (Responsive.isMobile(context) || Responsive.isTablet(context)) ? constraints.maxHeight * 0.9 : constraints.maxHeight * 0.5;
 
-            return AlertDialog(
-              title: Row(
-                children: [
-                  const Icon(Icons.edit, color: Colors.pink),
-                  Text("Editing Tables For Match ${widget.matchNumber}"),
-                ],
-              ),
-              content: SizedBox(
-                height: height,
-                width: width,
-                child: OnTables(
-                  teams: widget.teams,
-                  match: _match,
-                  onMatchUpdate: (match) {
-                    _setMatch(match);
-                  },
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Cancel"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    _updateMatch();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Update", style: TextStyle(color: Colors.red)),
-                ),
+          return AlertDialog(
+            title: Row(
+              children: [
+                const Icon(Icons.edit, color: Colors.pink),
+                Text(" Editing Tables For Match ${widget.matchNumber}"),
               ],
-            );
-          }),
-        );
+            ),
+            content: SizedBox(
+              height: height,
+              width: width,
+              child: OnTables(
+                teams: widget.teams,
+                match: _match,
+                onMatchUpdate: (match) {
+                  _setMatch(match);
+                },
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  _updateMatch();
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Update", style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          );
+        });
       },
     );
   }
@@ -117,7 +117,7 @@ class _EditOnTablesState extends State<EditOnTables> {
       icon: const Icon(Icons.edit, color: Colors.pink),
       onPressed: () async {
         await _getMatch();
-        _editOnTabledDialog();
+        _editOnTablesDialog();
       },
     );
   }

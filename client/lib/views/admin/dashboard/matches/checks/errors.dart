@@ -18,7 +18,6 @@ class MatchErrors extends StatefulWidget {
   final List<Team> teams;
   final Event? event;
   final double? fontSize;
-  final Function(List<MatchError>)? onErrors;
 
   const MatchErrors({
     Key? key,
@@ -26,7 +25,6 @@ class MatchErrors extends StatefulWidget {
     required this.teams,
     required this.event,
     this.fontSize,
-    this.onErrors,
   }) : super(key: key);
 
   @override
@@ -80,10 +78,6 @@ class _MatchErrorsState extends State<MatchErrors> {
       ...onTableErrors(),
       ...teamErrors(),
     ];
-
-    if (widget.onErrors != null) {
-      widget.onErrors!.call(_errors);
-    }
   }
 
   @override
@@ -98,10 +92,11 @@ class _MatchErrorsState extends State<MatchErrors> {
     setErrors();
   }
 
-  // can only ever be either match error or team error
   String? getTooltips(MatchError e) {
-    if (e.matchNumber != null) {
-      return "Match ${e.matchNumber}: ${e.message}";
+    if (e.matchNumber != null && e.teamNumber != null) {
+      return "Session ${e.matchNumber} - Team ${e.teamNumber}: ${e.message}";
+    } else if (e.matchNumber != null) {
+      return "Session ${e.matchNumber}: ${e.message}";
     } else if (e.teamNumber != null) {
       return "Team ${e.teamNumber}: ${e.message}";
     } else {

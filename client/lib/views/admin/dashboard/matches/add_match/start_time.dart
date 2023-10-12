@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tms/schema/tms_schema.dart';
-import 'package:tms/views/admin/dashboard/matches/match_edit/edit_time.dart';
+import 'package:tms/views/shared/edit_time.dart';
 import 'package:tms/views/shared/parse_util.dart';
 import 'package:tms/views/shared/sorter_util.dart';
 
-class StartTime extends StatelessWidget {
+class MatchStartTime extends StatelessWidget {
   final List<GameMatch> matches;
   final TextEditingController controller;
   final String? label;
@@ -12,7 +12,7 @@ class StartTime extends StatelessWidget {
   final Function(String)? onProposedMatchNumber;
   final Function(String)? onProposedEndTime;
 
-  const StartTime({
+  const MatchStartTime({
     Key? key,
     this.label,
     this.initialTime,

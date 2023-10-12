@@ -38,7 +38,7 @@ class DeleteMatch extends StatelessWidget {
           title: const Row(
             children: [
               Icon(Icons.warning, color: Colors.red),
-              Text("Delete Match?"),
+              Text(" Delete Match?"),
             ],
           ),
           content: Text("Are you sure you want to delete match $matchNumber?"),

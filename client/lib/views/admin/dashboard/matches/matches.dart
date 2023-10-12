@@ -5,7 +5,7 @@ import 'package:tms/mixins/auto_subscribe.dart';
 import 'package:tms/mixins/local_db_mixin.dart';
 import 'package:tms/requests/match_requests.dart';
 import 'package:tms/schema/tms_schema.dart';
-import 'package:tms/views/admin/dashboard/matches/info.dart';
+import 'package:tms/views/admin/dashboard/matches/match_info.dart';
 import 'package:tms/views/admin/dashboard/matches/match_edit_table.dart';
 import 'package:tms/views/shared/network_error_popup.dart';
 import 'package:tms/views/shared/sorter_util.dart';
@@ -146,7 +146,7 @@ class _MatchesState extends State<Matches> with AutoUnsubScribeMixin, LocalDatab
                   ),
                 ),
               ),
-              child: Info(
+              child: MatchInfo(
                 matches: _matches,
                 teams: _teams,
                 judgingSessions: _judgingSessions,

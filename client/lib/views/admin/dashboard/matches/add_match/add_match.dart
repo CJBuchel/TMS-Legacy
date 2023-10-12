@@ -5,7 +5,7 @@ import 'package:tms/requests/match_requests.dart';
 import 'package:tms/schema/tms_schema.dart';
 import 'package:tms/views/admin/dashboard/matches/add_match/round_number.dart';
 import 'package:tms/views/admin/dashboard/matches/add_match/start_time.dart';
-import 'package:tms/views/admin/dashboard/matches/match_edit/edit_time.dart';
+import 'package:tms/views/shared/edit_time.dart';
 import 'package:tms/views/shared/network_error_popup.dart';
 
 class AddMatch extends StatelessWidget {
@@ -23,12 +23,12 @@ class AddMatch extends StatelessWidget {
 
   void _addMatch(BuildContext context) {
     final GameMatch match = GameMatch(
-      // required fields
+      // default fields
       complete: false,
       gameMatchDeferred: false,
       matchTables: [],
 
-      // addition fields
+      // edited fields
       matchNumber: _matchNumberController.text,
       roundNumber: int.tryParse(_roundNumberController.text) ?? 1,
       startTime: _startTimeController.text,
@@ -68,7 +68,7 @@ class AddMatch extends StatelessWidget {
   }
 
   Widget _editStartTime() {
-    return StartTime(
+    return MatchStartTime(
       matches: matches,
       controller: _startTimeController,
       onProposedMatchNumber: (value) {
@@ -125,7 +125,7 @@ class AddMatch extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                if (_roundNumberController.text.isNotEmpty) {
+                if (_roundNumberController.text.isNotEmpty && _matchNumberController.text.isNotEmpty) {
                   _addMatch(context);
                   Navigator.of(context).pop();
                 }

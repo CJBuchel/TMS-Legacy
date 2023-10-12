@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tms/requests/match_requests.dart';
 import 'package:tms/schema/tms_schema.dart';
-import 'package:tms/views/admin/dashboard/matches/match_edit/edit_match_checkbox.dart';
-import 'package:tms/views/admin/dashboard/matches/match_edit/edit_time.dart';
+import 'package:tms/views/shared/edit_checkbox.dart';
+import 'package:tms/views/shared/edit_time.dart';
 import 'package:tms/views/shared/network_error_popup.dart';
 
 class EditMatch extends StatefulWidget {
   final String matchNumber;
-
-  const EditMatch({Key? key, required this.matchNumber}) : super(key: key);
+  final Function()? onEdit;
+  const EditMatch({Key? key, required this.matchNumber, this.onEdit}) : super(key: key);
 
   @override
   State<EditMatch> createState() => _EditMatchState();
@@ -23,7 +23,16 @@ class _EditMatchState extends State<EditMatch> {
   final TextEditingController _endTimeController = TextEditingController();
 
   // edits
-  late GameMatch _updatedMatch;
+  GameMatch _updatedMatch = GameMatch(
+    complete: false,
+    gameMatchDeferred: false,
+    endTime: "",
+    exhibitionMatch: false,
+    matchNumber: "",
+    matchTables: [],
+    roundNumber: 0,
+    startTime: "",
+  );
 
   Future<void> _getMatch() async {
     await getMatchRequest(widget.matchNumber).then((res) {
@@ -39,17 +48,12 @@ class _EditMatchState extends State<EditMatch> {
               _matchNumberController.text = m.matchNumber;
               _roundNumberController.text = m.roundNumber.toString();
               _startTimeController.text = m.startTime;
+              _endTimeController.text = m.endTime;
             });
           }
         }
       }
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getMatch();
   }
 
   void _updateMatch() {
@@ -70,6 +74,8 @@ class _EditMatchState extends State<EditMatch> {
           ),
         );
       }
+
+      widget.onEdit?.call();
     });
   }
 
@@ -107,7 +113,7 @@ class _EditMatchState extends State<EditMatch> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label),
-          MatchCheckbox(
+          EditCheckbox(
             value: initialValue,
             onChanged: (value) => onChanged(value),
           )
@@ -120,74 +126,67 @@ class _EditMatchState extends State<EditMatch> {
     showDialog(
       context: context,
       builder: (context) {
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            return AlertDialog(
-              title: Row(
-                children: [
-                  const Icon(Icons.edit, color: Colors.blue),
-                  Text(" Editing Match ${widget.matchNumber}"),
-                ],
-              ),
-              content: SizedBox(
-                // width: constraints.maxWidth * 0.9,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _editMatchNumber(),
-                      _editRoundNumber(),
-                      EditTime(
-                        label: "Start Time",
-                        controller: _startTimeController,
-                        initialTime: _updatedMatch.startTime,
-                      ),
-                      EditTime(
-                        label: "End Time",
-                        controller: _endTimeController,
-                        initialTime: _updatedMatch.endTime,
-                      ),
-                      _checkboxContainer("Complete", _updatedMatch.complete, (value) {
-                        if (mounted) {
-                          setState(() {
-                            _updatedMatch.complete = value;
-                          });
-                        }
-                      }),
-                      _checkboxContainer("Deferred", _updatedMatch.gameMatchDeferred, (value) {
-                        if (mounted) {
-                          setState(() {
-                            _updatedMatch.gameMatchDeferred = value;
-                          });
-                        }
-                      }),
-                      _checkboxContainer("Exhibition", _updatedMatch.exhibitionMatch, (value) {
-                        if (mounted) {
-                          setState(() {
-                            _updatedMatch.exhibitionMatch = value;
-                          });
-                        }
-                      }),
-                    ],
-                  ),
+        return AlertDialog(
+          title: Row(
+            children: [
+              const Icon(Icons.edit, color: Colors.blue),
+              Text(" Editing Match ${widget.matchNumber}"),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                _editMatchNumber(),
+                _editRoundNumber(),
+                EditTime(
+                  label: "Start Time",
+                  controller: _startTimeController,
+                  initialTime: _updatedMatch.startTime,
                 ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Cancel"),
+                EditTime(
+                  label: "End Time",
+                  controller: _endTimeController,
+                  initialTime: _updatedMatch.endTime,
                 ),
-                TextButton(
-                  onPressed: () {
-                    _updateMatch();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Update", style: TextStyle(color: Colors.red)),
-                ),
+                _checkboxContainer("Complete", _updatedMatch.complete, (value) {
+                  if (mounted) {
+                    setState(() {
+                      _updatedMatch.complete = value;
+                    });
+                  }
+                }),
+                _checkboxContainer("Deferred", _updatedMatch.gameMatchDeferred, (value) {
+                  if (mounted) {
+                    setState(() {
+                      _updatedMatch.gameMatchDeferred = value;
+                    });
+                  }
+                }),
+                _checkboxContainer("Exhibition", _updatedMatch.exhibitionMatch, (value) {
+                  if (mounted) {
+                    setState(() {
+                      _updatedMatch.exhibitionMatch = value;
+                    });
+                  }
+                }),
               ],
-            );
-          },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                _updateMatch();
+                Navigator.of(context).pop();
+              },
+              child: const Text("Update", style: TextStyle(color: Colors.red)),
+            ),
+          ],
         );
       },
     );

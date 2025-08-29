@@ -17,10 +17,6 @@ pub struct TmsConfig {
   #[arg(short, long, default_value_t = 8080)]
   pub port: u16,
 
-  /// Enable API Playground (GraphQL HTML Page)
-  #[arg(long, default_value_t = false)]
-  pub api_playground: bool,
-
   /// The path to the Key Value DB
   #[arg(long, default_value = "tms.db")]
   pub db_path: String,

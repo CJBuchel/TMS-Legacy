@@ -19,10 +19,59 @@ async fn main() {
   if config.no_gui {
     // Start without GUI
     log::info!("Starting TMS (No GUI)");
-    let server = server::TmsServer::new(Some(config));
-    match server.run().await {
-      Ok(_) => log::info!("Server exited gracefully"),
-      Err(e) => log::error!("Server exited with error: {}", e),
+    let (server, handle) = server::TmsServer::new(Some(config));
+
+    // Spawn the server task
+    let mut server_task = tokio::spawn(async move { server.run().await });
+
+    // Set up signal handling for graceful shutdown
+    let shutdown_signal = async {
+      #[cfg(unix)]
+      {
+        use tokio::signal::unix::{signal, SignalKind};
+
+        let mut sigterm = signal(SignalKind::terminate()).expect("Failed to register SIGTERM handler");
+        let mut sigint = signal(SignalKind::interrupt()).expect("Failed to register SIGINT handler");
+
+        tokio::select! {
+          _ = sigterm.recv() => log::info!("Received SIGTERM"),
+          _ = sigint.recv() => log::info!("Received SIGINT"),
+        }
+      }
+
+      #[cfg(windows)]
+      {
+        tokio::signal::ctrl_c().await.expect("Failed to listen for Ctrl+C");
+        log::info!("Received Ctrl+C");
+      }
+    };
+
+    tokio::select! {
+      // Wait for server to complete normally
+      result = &mut server_task => {
+        match result {
+          Ok(Ok(_)) => log::info!("Server exited gracefully"),
+          Ok(Err(e)) => log::error!("Server exited with error: {}", e),
+          Err(e) => log::error!("Server task panicked: {}", e),
+        }
+      }
+
+      // Wait for shutdown signal (Ctrl+C, SIGTERM, etc.)
+      _ = shutdown_signal => {
+        log::info!("Shutdown signal received, stopping server gracefully...");
+        handle.shutdown();
+
+        // Wait for server to actually stop (with timeout)
+        match tokio::time::timeout(std::time::Duration::from_secs(5), server_task).await {
+          Ok(Ok(Ok(_))) => log::info!("Server stopped gracefully"),
+          Ok(Ok(Err(e))) => log::error!("Server stopped with error: {}", e),
+          Ok(Err(e)) => log::error!("Server task panicked during shutdown: {}", e),
+          Err(_) => {
+            log::error!("Server did not stop within 5 seconds, forcing exit");
+            std::process::exit(1);
+          }
+        }
+      }
     }
   } else {
     // Start with GUI
@@ -79,12 +128,12 @@ async fn main() {
 }
 
 async fn run_server_management(mut rx: mpsc::Receiver<GuiMessage>, server_state: Arc<Mutex<ServerState>>) {
-  // The server instance (None initially)
-  let mut server_instance: Option<server::TmsServer> = None;
+  // The server task and shutdown handle (None initially)
+  let mut server_instance: Option<(tokio::task::JoinHandle<anyhow::Result<()>>, server::TmsServerHandle)> = None;
 
   // Server management loop
   loop {
-    if let Some(server) = &mut server_instance {
+    if let Some((server_task, _)) = &mut server_instance {
       // Server is running - select between GUI messages and server events
       tokio::select! {
         Some(msg) = rx.recv() => match msg {
@@ -92,23 +141,38 @@ async fn run_server_management(mut rx: mpsc::Receiver<GuiMessage>, server_state:
           // Stop server
           GuiMessage::StopServer => {
             log::warn!("Stopping server");
-            server_instance = None;
+
+            // Request graceful shutdown using the handle
+            if let Some((_, handle)) = server_instance.take() {
+              handle.shutdown();
+            }
+
             *server_state.lock() = ServerState::Stopped;
           },
 
           // Exit
-          GuiMessage::Exit => break,
+          GuiMessage::Exit => {
+            // Shutdown server if running
+            if let Some((_, handle)) = server_instance.take() {
+              handle.shutdown();
+            }
+            break;
+          },
           _ => {}
         },
 
-        result = server.run() => {
+        result = server_task => {
           match result {
-            Ok(_) => {
+            Ok(Ok(_)) => {
               log::info!("Server exited gracefully");
               *server_state.lock() = ServerState::Stopped;
             },
-            Err(e) => {
+            Ok(Err(e)) => {
               log::error!("Server exited with error: {}", e);
+              *server_state.lock() = ServerState::Error(e.to_string());
+            },
+            Err(e) => {
+              log::error!("Server task panicked: {}", e);
               *server_state.lock() = ServerState::Error(e.to_string());
             }
           }
@@ -124,8 +188,14 @@ async fn run_server_management(mut rx: mpsc::Receiver<GuiMessage>, server_state:
           // Start server
           GuiMessage::StartServer(config) => {
             log::info!("Starting server");
-            let server = Some(server::TmsServer::new(Some(config)));
-            server_instance = server;
+
+            // Create server and handle using the new API
+            let (server, handle) = server::TmsServer::new(Some(config));
+
+            // Spawn server task
+            let server_task = tokio::spawn(async move { server.run().await });
+
+            server_instance = Some((server_task, handle));
             *server_state.lock() = ServerState::Running;
           }
 

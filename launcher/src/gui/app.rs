@@ -59,7 +59,7 @@ impl eframe::App for Launcher {
 
       // Port
       ui.horizontal(|ui| {
-        ui.label("Port:");
+        ui.label("Web Port:");
         let mut port_text = self.active_cfg.port.clone();
         let response = ui.add_enabled(
           !is_running,
@@ -78,19 +78,6 @@ impl eframe::App for Launcher {
 
       ui.separator();
       ui.add_space(10.0);
-
-      // Enable playground
-      ui.horizontal(|ui| {
-        ui.add_enabled(
-          !is_running,
-          egui::Checkbox::new(&mut self.active_cfg.api_playground, "Enable API Playground"),
-        );
-
-        // add orange text warning if enabled
-        if self.active_cfg.api_playground {
-          ui.label(RichText::new("Warning: For Debug Only!").color(Color32::ORANGE));
-        }
-      });
 
       // Enable TLS
       ui.horizontal(|ui| {

@@ -1,7 +1,7 @@
 use anyhow::Result;
 use tokio::sync::oneshot;
 
-use crate::TmsConfig;
+use crate::{TmsConfig, auth::initialize_jwt_secret, db::initialize_db, web::TmsWeb};
 
 const SERVER_LOOP_PERIOD_MS: u64 = 10;
 const SERVER_WARNING_THRESHOLD_MS: u64 = 100;
@@ -39,13 +39,22 @@ impl TmsServer {
   pub async fn run(mut self) -> Result<()> {
     log::info!("Server running with config: {:?}", self.config);
 
-    // TODO: implement startup sequences
-
     // Take the shutdown receiver (can only be used once)
     let mut shutdown_rx = self.shutdown_rx.take().expect("Server can only be run once");
 
     // Create interval for regular server ticks
     let mut interval = tokio::time::interval(tokio::time::Duration::from_millis(SERVER_LOOP_PERIOD_MS));
+
+    // Setups
+    initialize_db(&self.config.db_path).await?;
+    initialize_jwt_secret().await?;
+
+    let web_server = TmsWeb::new(self.config.addr, self.config.port);
+    tokio::spawn(async move {
+      if let Err(e) = web_server.run().await {
+        log::error!("Web server error: {:?}", e);
+      }
+    });
 
     // Main server loop using select!
     loop {
@@ -54,7 +63,6 @@ impl TmsServer {
         _ = interval.tick() => {
           // Do server work here
 
-          // Optional: Add performance monitoring
           let start = std::time::Instant::now();
           self.update().await?;
           let duration = start.elapsed();
@@ -79,8 +87,6 @@ impl TmsServer {
   }
 
   async fn update(&self) -> Result<()> {
-    // @TODO: implement actual server work here
-    // This is where your main server logic will go
     Ok(())
   }
 }

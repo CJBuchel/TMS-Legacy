@@ -25,24 +25,18 @@ async fn main() {
     let mut server_task = tokio::spawn(async move { server.run().await });
 
     // Set up signal handling for graceful shutdown
+    // Note: In GUI applications without a console, Ctrl+C won't work
+    // but this is fine - GUI apps should be closed via the window close button
     let shutdown_signal = async {
-      #[cfg(unix)]
-      {
-        use tokio::signal::unix::{signal, SignalKind};
-
-        let mut sigterm = signal(SignalKind::terminate()).expect("Failed to register SIGTERM handler");
-        let mut sigint = signal(SignalKind::interrupt()).expect("Failed to register SIGINT handler");
-
-        tokio::select! {
-          _ = sigterm.recv() => log::info!("Received SIGTERM"),
-          _ = sigint.recv() => log::info!("Received SIGINT"),
+      // tokio::signal::ctrl_c() works on both Unix and Windows
+      match tokio::signal::ctrl_c().await {
+        Ok(_) => log::info!("Received shutdown signal (Ctrl+C)"),
+        Err(e) => {
+          log::debug!("Signal handler failed (expected in GUI mode): {}", e);
+          // In GUI mode without console, we'll rely on the GUI shutdown mechanism
+          // Keep the future alive indefinitely so the select! focuses on server completion
+          std::future::pending::<()>().await;
         }
-      }
-
-      #[cfg(windows)]
-      {
-        tokio::signal::ctrl_c().await.expect("Failed to listen for Ctrl+C");
-        log::info!("Received Ctrl+C");
       }
     };
 
@@ -56,7 +50,7 @@ async fn main() {
         }
       }
 
-      // Wait for shutdown signal (Ctrl+C, SIGTERM, etc.)
+      // Wait for shutdown signal (Ctrl+C, etc.)
       _ = shutdown_signal => {
         log::info!("Shutdown signal received, stopping server gracefully...");
         handle.shutdown();
@@ -79,7 +73,7 @@ async fn main() {
 
     // Create channel for GUI messages
     let (gui_tx, gui_rx) = mpsc::channel::<GuiMessage>(32);
-    let (done_tx, _) = oneshot::channel();
+    let (done_tx, done_rx) = oneshot::channel();
 
     // Create shared server state
     let shared_state = Arc::new(Mutex::new(ServerState::Stopped));
@@ -88,7 +82,7 @@ async fn main() {
     let server_state = shared_state.clone();
 
     // Start server management thread
-    let mut server_handle = tokio::task::spawn_blocking(move || {
+    let server_handle = tokio::task::spawn_blocking(move || {
       let rt = tokio::runtime::Builder::new_multi_thread()
         .enable_all()
         .build()
@@ -101,27 +95,39 @@ async fn main() {
       });
     });
 
-    // Start GUI
+    // Start GUI - this will block until the GUI exits
+    // The GUI framework will handle window close events and system shutdown
     if let Err(e) = gui::run_gui(gui_tx, shared_state, config) {
       log::error!("GUI error: {}", e);
     }
 
-    // Wait for server management thread to exit
-    log::info!("GUI closed, waiting for server to exit...");
+    // GUI has closed, wait for server management thread to clean up
+    log::info!("GUI closed, waiting for server management to exit...");
 
-    let timeout_result = tokio::time::timeout(std::time::Duration::from_secs(5), &mut server_handle).await;
+    // Wait for the done signal or timeout
+    tokio::select! {
+      _ = done_rx => {
+        log::info!("Server management thread signaled completion");
+      }
+      _ = tokio::time::sleep(std::time::Duration::from_secs(5)) => {
+        log::warn!("Server management thread did not signal completion within 5 seconds");
+      }
+    }
+
+    // Wait for the actual thread to finish with a timeout
+    let timeout_result = tokio::time::timeout(std::time::Duration::from_secs(3), server_handle).await;
 
     match timeout_result {
-      Ok(result) => {
-        if let Err(e) = result {
-          log::error!("Management thread exited with error: {}", e);
-        } else {
-          log::info!("Management thread exited gracefully");
-        }
+      Ok(Ok(_)) => {
+        log::info!("Server management thread exited gracefully");
+      }
+      Ok(Err(e)) => {
+        log::error!("Server management thread exited with error: {}", e);
       }
       Err(_) => {
-        log::error!("Management thread did not exit in time, terminating...");
-        server_handle.abort();
+        log::error!("Server management thread did not exit in time, terminating...");
+        // Note: We can't really force-kill a blocking task cleanly,
+        // but the process will exit anyway
       }
     }
   }

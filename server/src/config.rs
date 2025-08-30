@@ -36,6 +36,10 @@ pub struct TmsConfig {
   /// The path to the private key
   #[arg(long, default_value = "key.pem")]
   pub key_path: String,
+
+  /// Admin password
+  #[arg(long, default_value = "admin")]
+  pub admin_password: String,
 }
 
 impl TmsConfig {

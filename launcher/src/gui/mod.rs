@@ -21,6 +21,7 @@ struct ConfigFields {
   backup_path: String,
   cert_path: String,
   key_path: String,
+  admin_password: String,
 }
 
 impl From<ConfigFields> for TmsConfig {
@@ -34,6 +35,7 @@ impl From<ConfigFields> for TmsConfig {
       backup_path: fields.backup_path,
       cert_path: fields.cert_path,
       key_path: fields.key_path,
+      admin_password: fields.admin_password,
     }
   }
 }
@@ -48,6 +50,7 @@ impl From<TmsConfig> for ConfigFields {
       backup_path: config.backup_path.clone(),
       cert_path: config.cert_path.clone(),
       key_path: config.key_path.clone(),
+      admin_password: config.admin_password.clone(),
     }
   }
 }

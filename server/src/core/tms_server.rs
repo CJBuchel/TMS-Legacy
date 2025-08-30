@@ -46,12 +46,15 @@ impl TmsServer {
     let mut interval = tokio::time::interval(tokio::time::Duration::from_millis(SERVER_LOOP_PERIOD_MS));
 
     // Setups
-    initialize_db(&self.config.db_path).await?;
+    initialize_db(&self.config).await?;
     initialize_jwt_secret().await?;
 
-    let web_server = TmsWeb::new(self.config.addr, self.config.port);
-    tokio::spawn(async move {
-      if let Err(e) = web_server.run().await {
+    // Create shutdown channel for web server
+    let (web_shutdown_tx, web_shutdown_rx) = oneshot::channel();
+
+    let web_server = TmsWeb::new(self.config.addr, self.config.port, self.config.tls);
+    let web_handle = tokio::spawn(async move {
+      if let Err(e) = web_server.run(web_shutdown_rx).await {
         log::error!("Web server error: {:?}", e);
       }
     });
@@ -79,6 +82,24 @@ impl TmsServer {
           log::info!("Shutdown signal received");
           break;
         }
+      }
+    }
+
+    // Gracefully shutdown the web server
+    log::info!("Shutting down web server...");
+    let _ = web_shutdown_tx.send(());
+
+    // Wait for web server to shut down gracefully (with timeout)
+    match tokio::time::timeout(std::time::Duration::from_secs(5), web_handle).await {
+      Ok(result) => {
+        if let Err(e) = result {
+          log::error!("Web server task panicked: {:?}", e);
+        } else {
+          log::info!("Web server shut down gracefully");
+        }
+      }
+      Err(_) => {
+        log::warn!("Web server did not shut down within timeout, terminating...");
       }
     }
 

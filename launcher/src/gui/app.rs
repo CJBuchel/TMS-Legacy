@@ -45,6 +45,17 @@ impl eframe::App for Launcher {
       ui.heading("Configuration");
       ui.add_space(10.0);
 
+      // Admin password
+      ui.horizontal(|ui| {
+        ui.label("Admin Password:");
+        ui.add_enabled(
+          !is_running,
+          egui::TextEdit::singleline(&mut self.active_cfg.admin_password)
+            .desired_width(150.0)
+            .password(true),
+        );
+      });
+
       // Server binding
       ui.horizontal(|ui| {
         ui.label("Binding:");

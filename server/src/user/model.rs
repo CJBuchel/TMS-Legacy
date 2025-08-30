@@ -15,7 +15,7 @@ impl Default for User {
     Self {
       username: "".to_string(),
       password: "".to_string(),
-      roles: vec![Role::Admin],
+      roles: vec![],
     }
   }
 }

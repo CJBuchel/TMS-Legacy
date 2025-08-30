@@ -14,3 +14,6 @@ pub use user::*;
 
 mod secret;
 pub use secret::*;
+
+mod tournament;
+pub use tournament::*;

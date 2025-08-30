@@ -2,11 +2,11 @@ use anyhow::Result;
 use database::Database;
 use once_cell::sync::OnceCell;
 
-use crate::{User, UserRepository};
+use crate::{TmsConfig, User, UserRepository, permissions::Role};
 
 pub static DB: OnceCell<Database> = OnceCell::new();
 
-async fn db_data_init() -> Result<()> {
+async fn db_data_init(config: &TmsConfig) -> Result<()> {
   log::info!("Initializing DB Data");
 
   // create users
@@ -17,7 +17,8 @@ async fn db_data_init() -> Result<()> {
 
         let admin = User {
           username: "admin".to_string(),
-          password: "admin".to_string(),
+          password: config.admin_password.clone(),
+          roles: vec![Role::Admin],
           ..User::default()
         };
 
@@ -35,18 +36,18 @@ async fn db_data_init() -> Result<()> {
   Ok(())
 }
 
-pub async fn initialize_db(db_path: &str) -> Result<()> {
+pub async fn initialize_db(config: &TmsConfig) -> Result<()> {
   // check if DB is already set
   if DB.get().is_some() {
     log::warn!("DB already initialized");
   } else {
     log::info!("Initializing DB");
-    let db = Database::new(db_path.to_string())?;
+    let db = Database::new(config.db_path.clone())?;
     DB.set(db).map_err(|_| anyhow::anyhow!("Failed to set DB"))?;
   }
 
   // Initialize the data
-  match db_data_init().await {
+  match db_data_init(config).await {
     Ok(_) => log::info!("DB data initialized"),
     Err(e) => log::error!("Failed to initialize DB data: {}", e),
   }

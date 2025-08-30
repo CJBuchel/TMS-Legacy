@@ -1,8 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:tms/helpers/websocket.dart';
+import 'package:tms/providers/network_config_provider.dart';
 
 part 'tournament_provider.g.dart';
 
@@ -17,61 +15,32 @@ class Tournament {
 
 @riverpod
 class TournamentTitle extends _$TournamentTitle {
-  WebSocketChannel? _channel;
-  bool _isReconnecting = false;
+  late WebSocketHelper<Tournament> _wsHelper;
 
   @override
   String build() {
-    ref.onDispose(() {
-      _channel?.sink.close(WebSocketStatus.goingAway);
-    });
-    _connectWebSocket();
-    return 'No Tournament Connected';
-  }
+    final serverAddress = ref.watch(serverAddressProvider);
+    _wsHelper = WebSocketHelper(
+      url: "ws://$serverAddress/ws/tournament/config",
+      fromJson: Tournament.fromJson,
+    );
 
-  void _connectWebSocket() {
-    if (_isReconnecting) return;
-    _cleanup();
-
-    final uri = Uri.parse('ws://localhost:8080/ws/tournament/config');
-    _channel = WebSocketChannel.connect(uri);
-    _channel?.stream.listen(
-      (message) {
-        // Handle incoming messages
-        final json = jsonDecode(message) as Map<String, dynamic>;
-        final t = Tournament.fromJson(json);
-        state = t.name;
+    _wsHelper.setHandlers(
+      onMessage: (tournament) {
+        state = tournament.name;
       },
-      onError: (error) {
-        // Handle errors
-        print('WebSocket error: $error');
-        _reconnect();
-      },
-      onDone: () {
-        // Handle socket closure
-        print('WebSocket closed');
-        _reconnect();
+      onStateChange: (isConnected) {
+        if (!isConnected) {
+          state = "No Tournament Connected";
+        }
       },
     );
-  }
 
-  void _reconnect() {
-    if (_isReconnecting) return;
-    _isReconnecting = true;
-    Future.delayed(const Duration(seconds: 5), () {
-      _isReconnecting = false;
-      _connectWebSocket();
+    ref.onDispose(() {
+      _wsHelper.dispose();
     });
-  }
 
-  void _cleanup() {
-    _channel?.sink.close(WebSocketStatus.goingAway);
-    _channel = null;
-    _isReconnecting = false;
-  }
-
-  void disconnect() {
-    _channel?.sink.close();
-    _channel = null;
+    _wsHelper.connect();
+    return "No Tournament Connected";
   }
 }

@@ -9,11 +9,8 @@ pub use config::*;
 mod core;
 pub use core::*;
 
-mod user;
-pub use user::*;
+pub mod user;
 
-mod secret;
-pub use secret::*;
+pub mod secret;
 
-mod tournament;
-pub use tournament::*;
+pub mod tournament;

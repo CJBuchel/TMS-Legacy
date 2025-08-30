@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use crate::{Tournament, db::DB};
+use crate::{db::DB, tournament::Tournament};
 
 const TOURNAMENT_KEY: &str = "tournament";
 

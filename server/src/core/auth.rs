@@ -3,7 +3,7 @@ use jsonwebtoken::{DecodingKey, EncodingKey};
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
 
-use crate::{Secret, SecretRepository};
+use crate::{secret::Secret, secret::SecretRepository};
 
 use super::permissions::Role;
 

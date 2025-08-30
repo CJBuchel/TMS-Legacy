@@ -10,7 +10,7 @@ use axum::{
 use database::TableBroker;
 use futures::{SinkExt, StreamExt};
 
-use crate::{Tournament, TournamentRepository};
+use crate::{tournament::Tournament, tournament::TournamentRepository};
 
 async fn websocket_upgrade(ws: WebSocketUpgrade) -> Response {
   ws.on_upgrade(handle_socket)

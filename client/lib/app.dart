@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tms/providers/local_storage_provider.dart';
+import 'package:tms/providers/theme_provider.dart';
 import 'package:tms/router.dart';
 import 'package:tms/theme.dart';
 

@@ -2,7 +2,7 @@ use anyhow::Result;
 use database::Database;
 use once_cell::sync::OnceCell;
 
-use crate::{TmsConfig, User, UserRepository, permissions::Role};
+use crate::{TmsConfig, permissions::Role, user::User, user::UserRepository};
 
 pub static DB: OnceCell<Database> = OnceCell::new();
 

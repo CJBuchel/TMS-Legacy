@@ -1,3 +1,4 @@
+use crate::tournament::{Tournament, TournamentRepository};
 use axum::{
   Router,
   extract::{
@@ -9,12 +10,6 @@ use axum::{
 };
 use database::TableBroker;
 use futures::{SinkExt, StreamExt};
-
-use crate::{tournament::Tournament, tournament::TournamentRepository};
-
-async fn websocket_upgrade(ws: WebSocketUpgrade) -> Response {
-  ws.on_upgrade(handle_socket)
-}
 
 async fn handle_socket(socket: WebSocket) {
   let (mut tx, mut rx) = socket.split();
@@ -56,6 +51,10 @@ async fn handle_socket(socket: WebSocket) {
       }
     }
   }
+}
+
+async fn websocket_upgrade(ws: WebSocketUpgrade) -> Response {
+  ws.on_upgrade(handle_socket)
 }
 
 pub fn ws_routes() -> Router {

@@ -1,17 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tms/helpers/websocket.dart';
+import 'package:tms/models/tournament.dart';
 import 'package:tms/providers/network_config_provider.dart';
 
 part 'tournament_provider.g.dart';
-
-class Tournament {
-  final String name;
-  Tournament(this.name);
-
-  factory Tournament.fromJson(Map<String, dynamic> json) {
-    return Tournament(json['name'] ?? '');
-  }
-}
 
 @riverpod
 class TournamentTitle extends _$TournamentTitle {

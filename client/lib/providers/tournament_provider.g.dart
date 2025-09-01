@@ -6,7 +6,7 @@ part of 'tournament_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tournamentTitleHash() => r'8f6c5039611ac23670d6bcc4126a6658f1727fc8';
+String _$tournamentTitleHash() => r'b9f6a48c501ddeef827d1941be60803c81513023';
 
 /// See also [TournamentTitle].
 @ProviderFor(TournamentTitle)

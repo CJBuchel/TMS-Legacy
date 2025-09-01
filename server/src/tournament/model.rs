@@ -14,7 +14,7 @@ pub struct Tournament {
 impl Default for Tournament {
   fn default() -> Self {
     Self {
-      name: "CJ is cool".to_string(),
+      name: "TMS Tournament".to_string(),
       backup_interval: 15,
       retain_backups: 10,
       end_game_timer_length: 5,

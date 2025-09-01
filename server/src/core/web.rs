@@ -1,7 +1,7 @@
 use std::net::{IpAddr, SocketAddr};
 
 use anyhow::Result;
-use axum::{Router, routing::get};
+use axum::{Router, http::StatusCode, routing::get};
 use tokio::net::TcpListener;
 use tokio::sync::oneshot;
 use tower::ServiceBuilder;
@@ -37,6 +37,7 @@ impl TmsWeb {
           .layer(CorsLayer::permissive())
           .service(ServeDir::new("client/build/web").fallback(ServeFile::new("client/build/web/index.html"))),
       )
+      // fallback to error 404
       .layer(CorsLayer::permissive());
 
     let socket_addr = SocketAddr::new(self.addr, self.port);

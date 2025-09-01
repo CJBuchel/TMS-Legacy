@@ -13,8 +13,9 @@ class TmsApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'TMS',
+      debugShowCheckedModeBanner: false,
       routerConfig: router,
-      themeMode: themeMode, // default
+      themeMode: themeMode,
       theme: lightTheme,
       darkTheme: darkTheme,
     );

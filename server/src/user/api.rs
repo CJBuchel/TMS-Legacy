@@ -1,5 +1,12 @@
 use anyhow::Result;
-use axum::{Router, extract::Json, http::StatusCode, response::Json as ResponseJson, routing::post};
+use axum::{
+  Router,
+  extract::Json,
+  http::StatusCode,
+  middleware,
+  response::Json as ResponseJson,
+  routing::{get, post},
+};
 use serde::{Deserialize, Serialize};
 
 use super::{User, UserRepository};
@@ -17,7 +24,7 @@ pub struct LoginResponse {
   pub roles: Vec<String>,
 }
 
-pub async fn login(Json(payload): Json<LoginRequest>) -> Result<ResponseJson<LoginResponse>, StatusCode> {
+async fn login(Json(payload): Json<LoginRequest>) -> Result<ResponseJson<LoginResponse>, StatusCode> {
   // Get user by username
   let users = User::get_by_username(&payload.username).await.map_err(|e| {
     log::error!("Database error: {}", e);
@@ -49,6 +56,15 @@ pub async fn login(Json(payload): Json<LoginRequest>) -> Result<ResponseJson<Log
   }))
 }
 
+async fn validate_token() -> Result<StatusCode, StatusCode> {
+  log::info!("Token is valid");
+  Ok(StatusCode::OK)
+}
+
 pub fn routes() -> Router {
-  Router::new().route("/login", post(login))
+  Router::new().route("/login", post(login)).merge(
+    Router::new()
+      .route("/verify", get(validate_token))
+      .layer(middleware::from_fn(Auth::auth_middleware)),
+  )
 }

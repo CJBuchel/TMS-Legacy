@@ -4,7 +4,13 @@ use crate::{tournament, user};
 
 pub fn routes() -> Router {
   Router::new()
-    .route("/", get(|| async { "API Is working" }))
-    .nest("/users", user::routes())
+    .route(
+      "/",
+      get(|| async {
+        log::info!("API Is working");
+        "API Is working"
+      }),
+    )
+    .nest("/user", user::routes())
     .nest("/tournament", tournament::routes())
 }

@@ -1,8 +1,13 @@
-class Tournament {
-  final String name;
-  Tournament(this.name);
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  factory Tournament.fromJson(Map<String, dynamic> json) {
-    return Tournament(json['name'] ?? '');
-  }
+part 'tournament.freezed.dart';
+part 'tournament.g.dart';
+
+@freezed
+abstract class TournamentResponse with _$TournamentResponse {
+  const factory TournamentResponse({required String name}) =
+      _TournamentResponse;
+
+  factory TournamentResponse.fromJson(Map<String, dynamic> json) =>
+      _$TournamentResponseFromJson(json);
 }

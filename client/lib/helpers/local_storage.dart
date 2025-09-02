@@ -1,9 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-late SharedPreferences _gls;
+late SharedPreferencesWithCache _gls;
 
 Future<void> initializeLocalStorage() async {
-  _gls = await SharedPreferences.getInstance();
+  _gls = await SharedPreferencesWithCache.create(
+    cacheOptions: SharedPreferencesWithCacheOptions(),
+  );
 }
 
-SharedPreferences get localStorage => _gls;
+SharedPreferencesWithCache get localStorage => _gls;

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tms/base/app_bar.dart';
 
+// TODO: build base props for flexible base
+
 class BaseScaffold extends StatelessWidget {
   final GoRouterState state;
   final Widget child;

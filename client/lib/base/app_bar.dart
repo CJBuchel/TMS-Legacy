@@ -1,43 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tms/providers/auth_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tms/base/actions/login_action.dart';
 import 'package:tms/providers/tournament_provider.dart';
 
-class BaseAppBar extends HookConsumerWidget implements PreferredSizeWidget {
-  const BaseAppBar({super.key});
+class BaseAppBar extends ConsumerWidget implements PreferredSizeWidget {
+  final String? title;
+  final bool showActions;
+  const BaseAppBar({super.key, this.title, this.showActions = true});
 
-  Widget _loginButton(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authenticationProvider);
-    return auth.when(
-      data: (isLoggedIn) {
-        return IconButton(
-          icon: Icon(isLoggedIn ? Icons.logout : Icons.login),
-          onPressed: () {
-            // Handle login/logout action
-          },
-        );
-      },
-      error: (error, stackTrace) => IconButton(
-        icon: Icon(Icons.error),
-        onPressed: () {
-          // Handle error action
-        },
-      ),
-      loading: () {
-        return CircularProgressIndicator();
-      },
-    );
+  List<Widget> _buildActions(BuildContext context, WidgetRef ref) {
+    if (showActions) {
+      return [LoginAction()];
+    }
+    return [];
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // watch the tournament title provider
-    final tournamentTitle = ref.watch(tournamentTitleProvider);
+    final String tournamentTitle = title ?? ref.watch(tournamentTitleProvider);
 
     return AppBar(
       automaticallyImplyLeading: true,
       title: Text(tournamentTitle),
-      actions: [_loginButton(context, ref)],
+      actions: _buildActions(context, ref),
     );
   }
 

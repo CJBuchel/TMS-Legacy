@@ -1,7 +1,7 @@
 use std::net::{IpAddr, SocketAddr};
 
 use anyhow::Result;
-use axum::{Router, http::StatusCode, routing::get};
+use axum::{Router, routing::get};
 use tokio::net::TcpListener;
 use tokio::sync::oneshot;
 use tower::ServiceBuilder;

@@ -7,14 +7,14 @@ part 'tournament_provider.g.dart';
 
 @riverpod
 class TournamentTitle extends _$TournamentTitle {
-  late WebSocketHelper<Tournament> _wsHelper;
+  late WebSocketHelper<TournamentResponse> _wsHelper;
 
   @override
   String build() {
     final serverAddress = ref.watch(serverAddressProvider);
     _wsHelper = WebSocketHelper(
       url: "ws://$serverAddress/ws/tournament/config",
-      fromJson: Tournament.fromJson,
+      fromJson: TournamentResponse.fromJson,
     );
 
     _wsHelper.setHandlers(

@@ -1,3 +1,4 @@
+#![allow(async_fn_in_trait)]
 mod broker;
 mod db;
 

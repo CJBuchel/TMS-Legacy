@@ -9,24 +9,16 @@ class LoginAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authenticationProvider);
-    return auth.when(
-      data: (isLoggedIn) {
-        return IconButton(
-          icon: Icon(isLoggedIn ? Icons.person : Icons.login),
-          onPressed: () {
-            context.push('/login');
-          },
-        );
+
+    return IconButton(
+      onPressed: () {
+        context.push('/login');
       },
-      error: (error, stackTrace) => IconButton(
-        icon: Icon(Icons.error),
-        onPressed: () {
-          // Handle error action
-        },
+      icon: auth.when(
+        data: (isLoggedIn) => Icon(isLoggedIn ? Icons.person : Icons.login),
+        error: (error, stackTrace) => Icon(Icons.error),
+        loading: () => Icon(Icons.login),
       ),
-      loading: () {
-        return CircularProgressIndicator();
-      },
     );
   }
 }

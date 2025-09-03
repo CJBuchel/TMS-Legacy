@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tms/providers/auth_provider.dart';
 
-class Login extends ConsumerWidget {
-  // text controllers
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+class Login extends HookConsumerWidget {
+  const Login({super.key});
 
-  Login({super.key});
-
-  Widget _username() {
+  Widget _username(TextEditingController controller) {
     return SizedBox(
       width: 400,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 25),
         child: TextField(
-          controller: usernameController,
+          controller: controller,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'Username',
@@ -27,13 +24,13 @@ class Login extends ConsumerWidget {
     );
   }
 
-  Widget _password() {
+  Widget _password(TextEditingController controller) {
     return SizedBox(
       width: 400,
       child: Padding(
         padding: const EdgeInsets.only(left: 0, right: 0, bottom: 25),
         child: TextField(
-          controller: passwordController,
+          controller: controller,
           obscureText: true,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -45,62 +42,17 @@ class Login extends ConsumerWidget {
     );
   }
 
-  Widget _login(BuildContext context, WidgetRef ref) {
-    return Column(
-      spacing: 5,
-      children: [
-        _username(),
-        _password(),
-        SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: () {
-            // Handle login
-            ref
-                .read(authenticationProvider.notifier)
-                .login(usernameController.text, passwordController.text)
-                .then((success) {
-                  if (success && context.mounted) {
-                    context.pop();
-                  } else {
-                    if (context.mounted) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('Login failed'),
-                          content: Text(
-                            'Please check your username and password.',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('OK'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  }
-                });
-          },
-          child: Text('Login'),
-        ),
-      ],
-    );
-  }
-
   Widget _logout(WidgetRef ref) {
     final username = ref.read(authenticationProvider.notifier).username;
     return Column(
-      spacing: 20,
       children: [
         Text('Welcome back, $username!'),
+        const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
             ref.read(authenticationProvider.notifier).logout();
           },
-          child: Text('Logout'),
+          child: const Text('Logout'),
         ),
       ],
     );
@@ -108,20 +60,70 @@ class Login extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoggedIn = ref.watch(authenticationProvider);
+    final usernameController = useTextEditingController();
+    final passwordController = useTextEditingController();
+    final isLoading = useState(false);
+    final authState = ref.watch(authenticationProvider);
+
+    void handleLogin() async {
+      isLoading.value = true;
+
+      final success = await ref
+          .read(authenticationProvider.notifier)
+          .login(usernameController.text, passwordController.text);
+
+      if (context.mounted) {
+        if (success) {
+          context.pop();
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Login failed'),
+              content: const Text('Please check your username and password.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        }
+      }
+
+      isLoading.value = false;
+    }
+
+    Widget loginWidget() {
+      return Column(
+        children: [
+          _username(usernameController),
+          _password(passwordController),
+          const SizedBox(height: 20),
+          if (isLoading.value)
+            const CircularProgressIndicator()
+          else
+            ElevatedButton(onPressed: handleLogin, child: const Text('Login')),
+        ],
+      );
+    }
+
     return Center(
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(25),
-          child: isLoggedIn.when(
+          child: authState.when(
             data: (isLoggedIn) {
-              return isLoggedIn ? _logout(ref) : _login(context, ref);
+              return isLoggedIn ? _logout(ref) : loginWidget();
             },
             error: (error, _) {
-              return Text('Error: $error');
+              return loginWidget();
             },
             loading: () {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             },
           ),
         ),

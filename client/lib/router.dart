@@ -11,7 +11,7 @@ final _protectedRoutes = <GoRoute>[
     path: '/login',
     builder: (context, state) => Scaffold(
       body: Login(),
-      appBar: BaseAppBar(title: 'User Details', showActions: false),
+      appBar: BaseAppBar(title: 'Login', showActions: false),
     ),
   ),
 ];

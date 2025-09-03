@@ -6,24 +6,24 @@ import 'package:tms/providers/network_config_provider.dart';
 part 'tournament_provider.g.dart';
 
 @riverpod
-class TournamentTitle extends _$TournamentTitle {
-  late WebSocketHelper<TournamentResponse> _wsHelper;
+class TournamentData extends _$TournamentData {
+  late WebSocketHelper<Tournament> _wsHelper;
 
   @override
-  String build() {
+  Tournament build() {
     final serverAddress = ref.watch(serverAddressProvider);
     _wsHelper = WebSocketHelper(
       url: "ws://$serverAddress/ws/tournament/config",
-      fromJson: TournamentResponse.fromJson,
+      fromJson: Tournament.fromJson,
     );
 
     _wsHelper.setHandlers(
       onMessage: (tournament) {
-        state = tournament.name;
+        state = tournament;
       },
       onStateChange: (isConnected) {
         if (!isConnected) {
-          state = "No Tournament Connected";
+          state = Tournament.defaultTournament();
         }
       },
     );
@@ -33,6 +33,6 @@ class TournamentTitle extends _$TournamentTitle {
     });
 
     _wsHelper.connect();
-    return "No Tournament Connected";
+    return Tournament.defaultTournament();
   }
 }

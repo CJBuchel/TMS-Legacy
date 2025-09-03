@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:logger/web.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tms/helpers/local_storage.dart';
+import 'package:tms/helpers/permissions.dart';
 import 'package:tms/models/user.dart';
 import 'package:tms/providers/network_config_provider.dart';
 
@@ -17,7 +18,10 @@ class Authentication extends _$Authentication {
   static const _rolesKey = 'roles';
 
   String get username => localStorage.getString(_usernameKey) ?? "";
-  List<String> get roles => localStorage.getStringList(_rolesKey) ?? <String>[];
+  List<Role> get roles {
+    final roles = localStorage.getStringList(_rolesKey) ?? <String>[];
+    return roles.map((role) => getRoleFromString(role)).nonNulls.toList();
+  }
 
   Future<bool> _validateToken(String serverAddress) async {
     // get JWT token from storage
@@ -39,6 +43,14 @@ class Authentication extends _$Authentication {
       Logger().e('Error occurred while validating token: $e');
     }
     return false;
+  }
+
+  bool hasPermission(Role necessary) {
+    // Check if user has the required permissions
+    return roles.any((role) {
+      Logger().i('Checking permission for role: $role');
+      return RoleGraph.instance.hasPermission(role, necessary);
+    });
   }
 
   @override

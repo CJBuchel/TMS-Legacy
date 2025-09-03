@@ -2,7 +2,9 @@ use database::Record;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Tournament {
+  pub bootstrapped: bool,
   pub name: String,
   pub backup_interval: u32,
   pub retain_backups: u32,
@@ -14,6 +16,7 @@ pub struct Tournament {
 impl Default for Tournament {
   fn default() -> Self {
     Self {
+      bootstrapped: false,
       name: "TMS Tournament".to_string(),
       backup_interval: 15,
       retain_backups: 10,

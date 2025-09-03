@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:logger/web.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -57,10 +58,12 @@ class WebSocketHelper<T> {
             _onMessage?.call(data);
             _isReconnecting = false; // Reset on successful message
           } catch (e) {
+            Logger().e("Error processing WebSocket message: $e");
             _onError?.call(e);
           }
         },
         onError: (error) {
+          Logger().e("WebSocket error: $error");
           _onError?.call(error);
           _onStateChange?.call(false);
           _scheduleReconnect();
@@ -73,6 +76,7 @@ class WebSocketHelper<T> {
 
       _onStateChange?.call(true);
     } catch (e) {
+      Logger().e("WebSocket connection error: $e");
       _onError?.call(e);
       _onStateChange?.call(false);
       _scheduleReconnect();
@@ -120,7 +124,7 @@ class WebSocketHelper<T> {
   Future<void> _cleanup() async {
     await _subscription?.cancel();
     _subscription = null;
-    _channel?.sink.close(status.goingAway);
+    _channel?.sink.close(status.normalClosure);
     _channel = null;
     _isReconnecting = false;
   }

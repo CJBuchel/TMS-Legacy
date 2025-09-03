@@ -4,10 +4,29 @@ part 'tournament.freezed.dart';
 part 'tournament.g.dart';
 
 @freezed
-abstract class TournamentResponse with _$TournamentResponse {
-  const factory TournamentResponse({required String name}) =
-      _TournamentResponse;
+abstract class Tournament with _$Tournament {
+  const factory Tournament({
+    required bool bootstrapped,
+    required String name,
+    required int backupInterval,
+    required int retainBackups,
+    required int endGameTimerLength,
+    required int gameTimerLength,
+    String? season,
+  }) = _Tournament;
 
-  factory TournamentResponse.fromJson(Map<String, dynamic> json) =>
-      _$TournamentResponseFromJson(json);
+  // default
+  factory Tournament.defaultTournament() {
+    return Tournament(
+      bootstrapped: false,
+      name: "No Tournament Connected",
+      backupInterval: 0,
+      retainBackups: 0,
+      endGameTimerLength: 0,
+      gameTimerLength: 0,
+    );
+  }
+
+  factory Tournament.fromJson(Map<String, dynamic> json) =>
+      _$TournamentFromJson(json);
 }

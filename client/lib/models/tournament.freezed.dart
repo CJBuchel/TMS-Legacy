@@ -13,42 +13,42 @@ part of 'tournament.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$TournamentResponse {
+mixin _$Tournament {
 
- String get name;
-/// Create a copy of TournamentResponse
+ bool get bootstrapped; String get name; int get backupInterval; int get retainBackups; int get endGameTimerLength; int get gameTimerLength; String? get season;
+/// Create a copy of Tournament
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$TournamentResponseCopyWith<TournamentResponse> get copyWith => _$TournamentResponseCopyWithImpl<TournamentResponse>(this as TournamentResponse, _$identity);
+$TournamentCopyWith<Tournament> get copyWith => _$TournamentCopyWithImpl<Tournament>(this as Tournament, _$identity);
 
-  /// Serializes this TournamentResponse to a JSON map.
+  /// Serializes this Tournament to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TournamentResponse&&(identical(other.name, name) || other.name == name));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Tournament&&(identical(other.bootstrapped, bootstrapped) || other.bootstrapped == bootstrapped)&&(identical(other.name, name) || other.name == name)&&(identical(other.backupInterval, backupInterval) || other.backupInterval == backupInterval)&&(identical(other.retainBackups, retainBackups) || other.retainBackups == retainBackups)&&(identical(other.endGameTimerLength, endGameTimerLength) || other.endGameTimerLength == endGameTimerLength)&&(identical(other.gameTimerLength, gameTimerLength) || other.gameTimerLength == gameTimerLength)&&(identical(other.season, season) || other.season == season));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name);
+int get hashCode => Object.hash(runtimeType,bootstrapped,name,backupInterval,retainBackups,endGameTimerLength,gameTimerLength,season);
 
 @override
 String toString() {
-  return 'TournamentResponse(name: $name)';
+  return 'Tournament(bootstrapped: $bootstrapped, name: $name, backupInterval: $backupInterval, retainBackups: $retainBackups, endGameTimerLength: $endGameTimerLength, gameTimerLength: $gameTimerLength, season: $season)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $TournamentResponseCopyWith<$Res>  {
-  factory $TournamentResponseCopyWith(TournamentResponse value, $Res Function(TournamentResponse) _then) = _$TournamentResponseCopyWithImpl;
+abstract mixin class $TournamentCopyWith<$Res>  {
+  factory $TournamentCopyWith(Tournament value, $Res Function(Tournament) _then) = _$TournamentCopyWithImpl;
 @useResult
 $Res call({
- String name
+ bool bootstrapped, String name, int backupInterval, int retainBackups, int endGameTimerLength, int gameTimerLength, String? season
 });
 
 
@@ -56,27 +56,33 @@ $Res call({
 
 }
 /// @nodoc
-class _$TournamentResponseCopyWithImpl<$Res>
-    implements $TournamentResponseCopyWith<$Res> {
-  _$TournamentResponseCopyWithImpl(this._self, this._then);
+class _$TournamentCopyWithImpl<$Res>
+    implements $TournamentCopyWith<$Res> {
+  _$TournamentCopyWithImpl(this._self, this._then);
 
-  final TournamentResponse _self;
-  final $Res Function(TournamentResponse) _then;
+  final Tournament _self;
+  final $Res Function(Tournament) _then;
 
-/// Create a copy of TournamentResponse
+/// Create a copy of Tournament
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? bootstrapped = null,Object? name = null,Object? backupInterval = null,Object? retainBackups = null,Object? endGameTimerLength = null,Object? gameTimerLength = null,Object? season = freezed,}) {
   return _then(_self.copyWith(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,
+bootstrapped: null == bootstrapped ? _self.bootstrapped : bootstrapped // ignore: cast_nullable_to_non_nullable
+as bool,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,backupInterval: null == backupInterval ? _self.backupInterval : backupInterval // ignore: cast_nullable_to_non_nullable
+as int,retainBackups: null == retainBackups ? _self.retainBackups : retainBackups // ignore: cast_nullable_to_non_nullable
+as int,endGameTimerLength: null == endGameTimerLength ? _self.endGameTimerLength : endGameTimerLength // ignore: cast_nullable_to_non_nullable
+as int,gameTimerLength: null == gameTimerLength ? _self.gameTimerLength : gameTimerLength // ignore: cast_nullable_to_non_nullable
+as int,season: freezed == season ? _self.season : season // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [TournamentResponse].
-extension TournamentResponsePatterns on TournamentResponse {
+/// Adds pattern-matching-related methods to [Tournament].
+extension TournamentPatterns on Tournament {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -89,10 +95,10 @@ extension TournamentResponsePatterns on TournamentResponse {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TournamentResponse value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Tournament value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _TournamentResponse() when $default != null:
+case _Tournament() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -111,10 +117,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TournamentResponse value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Tournament value)  $default,){
 final _that = this;
 switch (_that) {
-case _TournamentResponse():
+case _Tournament():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -132,10 +138,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TournamentResponse value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Tournament value)?  $default,){
 final _that = this;
 switch (_that) {
-case _TournamentResponse() when $default != null:
+case _Tournament() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -153,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool bootstrapped,  String name,  int backupInterval,  int retainBackups,  int endGameTimerLength,  int gameTimerLength,  String? season)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _TournamentResponse() when $default != null:
-return $default(_that.name);case _:
+case _Tournament() when $default != null:
+return $default(_that.bootstrapped,_that.name,_that.backupInterval,_that.retainBackups,_that.endGameTimerLength,_that.gameTimerLength,_that.season);case _:
   return orElse();
 
 }
@@ -174,10 +180,10 @@ return $default(_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool bootstrapped,  String name,  int backupInterval,  int retainBackups,  int endGameTimerLength,  int gameTimerLength,  String? season)  $default,) {final _that = this;
 switch (_that) {
-case _TournamentResponse():
-return $default(_that.name);case _:
+case _Tournament():
+return $default(_that.bootstrapped,_that.name,_that.backupInterval,_that.retainBackups,_that.endGameTimerLength,_that.gameTimerLength,_that.season);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +200,10 @@ return $default(_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool bootstrapped,  String name,  int backupInterval,  int retainBackups,  int endGameTimerLength,  int gameTimerLength,  String? season)?  $default,) {final _that = this;
 switch (_that) {
-case _TournamentResponse() when $default != null:
-return $default(_that.name);case _:
+case _Tournament() when $default != null:
+return $default(_that.bootstrapped,_that.name,_that.backupInterval,_that.retainBackups,_that.endGameTimerLength,_that.gameTimerLength,_that.season);case _:
   return null;
 
 }
@@ -208,46 +214,52 @@ return $default(_that.name);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _TournamentResponse implements TournamentResponse {
-  const _TournamentResponse({required this.name});
-  factory _TournamentResponse.fromJson(Map<String, dynamic> json) => _$TournamentResponseFromJson(json);
+class _Tournament implements Tournament {
+  const _Tournament({required this.bootstrapped, required this.name, required this.backupInterval, required this.retainBackups, required this.endGameTimerLength, required this.gameTimerLength, this.season});
+  factory _Tournament.fromJson(Map<String, dynamic> json) => _$TournamentFromJson(json);
 
+@override final  bool bootstrapped;
 @override final  String name;
+@override final  int backupInterval;
+@override final  int retainBackups;
+@override final  int endGameTimerLength;
+@override final  int gameTimerLength;
+@override final  String? season;
 
-/// Create a copy of TournamentResponse
+/// Create a copy of Tournament
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$TournamentResponseCopyWith<_TournamentResponse> get copyWith => __$TournamentResponseCopyWithImpl<_TournamentResponse>(this, _$identity);
+_$TournamentCopyWith<_Tournament> get copyWith => __$TournamentCopyWithImpl<_Tournament>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$TournamentResponseToJson(this, );
+  return _$TournamentToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TournamentResponse&&(identical(other.name, name) || other.name == name));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Tournament&&(identical(other.bootstrapped, bootstrapped) || other.bootstrapped == bootstrapped)&&(identical(other.name, name) || other.name == name)&&(identical(other.backupInterval, backupInterval) || other.backupInterval == backupInterval)&&(identical(other.retainBackups, retainBackups) || other.retainBackups == retainBackups)&&(identical(other.endGameTimerLength, endGameTimerLength) || other.endGameTimerLength == endGameTimerLength)&&(identical(other.gameTimerLength, gameTimerLength) || other.gameTimerLength == gameTimerLength)&&(identical(other.season, season) || other.season == season));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name);
+int get hashCode => Object.hash(runtimeType,bootstrapped,name,backupInterval,retainBackups,endGameTimerLength,gameTimerLength,season);
 
 @override
 String toString() {
-  return 'TournamentResponse(name: $name)';
+  return 'Tournament(bootstrapped: $bootstrapped, name: $name, backupInterval: $backupInterval, retainBackups: $retainBackups, endGameTimerLength: $endGameTimerLength, gameTimerLength: $gameTimerLength, season: $season)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$TournamentResponseCopyWith<$Res> implements $TournamentResponseCopyWith<$Res> {
-  factory _$TournamentResponseCopyWith(_TournamentResponse value, $Res Function(_TournamentResponse) _then) = __$TournamentResponseCopyWithImpl;
+abstract mixin class _$TournamentCopyWith<$Res> implements $TournamentCopyWith<$Res> {
+  factory _$TournamentCopyWith(_Tournament value, $Res Function(_Tournament) _then) = __$TournamentCopyWithImpl;
 @override @useResult
 $Res call({
- String name
+ bool bootstrapped, String name, int backupInterval, int retainBackups, int endGameTimerLength, int gameTimerLength, String? season
 });
 
 
@@ -255,19 +267,25 @@ $Res call({
 
 }
 /// @nodoc
-class __$TournamentResponseCopyWithImpl<$Res>
-    implements _$TournamentResponseCopyWith<$Res> {
-  __$TournamentResponseCopyWithImpl(this._self, this._then);
+class __$TournamentCopyWithImpl<$Res>
+    implements _$TournamentCopyWith<$Res> {
+  __$TournamentCopyWithImpl(this._self, this._then);
 
-  final _TournamentResponse _self;
-  final $Res Function(_TournamentResponse) _then;
+  final _Tournament _self;
+  final $Res Function(_Tournament) _then;
 
-/// Create a copy of TournamentResponse
+/// Create a copy of Tournament
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,}) {
-  return _then(_TournamentResponse(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,
+@override @pragma('vm:prefer-inline') $Res call({Object? bootstrapped = null,Object? name = null,Object? backupInterval = null,Object? retainBackups = null,Object? endGameTimerLength = null,Object? gameTimerLength = null,Object? season = freezed,}) {
+  return _then(_Tournament(
+bootstrapped: null == bootstrapped ? _self.bootstrapped : bootstrapped // ignore: cast_nullable_to_non_nullable
+as bool,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,backupInterval: null == backupInterval ? _self.backupInterval : backupInterval // ignore: cast_nullable_to_non_nullable
+as int,retainBackups: null == retainBackups ? _self.retainBackups : retainBackups // ignore: cast_nullable_to_non_nullable
+as int,endGameTimerLength: null == endGameTimerLength ? _self.endGameTimerLength : endGameTimerLength // ignore: cast_nullable_to_non_nullable
+as int,gameTimerLength: null == gameTimerLength ? _self.gameTimerLength : gameTimerLength // ignore: cast_nullable_to_non_nullable
+as int,season: freezed == season ? _self.season : season // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

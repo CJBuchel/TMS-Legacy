@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../models/setup_step.dart';
+import 'package:tms/models/setup_step.dart';
 
 class SetupStepItem extends StatelessWidget {
   final SetupStep step;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tms/models/setup_step.dart';
+import 'package:tms/providers/setup_provider.dart';
 
-import '../../models/setup_step.dart';
-import '../../providers/setup_provider.dart';
 import 'setup_step_item.dart';
 
 class SetupStepsView extends ConsumerWidget {

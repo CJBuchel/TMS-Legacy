@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tms/providers/setup_provider.dart';
 
-import '../../providers/setup_provider.dart';
 import 'setup_steps_view.dart';
 
 class SetupWidget extends ConsumerStatefulWidget {

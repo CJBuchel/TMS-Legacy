@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import 'carousel_card.dart';
-
 class _SectionTitle extends StatelessWidget {
   const _SectionTitle({required this.title});
 
@@ -25,7 +23,7 @@ class _SectionTitle extends StatelessWidget {
 class _CarouselList extends HookWidget {
   const _CarouselList({required this.cards});
 
-  final List<CarouselCard> cards;
+  final List<Widget> cards;
 
   @override
   Widget build(BuildContext context) {
@@ -48,18 +46,6 @@ class _CarouselList extends HookWidget {
 
     return Stack(
       children: [
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 180),
-          child: CarouselView(
-            controller: scrollController,
-            itemExtent: 320,
-            shrinkExtent: 200,
-            itemSnapping: true,
-            padding: const EdgeInsets.all(10),
-            children: cards,
-          ),
-        ),
-
         // Left gradient indicator
         if (showLeftGradient.value)
           Positioned(
@@ -105,6 +91,19 @@ class _CarouselList extends HookWidget {
               ),
             ),
           ),
+
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 180),
+          child: CarouselView(
+            enableSplash: false,
+            controller: scrollController,
+            itemExtent: 320,
+            shrinkExtent: 200,
+            itemSnapping: true,
+            padding: const EdgeInsets.all(10),
+            children: cards,
+          ),
+        ),
       ],
     );
   }
@@ -114,7 +113,7 @@ class CarouselSection extends StatelessWidget {
   const CarouselSection({super.key, required this.title, required this.cards});
 
   final String title;
-  final List<CarouselCard> cards;
+  final List<Widget> cards;
 
   @override
   Widget build(BuildContext context) {

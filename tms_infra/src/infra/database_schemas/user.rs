@@ -3,12 +3,13 @@ use serde::{Deserialize, Serialize};
 
 use crate::infra::DataSchemeExtensions;
 
-use super::{ADMIN_ROLE, AV_ROLE, EMCEE_ROLE, HEAD_REFEREE_ROLE, JUDGE_ADVISOR_ROLE, JUDGE_ROLE, REFEREE_ROLE, SCORE_KEEPER_ROLE};
+use super::{ADMIN_ROLE, AV_ROLE, EMCEE_ROLE, HEAD_REFEREE_ROLE, JUDGE_ADVISOR_ROLE, JUDGE_ROLE, QUEUER_ROLE, REFEREE_ROLE, SCORE_KEEPER_ROLE};
 
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 pub struct UserPermissions {
   // hard coded roles
   pub admin: Option<bool>,
+  pub queuer: Option<bool>,
   pub referee: Option<bool>,
   pub head_referee: Option<bool>,
   pub judge: Option<bool>,
@@ -20,19 +21,11 @@ pub struct UserPermissions {
 
 impl UserPermissions {
   // optional new`
-  
-  pub fn new(
-    admin: Option<bool>,
-    referee: Option<bool>,
-    head_referee: Option<bool>,
-    judge: Option<bool>,
-    judge_advisor: Option<bool>,
-    score_keeper: Option<bool>,
-    emcee: Option<bool>,
-    av: Option<bool>,
-  ) -> Self {
+
+  pub fn new(admin: Option<bool>, queuer: Option<bool>, referee: Option<bool>, head_referee: Option<bool>, judge: Option<bool>, judge_advisor: Option<bool>, score_keeper: Option<bool>, emcee: Option<bool>, av: Option<bool>) -> Self {
     Self {
       admin,
+      queuer,
       referee,
       head_referee,
       judge,
@@ -43,11 +36,11 @@ impl UserPermissions {
     }
   }
 
-  
   pub fn get_merged_permissions(&self, permissions: UserPermissions) -> UserPermissions {
     let mut merged_permissions = self.clone();
 
     merged_permissions.admin = permissions.admin.or(self.admin);
+    merged_permissions.queuer = permissions.queuer.or(self.queuer);
     merged_permissions.referee = permissions.referee.or(self.referee);
     merged_permissions.head_referee = permissions.head_referee.or(self.head_referee);
     merged_permissions.judge = permissions.judge.or(self.judge);
@@ -59,13 +52,13 @@ impl UserPermissions {
     merged_permissions
   }
 
-  
   pub fn from_roles(roles: Vec<String>) -> Self {
     let mut permissions = Self::default();
 
     for role in roles {
       match role.as_str() {
         ADMIN_ROLE => permissions.admin = Some(true),
+        QUEUER_ROLE => permissions.queuer = Some(true),
         REFEREE_ROLE => permissions.referee = Some(true),
         HEAD_REFEREE_ROLE => permissions.head_referee = Some(true),
         JUDGE_ROLE => permissions.judge = Some(true),
@@ -80,12 +73,15 @@ impl UserPermissions {
     permissions
   }
 
-  
   pub fn get_roles(&self) -> Vec<String> {
     let mut roles = vec![];
 
     if self.admin.unwrap_or(false) {
       roles.push(ADMIN_ROLE.to_string());
+    }
+
+    if self.queuer.unwrap_or(false) {
+      roles.push(QUEUER_ROLE.to_string());
     }
 
     if self.referee.unwrap_or(false) {
@@ -117,9 +113,8 @@ impl UserPermissions {
     }
 
     roles
-  } 
+  }
 
-  
   pub fn has_role_access(&self, required_roles: Vec<String>) -> bool {
     let required_permissions = UserPermissions::from_roles(required_roles);
 
@@ -129,6 +124,13 @@ impl UserPermissions {
     }
 
     let mut has_access = false;
+
+    // queuer
+    if required_permissions.queuer.unwrap_or(false) {
+      if self.queuer.unwrap_or(false) || self.head_referee.unwrap_or(false) {
+        has_access = true;
+      }
+    }
 
     // referee
     if required_permissions.referee.unwrap_or(false) {
@@ -189,6 +191,7 @@ impl Default for UserPermissions {
   fn default() -> Self {
     Self {
       admin: None,
+      queuer: None,
       referee: None,
       head_referee: None,
       judge: None,
@@ -208,7 +211,6 @@ pub struct User {
 }
 
 impl User {
-  
   pub fn new(username: &str, password: &str, roles: Vec<String>) -> Self {
     Self {
       username: username.to_string(),
@@ -221,19 +223,16 @@ impl User {
     self.roles.contains(&role.to_string())
   }
 
-  
   pub fn has_permission_access(&self, required_permissions: &UserPermissions) -> bool {
     let permissions = UserPermissions::from_roles(self.roles.clone());
     permissions.has_role_access(required_permissions.get_roles())
   }
 
-  
   pub fn has_role_access(&self, required_roles: Vec<String>) -> bool {
     let permissions = UserPermissions::from_roles(self.roles.clone());
     permissions.has_role_access(required_roles)
   }
 
-  
   pub fn get_permissions(&self) -> UserPermissions {
     UserPermissions::from_roles(self.roles.clone())
   }

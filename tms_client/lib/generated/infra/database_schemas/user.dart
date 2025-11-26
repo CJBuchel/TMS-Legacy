@@ -72,6 +72,7 @@ class User {
 
 class UserPermissions {
   final bool? admin;
+  final bool? queuer;
   final bool? referee;
   final bool? headReferee;
   final bool? judge;
@@ -82,6 +83,7 @@ class UserPermissions {
 
   const UserPermissions.raw({
     this.admin,
+    this.queuer,
     this.referee,
     this.headReferee,
     this.judge,
@@ -120,6 +122,7 @@ class UserPermissions {
 
   factory UserPermissions(
           {bool? admin,
+          bool? queuer,
           bool? referee,
           bool? headReferee,
           bool? judge,
@@ -129,6 +132,7 @@ class UserPermissions {
           bool? av}) =>
       TmsRustLib.instance.api.crateInfraDatabaseSchemasUserUserPermissionsNew(
           admin: admin,
+          queuer: queuer,
           referee: referee,
           headReferee: headReferee,
           judge: judge,
@@ -148,6 +152,7 @@ class UserPermissions {
   @override
   int get hashCode =>
       admin.hashCode ^
+      queuer.hashCode ^
       referee.hashCode ^
       headReferee.hashCode ^
       judge.hashCode ^
@@ -162,6 +167,7 @@ class UserPermissions {
       other is UserPermissions &&
           runtimeType == other.runtimeType &&
           admin == other.admin &&
+          queuer == other.queuer &&
           referee == other.referee &&
           headReferee == other.headReferee &&
           judge == other.judge &&

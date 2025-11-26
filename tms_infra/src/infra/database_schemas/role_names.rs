@@ -1,5 +1,6 @@
 pub const PUBLIC_ROLE: &str = "public";
 pub const ADMIN_ROLE: &str = "admin";
+pub const QUEUER_ROLE: &str = "queuer";
 pub const REFEREE_ROLE: &str = "referee";
 pub const HEAD_REFEREE_ROLE: &str = "head_referee";
 pub const JUDGE_ROLE: &str = "judge";

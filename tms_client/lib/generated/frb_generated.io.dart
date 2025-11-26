@@ -221,6 +221,11 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
       dco_decode_box_autoadd_robot_game_table_signal_request(dynamic raw);
 
   @protected
+  RobotGameToggleTeamCheckInRequest
+      dco_decode_box_autoadd_robot_game_toggle_team_check_in_request(
+          dynamic raw);
+
+  @protected
   Submerged dco_decode_box_autoadd_submerged(dynamic raw);
 
   @protected
@@ -349,6 +354,9 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
 
   @protected
   GameMatch dco_decode_game_match(dynamic raw);
+
+  @protected
+  GameMatchQueueStatus dco_decode_game_match_queue_status(dynamic raw);
 
   @protected
   GameMatchTable dco_decode_game_match_table(dynamic raw);
@@ -525,10 +533,17 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
       dynamic raw);
 
   @protected
+  RobotGameToggleTeamCheckInRequest
+      dco_decode_robot_game_toggle_team_check_in_request(dynamic raw);
+
+  @protected
   Submerged dco_decode_submerged(dynamic raw);
 
   @protected
   Team dco_decode_team(dynamic raw);
+
+  @protected
+  TeamCheckInStatus dco_decode_team_check_in_status(dynamic raw);
 
   @protected
   TeamInsertRequest dco_decode_team_insert_request(dynamic raw);
@@ -823,6 +838,11 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  RobotGameToggleTeamCheckInRequest
+      sse_decode_box_autoadd_robot_game_toggle_team_check_in_request(
+          SseDeserializer deserializer);
+
+  @protected
   Submerged sse_decode_box_autoadd_submerged(SseDeserializer deserializer);
 
   @protected
@@ -963,6 +983,10 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
 
   @protected
   GameMatch sse_decode_game_match(SseDeserializer deserializer);
+
+  @protected
+  GameMatchQueueStatus sse_decode_game_match_queue_status(
+      SseDeserializer deserializer);
 
   @protected
   GameMatchTable sse_decode_game_match_table(SseDeserializer deserializer);
@@ -1153,10 +1177,19 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  RobotGameToggleTeamCheckInRequest
+      sse_decode_robot_game_toggle_team_check_in_request(
+          SseDeserializer deserializer);
+
+  @protected
   Submerged sse_decode_submerged(SseDeserializer deserializer);
 
   @protected
   Team sse_decode_team(SseDeserializer deserializer);
+
+  @protected
+  TeamCheckInStatus sse_decode_team_check_in_status(
+      SseDeserializer deserializer);
 
   @protected
   TeamInsertRequest sse_decode_team_insert_request(
@@ -1464,6 +1497,10 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
       RobotGameTableSignalRequest self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_robot_game_toggle_team_check_in_request(
+      RobotGameToggleTeamCheckInRequest self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_submerged(
       Submerged self, SseSerializer serializer);
 
@@ -1604,6 +1641,10 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
 
   @protected
   void sse_encode_game_match(GameMatch self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_game_match_queue_status(
+      GameMatchQueueStatus self, SseSerializer serializer);
 
   @protected
   void sse_encode_game_match_table(
@@ -1801,10 +1842,18 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
       RobotGameTableSignalRequest self, SseSerializer serializer);
 
   @protected
+  void sse_encode_robot_game_toggle_team_check_in_request(
+      RobotGameToggleTeamCheckInRequest self, SseSerializer serializer);
+
+  @protected
   void sse_encode_submerged(Submerged self, SseSerializer serializer);
 
   @protected
   void sse_encode_team(Team self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_team_check_in_status(
+      TeamCheckInStatus self, SseSerializer serializer);
 
   @protected
   void sse_encode_team_insert_request(

@@ -37,7 +37,7 @@ use flutter_rust_bridge::{Handler, IntoIntoDart};
 
 flutter_rust_bridge::frb_generated_boilerplate!(default_stream_sink_codec = SseCodec, default_rust_opaque = RustOpaqueMoi, default_rust_auto_opaque = RustAutoOpaqueMoi,);
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 361571972;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -299985328;
 
 // Section: executor
 
@@ -5999,96 +5999,6 @@ fn wire__crate__infra__network_schemas__tournament_config_requests__tournament_c
     },
   )
 }
-fn wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_tms_mobi_config_request_default_impl(
-  ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-  rust_vec_len_: i32,
-  data_len_: i32,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
-  FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
-    flutter_rust_bridge::for_generated::TaskInfo {
-      debug_name: "tournament_config_set_tms_mobi_config_request_default",
-      port: None,
-      mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
-    },
-    move || {
-      let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
-      let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-      deserializer.end();
-      transform_result_sse::<_, ()>((move || {
-        let output_ok = Result::<_, ()>::Ok(crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest::default())?;
-        Ok(output_ok)
-      })())
-    },
-  )
-}
-fn wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_tms_mobi_config_request_from_json_string_impl(
-  ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-  rust_vec_len_: i32,
-  data_len_: i32,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
-  FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
-    flutter_rust_bridge::for_generated::TaskInfo {
-      debug_name: "tournament_config_set_tms_mobi_config_request_from_json_string",
-      port: None,
-      mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
-    },
-    move || {
-      let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
-      let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-      let api_json = <String>::sse_decode(&mut deserializer);
-      deserializer.end();
-      transform_result_sse::<_, ()>((move || {
-        let output_ok = Result::<_, ()>::Ok(crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest::from_json_string(&api_json))?;
-        Ok(output_ok)
-      })())
-    },
-  )
-}
-fn wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_tms_mobi_config_request_to_json_string_impl(
-  ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-  rust_vec_len_: i32,
-  data_len_: i32,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
-  FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
-    flutter_rust_bridge::for_generated::TaskInfo {
-      debug_name: "tournament_config_set_tms_mobi_config_request_to_json_string",
-      port: None,
-      mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
-    },
-    move || {
-      let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
-      let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-      let api_that = <crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest>::sse_decode(&mut deserializer);
-      deserializer.end();
-      transform_result_sse::<_, ()>((move || {
-        let output_ok = Result::<_, ()>::Ok(crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest::to_json_string(&api_that))?;
-        Ok(output_ok)
-      })())
-    },
-  )
-}
-fn wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_tms_mobi_config_request_to_schema_impl(
-  ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-  rust_vec_len_: i32,
-  data_len_: i32,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
-  FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
-    flutter_rust_bridge::for_generated::TaskInfo {
-      debug_name: "tournament_config_set_tms_mobi_config_request_to_schema",
-      port: None,
-      mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
-    },
-    move || {
-      let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
-      let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-      deserializer.end();
-      transform_result_sse::<_, ()>((move || {
-        let output_ok = Result::<_, ()>::Ok(crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest::to_schema())?;
-        Ok(output_ok)
-      })())
-    },
-  )
-}
 fn wire__crate__infra__database_schemas__tournament_config__tournament_config_to_json_string_impl(
   ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
   rust_vec_len_: i32,
@@ -8550,15 +8460,6 @@ impl SseDecode for crate::infra::network_schemas::tournament_config_requests::To
   }
 }
 
-impl SseDecode for crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest {
-  // Codec=Sse (Serialization based), see doc to use other codecs
-  fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-    let mut var_subdomain = <Option<String>>::sse_decode(deserializer);
-    let mut var_token = <Option<String>>::sse_decode(deserializer);
-    return crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest { subdomain: var_subdomain, token: var_token };
-  }
-}
-
 impl SseDecode for crate::infra::database_schemas::tournament_errors::TournamentErrorCode {
   // Codec=Sse (Serialization based), see doc to use other codecs
   fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -9023,68 +8924,64 @@ fn pde_ffi_dispatcher_sync_impl(func_id: i32, ptr: flutter_rust_bridge::for_gene
     274 => wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_timer_length_request_from_json_string_impl(ptr, rust_vec_len, data_len),
     275 => wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_timer_length_request_to_json_string_impl(ptr, rust_vec_len, data_len),
     276 => wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_timer_length_request_to_schema_impl(ptr, rust_vec_len, data_len),
-    277 => wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_tms_mobi_config_request_default_impl(ptr, rust_vec_len, data_len),
-    278 => wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_tms_mobi_config_request_from_json_string_impl(ptr, rust_vec_len, data_len),
-    279 => wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_tms_mobi_config_request_to_json_string_impl(ptr, rust_vec_len, data_len),
-    280 => wire__crate__infra__network_schemas__tournament_config_requests__tournament_config_set_tms_mobi_config_request_to_schema_impl(ptr, rust_vec_len, data_len),
-    281 => wire__crate__infra__database_schemas__tournament_config__tournament_config_to_json_string_impl(ptr, rust_vec_len, data_len),
-    282 => wire__crate__infra__database_schemas__tournament_config__tournament_config_to_schema_impl(ptr, rust_vec_len, data_len),
-    283 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_default_impl(ptr, rust_vec_len, data_len),
-    284 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_from_json_string_impl(ptr, rust_vec_len, data_len),
-    285 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_get_message_impl(ptr, rust_vec_len, data_len),
-    286 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_get_stringified_code_impl(ptr, rust_vec_len, data_len),
-    287 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_to_json_string_impl(ptr, rust_vec_len, data_len),
-    288 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_to_schema_impl(ptr, rust_vec_len, data_len),
-    289 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_default_impl(ptr, rust_vec_len, data_len),
-    290 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_from_json_string_impl(ptr, rust_vec_len, data_len),
-    291 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_get_message_impl(ptr, rust_vec_len, data_len),
-    292 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_get_stringified_code_impl(ptr, rust_vec_len, data_len),
-    293 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_to_json_string_impl(ptr, rust_vec_len, data_len),
-    294 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_to_schema_impl(ptr, rust_vec_len, data_len),
-    295 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_message_default_impl(ptr, rust_vec_len, data_len),
-    296 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_message_from_json_string_impl(ptr, rust_vec_len, data_len),
-    297 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_message_new_impl(ptr, rust_vec_len, data_len),
-    298 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_message_to_json_string_impl(ptr, rust_vec_len, data_len),
-    299 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_message_to_schema_impl(ptr, rust_vec_len, data_len),
-    300 => wire__crate__infra__database_schemas__tournament_season_blueprint__tournament_season_blueprint_default_impl(ptr, rust_vec_len, data_len),
-    301 => wire__crate__infra__database_schemas__tournament_season_blueprint__tournament_season_blueprint_from_json_string_impl(ptr, rust_vec_len, data_len),
-    302 => wire__crate__infra__database_schemas__tournament_season_blueprint__tournament_season_blueprint_to_json_string_impl(ptr, rust_vec_len, data_len),
-    303 => wire__crate__infra__database_schemas__tournament_season_blueprint__tournament_season_blueprint_to_schema_impl(ptr, rust_vec_len, data_len),
-    304 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_default_impl(ptr, rust_vec_len, data_len),
-    305 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_from_json_string_impl(ptr, rust_vec_len, data_len),
-    306 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_get_message_impl(ptr, rust_vec_len, data_len),
-    307 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_get_stringified_code_impl(ptr, rust_vec_len, data_len),
-    308 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_to_json_string_impl(ptr, rust_vec_len, data_len),
-    309 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_to_schema_impl(ptr, rust_vec_len, data_len),
-    310 => wire__crate__infra__fll_infra__seasons__fll_2025__unearthed_get_fll_game_impl(ptr, rust_vec_len, data_len),
-    311 => wire__crate__infra__fll_infra__seasons__fll_2025__unearthed_get_season_impl(ptr, rust_vec_len, data_len),
-    312 => wire__crate__infra__fll_infra__seasons__fll_2025__unearthed_validate_impl(ptr, rust_vec_len, data_len),
-    313 => wire__crate__infra__database_schemas__user__user_default_impl(ptr, rust_vec_len, data_len),
-    314 => wire__crate__infra__database_schemas__user__user_from_json_string_impl(ptr, rust_vec_len, data_len),
-    315 => wire__crate__infra__database_schemas__user__user_get_permissions_impl(ptr, rust_vec_len, data_len),
-    316 => wire__crate__infra__database_schemas__user__user_has_permission_access_impl(ptr, rust_vec_len, data_len),
-    317 => wire__crate__infra__database_schemas__user__user_has_role_impl(ptr, rust_vec_len, data_len),
-    318 => wire__crate__infra__database_schemas__user__user_has_role_access_impl(ptr, rust_vec_len, data_len),
-    319 => wire__crate__infra__network_schemas__user_requests__user_insert_request_default_impl(ptr, rust_vec_len, data_len),
-    320 => wire__crate__infra__network_schemas__user_requests__user_insert_request_from_json_string_impl(ptr, rust_vec_len, data_len),
-    321 => wire__crate__infra__network_schemas__user_requests__user_insert_request_to_json_string_impl(ptr, rust_vec_len, data_len),
-    322 => wire__crate__infra__network_schemas__user_requests__user_insert_request_to_schema_impl(ptr, rust_vec_len, data_len),
-    323 => wire__crate__infra__database_schemas__user__user_new_impl(ptr, rust_vec_len, data_len),
-    324 => wire__crate__infra__database_schemas__user__user_permissions_default_impl(ptr, rust_vec_len, data_len),
-    325 => wire__crate__infra__database_schemas__user__user_permissions_from_json_string_impl(ptr, rust_vec_len, data_len),
-    326 => wire__crate__infra__database_schemas__user__user_permissions_from_roles_impl(ptr, rust_vec_len, data_len),
-    327 => wire__crate__infra__database_schemas__user__user_permissions_get_merged_permissions_impl(ptr, rust_vec_len, data_len),
-    328 => wire__crate__infra__database_schemas__user__user_permissions_get_roles_impl(ptr, rust_vec_len, data_len),
-    329 => wire__crate__infra__database_schemas__user__user_permissions_has_role_access_impl(ptr, rust_vec_len, data_len),
-    330 => wire__crate__infra__database_schemas__user__user_permissions_new_impl(ptr, rust_vec_len, data_len),
-    331 => wire__crate__infra__database_schemas__user__user_permissions_to_json_string_impl(ptr, rust_vec_len, data_len),
-    332 => wire__crate__infra__database_schemas__user__user_permissions_to_schema_impl(ptr, rust_vec_len, data_len),
-    333 => wire__crate__infra__network_schemas__user_requests__user_remove_request_default_impl(ptr, rust_vec_len, data_len),
-    334 => wire__crate__infra__network_schemas__user_requests__user_remove_request_from_json_string_impl(ptr, rust_vec_len, data_len),
-    335 => wire__crate__infra__network_schemas__user_requests__user_remove_request_to_json_string_impl(ptr, rust_vec_len, data_len),
-    336 => wire__crate__infra__network_schemas__user_requests__user_remove_request_to_schema_impl(ptr, rust_vec_len, data_len),
-    337 => wire__crate__infra__database_schemas__user__user_to_json_string_impl(ptr, rust_vec_len, data_len),
-    338 => wire__crate__infra__database_schemas__user__user_to_schema_impl(ptr, rust_vec_len, data_len),
+    277 => wire__crate__infra__database_schemas__tournament_config__tournament_config_to_json_string_impl(ptr, rust_vec_len, data_len),
+    278 => wire__crate__infra__database_schemas__tournament_config__tournament_config_to_schema_impl(ptr, rust_vec_len, data_len),
+    279 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_default_impl(ptr, rust_vec_len, data_len),
+    280 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_from_json_string_impl(ptr, rust_vec_len, data_len),
+    281 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_get_message_impl(ptr, rust_vec_len, data_len),
+    282 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_get_stringified_code_impl(ptr, rust_vec_len, data_len),
+    283 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_to_json_string_impl(ptr, rust_vec_len, data_len),
+    284 => wire__crate__infra__database_schemas__tournament_errors__tournament_error_code_to_schema_impl(ptr, rust_vec_len, data_len),
+    285 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_default_impl(ptr, rust_vec_len, data_len),
+    286 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_from_json_string_impl(ptr, rust_vec_len, data_len),
+    287 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_get_message_impl(ptr, rust_vec_len, data_len),
+    288 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_get_stringified_code_impl(ptr, rust_vec_len, data_len),
+    289 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_to_json_string_impl(ptr, rust_vec_len, data_len),
+    290 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_code_to_schema_impl(ptr, rust_vec_len, data_len),
+    291 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_message_default_impl(ptr, rust_vec_len, data_len),
+    292 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_message_from_json_string_impl(ptr, rust_vec_len, data_len),
+    293 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_message_new_impl(ptr, rust_vec_len, data_len),
+    294 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_message_to_json_string_impl(ptr, rust_vec_len, data_len),
+    295 => wire__crate__infra__database_schemas__tournament_integrity_message__tournament_integrity_message_to_schema_impl(ptr, rust_vec_len, data_len),
+    296 => wire__crate__infra__database_schemas__tournament_season_blueprint__tournament_season_blueprint_default_impl(ptr, rust_vec_len, data_len),
+    297 => wire__crate__infra__database_schemas__tournament_season_blueprint__tournament_season_blueprint_from_json_string_impl(ptr, rust_vec_len, data_len),
+    298 => wire__crate__infra__database_schemas__tournament_season_blueprint__tournament_season_blueprint_to_json_string_impl(ptr, rust_vec_len, data_len),
+    299 => wire__crate__infra__database_schemas__tournament_season_blueprint__tournament_season_blueprint_to_schema_impl(ptr, rust_vec_len, data_len),
+    300 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_default_impl(ptr, rust_vec_len, data_len),
+    301 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_from_json_string_impl(ptr, rust_vec_len, data_len),
+    302 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_get_message_impl(ptr, rust_vec_len, data_len),
+    303 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_get_stringified_code_impl(ptr, rust_vec_len, data_len),
+    304 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_to_json_string_impl(ptr, rust_vec_len, data_len),
+    305 => wire__crate__infra__database_schemas__tournament_warnings__tournament_warning_code_to_schema_impl(ptr, rust_vec_len, data_len),
+    306 => wire__crate__infra__fll_infra__seasons__fll_2025__unearthed_get_fll_game_impl(ptr, rust_vec_len, data_len),
+    307 => wire__crate__infra__fll_infra__seasons__fll_2025__unearthed_get_season_impl(ptr, rust_vec_len, data_len),
+    308 => wire__crate__infra__fll_infra__seasons__fll_2025__unearthed_validate_impl(ptr, rust_vec_len, data_len),
+    309 => wire__crate__infra__database_schemas__user__user_default_impl(ptr, rust_vec_len, data_len),
+    310 => wire__crate__infra__database_schemas__user__user_from_json_string_impl(ptr, rust_vec_len, data_len),
+    311 => wire__crate__infra__database_schemas__user__user_get_permissions_impl(ptr, rust_vec_len, data_len),
+    312 => wire__crate__infra__database_schemas__user__user_has_permission_access_impl(ptr, rust_vec_len, data_len),
+    313 => wire__crate__infra__database_schemas__user__user_has_role_impl(ptr, rust_vec_len, data_len),
+    314 => wire__crate__infra__database_schemas__user__user_has_role_access_impl(ptr, rust_vec_len, data_len),
+    315 => wire__crate__infra__network_schemas__user_requests__user_insert_request_default_impl(ptr, rust_vec_len, data_len),
+    316 => wire__crate__infra__network_schemas__user_requests__user_insert_request_from_json_string_impl(ptr, rust_vec_len, data_len),
+    317 => wire__crate__infra__network_schemas__user_requests__user_insert_request_to_json_string_impl(ptr, rust_vec_len, data_len),
+    318 => wire__crate__infra__network_schemas__user_requests__user_insert_request_to_schema_impl(ptr, rust_vec_len, data_len),
+    319 => wire__crate__infra__database_schemas__user__user_new_impl(ptr, rust_vec_len, data_len),
+    320 => wire__crate__infra__database_schemas__user__user_permissions_default_impl(ptr, rust_vec_len, data_len),
+    321 => wire__crate__infra__database_schemas__user__user_permissions_from_json_string_impl(ptr, rust_vec_len, data_len),
+    322 => wire__crate__infra__database_schemas__user__user_permissions_from_roles_impl(ptr, rust_vec_len, data_len),
+    323 => wire__crate__infra__database_schemas__user__user_permissions_get_merged_permissions_impl(ptr, rust_vec_len, data_len),
+    324 => wire__crate__infra__database_schemas__user__user_permissions_get_roles_impl(ptr, rust_vec_len, data_len),
+    325 => wire__crate__infra__database_schemas__user__user_permissions_has_role_access_impl(ptr, rust_vec_len, data_len),
+    326 => wire__crate__infra__database_schemas__user__user_permissions_new_impl(ptr, rust_vec_len, data_len),
+    327 => wire__crate__infra__database_schemas__user__user_permissions_to_json_string_impl(ptr, rust_vec_len, data_len),
+    328 => wire__crate__infra__database_schemas__user__user_permissions_to_schema_impl(ptr, rust_vec_len, data_len),
+    329 => wire__crate__infra__network_schemas__user_requests__user_remove_request_default_impl(ptr, rust_vec_len, data_len),
+    330 => wire__crate__infra__network_schemas__user_requests__user_remove_request_from_json_string_impl(ptr, rust_vec_len, data_len),
+    331 => wire__crate__infra__network_schemas__user_requests__user_remove_request_to_json_string_impl(ptr, rust_vec_len, data_len),
+    332 => wire__crate__infra__network_schemas__user_requests__user_remove_request_to_schema_impl(ptr, rust_vec_len, data_len),
+    333 => wire__crate__infra__database_schemas__user__user_to_json_string_impl(ptr, rust_vec_len, data_len),
+    334 => wire__crate__infra__database_schemas__user__user_to_schema_impl(ptr, rust_vec_len, data_len),
     _ => unreachable!(),
   }
 }
@@ -10056,20 +9953,6 @@ impl flutter_rust_bridge::IntoDart for crate::infra::network_schemas::tournament
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTimerLengthRequest {}
 impl flutter_rust_bridge::IntoIntoDart<crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTimerLengthRequest> for crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTimerLengthRequest {
   fn into_into_dart(self) -> crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTimerLengthRequest {
-    self
-  }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest {
-  fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-    [self.subdomain.into_into_dart().into_dart(), self.token.into_into_dart().into_dart()].into_dart()
-  }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest {}
-impl flutter_rust_bridge::IntoIntoDart<crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest>
-  for crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest
-{
-  fn into_into_dart(self) -> crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest {
     self
   }
 }
@@ -11141,14 +11024,6 @@ impl SseEncode for crate::infra::network_schemas::tournament_config_requests::To
   // Codec=Sse (Serialization based), see doc to use other codecs
   fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
     <u32>::sse_encode(self.timer_length, serializer);
-  }
-}
-
-impl SseEncode for crate::infra::network_schemas::tournament_config_requests::TournamentConfigSetTmsMobiConfigRequest {
-  // Codec=Sse (Serialization based), see doc to use other codecs
-  fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-    <Option<String>>::sse_encode(self.subdomain, serializer);
-    <Option<String>>::sse_encode(self.token, serializer);
   }
 }
 

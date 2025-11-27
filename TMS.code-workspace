@@ -1,46 +1,41 @@
 {
-  "folders": [
-    {
-      "name": "tms_client",
-      "path": "tms_client"
-    },
-    {
-      "name": "tms_server",
-      "path": "tms_server"
-    },
-    {
-      "name": "tms_infra",
-      "path": "tms_infra"
-    },
-    {
-      "name": "echo_tree_rs",
-      "path": "echo_tree_rs"
-    },
-    {
-      "name": "echo_tree_infra",
-      "path": "echo_tree_infra"
-    },
-    {
-      "name": "echo_tree_flutter",
-      "path": "echo_tree_flutter"
-    },
-    {
-      "name": "tms_schedule_handler",
-      "path": "tms_schedule_handler"
-    },
-    {
-      "name": "docs",
-      "path": "docs"
-    }
-  ],
+  "folders": [{ "path": "." }],
   "settings": {
-    "search.exclude": {
-      "**/android": true
+    "files.watcherExclude": {
+      "**/target/**": true,
+      "**/.dart_tool/**": true,
+      "**/build/**": true,
+      "**/node_modules/**": true,
+      "**/.git/objects/**": true,
+      "**/.git/subtree-cache/**": true,
+      "**/android/.gradle/**": true,
+      "**/ios/Pods/**": true,
+      "**/.flutter-plugins-dependencies": true
     },
-    "rust-analyzer.showUnlinkedFileNotification": false,
-    "svg.preview.background": "dark-transparent",
-    "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "automatic",
-    "cSpell.words": ["tmsapplicationscheme"]
+    "search.exclude": {
+      "**/target/**": true,
+      "**/.dart_tool/**": true,
+      "**/build/**": true,
+      "**/node_modules/**": true,
+      "**/*.lock": true,
+      "**/Cargo.lock": false,
+      "**/pubspec.lock": false
+    },
+    "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true
+    },
+    "rust-analyzer.files.excludeDirs": [
+      "target",
+      ".dart_tool",
+      "build",
+      "node_modules"
+    ],
+    "dart.analysisExcludedFolders": ["**/target", "**/build", "**/.dart_tool"],
+    "typescript.disableAutomaticTypeAcquisition": true
   }
 }

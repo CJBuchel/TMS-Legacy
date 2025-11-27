@@ -2,7 +2,6 @@ use tms_infra::*;
 
 use crate::{database::*, network::*};
 
-
 pub async fn tournament_config_set_name_handler(request: TournamentConfigSetNameRequest, db: SharedDatabase) -> Result<impl warp::Reply, warp::Rejection> {
   let mut write_db = db.write().await;
   log::info!("Setting tournament name to: {}", request.name);

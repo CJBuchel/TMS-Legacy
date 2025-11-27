@@ -90,6 +90,18 @@ impl Default for TournamentConfigSetAdminPasswordRequest {
   }
 }
 
+#[derive(Serialize, Deserialize, Debug, JsonSchema)]
+pub struct TournamentConfigSetTmsMobiConfigRequest {
+  pub subdomain: Option<String>,
+  pub token: Option<String>,
+}
+
+impl Default for TournamentConfigSetTmsMobiConfigRequest {
+  fn default() -> Self {
+    Self { subdomain: None, token: None }
+  }
+}
+
 impl DataSchemeExtensions for TournamentConfigSetNameRequest {}
 impl DataSchemeExtensions for TournamentConfigSetSeasonRequest {}
 impl DataSchemeExtensions for TournamentConfigSetAdminPasswordRequest {}
@@ -97,3 +109,4 @@ impl DataSchemeExtensions for TournamentConfigSetBackupIntervalRequest {}
 impl DataSchemeExtensions for TournamentConfigSetRetainBackupsRequest {}
 impl DataSchemeExtensions for TournamentConfigSetTimerLengthRequest {}
 impl DataSchemeExtensions for TournamentConfigSetEndgameTimerLengthRequest {}
+impl DataSchemeExtensions for TournamentConfigSetTmsMobiConfigRequest {}

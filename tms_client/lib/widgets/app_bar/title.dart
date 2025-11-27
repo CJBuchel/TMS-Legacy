@@ -14,8 +14,6 @@ class TmsAppBarTitle extends StatelessWidget {
         return const Text("DC", style: TextStyle(color: Colors.red));
       case NetworkConnectionState.connected:
         return const Text("OK", style: TextStyle(color: Colors.green));
-      default:
-        return const Text("N/A");
     }
   }
 
@@ -59,7 +57,8 @@ class TmsAppBarTitle extends StatelessWidget {
       selector: (_, connectionProvider) => connectionProvider.isConnected,
       builder: (_, isConnected, __) {
         if (isConnected) {
-          return EchoTreeLifetime(trees: [":tournament:config"], child: _eventTitle());
+          return EchoTreeLifetime(
+              trees: [":tournament:config"], child: _eventTitle());
         } else {
           return _stateTitleRow();
         }

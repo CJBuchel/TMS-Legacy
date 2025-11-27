@@ -25,7 +25,6 @@ class Connection extends StatelessWidget {
       builder: (context, isConnected, child) {
         String ip = TmsLocalStorageProvider().serverIp;
         String port = TmsLocalStorageProvider().serverPort.toString();
-        String externalIp = TmsLocalStorageProvider().serverExternalIp;
 
         return Column(
           children: [
@@ -47,27 +46,6 @@ class Connection extends StatelessWidget {
               children: [
                 Text(
                   ip.isNotEmpty ? '${ip}:${port}' : 'N/A',
-                  style: TextStyle(
-                    color: isConnected ? null : Colors.red,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // allow text to be copied
-                SelectableText(
-                  'Actual: ',
-                  style: TextStyle(
-                    color: isConnected ? null : Colors.red,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                SelectableText(
-                  externalIp.isNotEmpty ? '${externalIp}:${port}' : 'N/A',
                   style: TextStyle(
                     color: isConnected ? null : Colors.red,
                     overflow: TextOverflow.ellipsis,

@@ -310,6 +310,11 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
           dynamic raw);
 
   @protected
+  TournamentConfigSetTmsMobiConfigRequest
+      dco_decode_box_autoadd_tournament_config_set_tms_mobi_config_request(
+          dynamic raw);
+
+  @protected
   TournamentIntegrityCode dco_decode_box_autoadd_tournament_integrity_code(
       dynamic raw);
 
@@ -625,6 +630,10 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
       dco_decode_tournament_config_set_timer_length_request(dynamic raw);
 
   @protected
+  TournamentConfigSetTmsMobiConfigRequest
+      dco_decode_tournament_config_set_tms_mobi_config_request(dynamic raw);
+
+  @protected
   TournamentErrorCode dco_decode_tournament_error_code(dynamic raw);
 
   @protected
@@ -931,6 +940,11 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
   @protected
   TournamentConfigSetTimerLengthRequest
       sse_decode_box_autoadd_tournament_config_set_timer_length_request(
+          SseDeserializer deserializer);
+
+  @protected
+  TournamentConfigSetTmsMobiConfigRequest
+      sse_decode_box_autoadd_tournament_config_set_tms_mobi_config_request(
           SseDeserializer deserializer);
 
   @protected
@@ -1285,6 +1299,11 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  TournamentConfigSetTmsMobiConfigRequest
+      sse_decode_tournament_config_set_tms_mobi_config_request(
+          SseDeserializer deserializer);
+
+  @protected
   TournamentErrorCode sse_decode_tournament_error_code(
       SseDeserializer deserializer);
 
@@ -1588,6 +1607,10 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
   @protected
   void sse_encode_box_autoadd_tournament_config_set_timer_length_request(
       TournamentConfigSetTimerLengthRequest self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_tournament_config_set_tms_mobi_config_request(
+      TournamentConfigSetTmsMobiConfigRequest self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_tournament_integrity_code(
@@ -1943,6 +1966,10 @@ abstract class TmsRustLibApiImplPlatform extends BaseApiImpl<TmsRustLibWire> {
   @protected
   void sse_encode_tournament_config_set_timer_length_request(
       TournamentConfigSetTimerLengthRequest self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_tournament_config_set_tms_mobi_config_request(
+      TournamentConfigSetTmsMobiConfigRequest self, SseSerializer serializer);
 
   @protected
   void sse_encode_tournament_error_code(

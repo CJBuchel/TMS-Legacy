@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:tms/generated/infra/network_schemas/socket_protocol/server_socket_protocol.dart';
-import 'package:tms/utils/logger.dart';
 import 'package:tms/network/connectivity.dart';
+import 'package:tms/utils/logger.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 typedef TmsEventHandler = void Function(TmsServerSocketMessage event);
@@ -49,18 +53,33 @@ class WebsocketController {
 
   Future<bool> connect(String url) async {
     try {
-      _channel = WebSocketChannel.connect(Uri.parse(url));
-      _channel?.ready.then((_) {
-        _connectivity.state = NetworkConnectionState.connected;
-        TmsLogger().d("Connected to TMS server websocket");
-        _listen();
-      });
+      TmsLogger().d("Connecting to WebSocket: $url");
+
+      if (kIsWeb) {
+        // Web platform
+        _channel = WebSocketChannel.connect(Uri.parse(url));
+      } else {
+        // Mobile/Desktop - disable certificate validation
+        final httpClient = HttpClient()
+          ..badCertificateCallback = (cert, host, port) => true;
+
+        _channel = IOWebSocketChannel.connect(
+          url,
+          customClient: httpClient,
+        );
+      }
+
+      await _channel?.ready;
+      _connectivity.state = NetworkConnectionState.connected;
+      TmsLogger().d("Connected to TMS server websocket");
+      _listen();
+
+      return true;
     } catch (e) {
       _connectivity.state = NetworkConnectionState.disconnected;
       TmsLogger().e("Error connecting to TMS server websocket: $e");
       return false;
     }
-    return true;
   }
 
   Future<void> disconnect() async {

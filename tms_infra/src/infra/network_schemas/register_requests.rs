@@ -19,8 +19,7 @@ impl Default for RegisterRequest {
 pub struct RegisterResponse {
   pub auth_token: String,
   pub uuid: String,
-  pub url: String,
-  pub server_ip: String,
+  pub protocol: String, // ws or wss
   pub roles: Vec<TmsTreeRole>,
 }
 
@@ -29,8 +28,7 @@ impl Default for RegisterResponse {
     Self {
       auth_token: "".to_string(),
       uuid: "".to_string(),
-      url: "".to_string(),
-      server_ip: "".to_string(),
+      protocol: "".to_string(),
       roles: Vec::new(),
     }
   }

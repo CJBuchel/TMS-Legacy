@@ -9,14 +9,12 @@ pub struct Network {
   db: SharedDatabase,
   clients: ClientMap,
   services: SharedServices,
-  local_ip: String,
   tls: bool,
-  port: u16,
 }
 
 impl Network {
-  pub fn new(db: SharedDatabase, clients: ClientMap, services: SharedServices, local_ip: String, tls: bool, port: u16) -> Self {
-    Self { db, clients, services, local_ip, tls, port }
+  pub fn new(db: SharedDatabase, clients: ClientMap, services: SharedServices, tls: bool) -> Self {
+    Self { db, clients, services, tls }
   }
 
   pub fn get_network_routes(&self) -> impl warp::Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
@@ -45,7 +43,7 @@ impl Network {
       // teams
       .or(teams_filter(self.clients.clone(), self.db.clone()))
       // core filters
-      .or(registration_filter(self.clients.clone(), self.db.clone(), self.local_ip.clone(), self.tls, self.port))
+      .or(registration_filter(self.clients.clone(), self.db.clone(), self.tls))
       .or(websocket_filter(self.clients.clone(), self.db.clone()))
       // box and recover
       .boxed()

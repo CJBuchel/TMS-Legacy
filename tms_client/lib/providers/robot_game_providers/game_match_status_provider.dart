@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/network_schemas/socket_protocol/match_state_event.dart';
@@ -5,7 +6,6 @@ import 'package:tms/generated/infra/network_schemas/socket_protocol/server_socke
 import 'package:tms/mixins/server_event_subscriber_mixin.dart';
 import 'package:tms/network/connectivity.dart';
 import 'package:tms/network/network.dart';
-import 'package:collection/collection.dart';
 import 'package:tms/services/game_match_service.dart';
 import 'package:tms/utils/logger.dart';
 
@@ -33,14 +33,16 @@ class _StagedGameMatchStatusProvider extends _BaseGameMatchStatusProvider {
     }
 
     // check if the match is already completed
-    GameMatch? match = matches.firstWhereOrNull((match) => match.matchNumber == matchNumber);
+    GameMatch? match =
+        matches.firstWhereOrNull((match) => match.matchNumber == matchNumber);
     if (match == null || match.completed) {
       return false;
     }
 
     // check over the staged matches
     for (var stagedMatchNumber in _stagedMatchNumbers) {
-      GameMatch? stagedMatch = matches.firstWhereOrNull((match) => match.matchNumber == stagedMatchNumber);
+      GameMatch? stagedMatch = matches
+          .firstWhereOrNull((match) => match.matchNumber == stagedMatchNumber);
 
       if (stagedMatch == null) {
         return false;
@@ -60,7 +62,9 @@ class _StagedGameMatchStatusProvider extends _BaseGameMatchStatusProvider {
   }
 
   List<GameMatch> getStagedMatches(List<GameMatch> matches) {
-    return matches.where((match) => _stagedMatchNumbers.contains(match.matchNumber)).toList();
+    return matches
+        .where((match) => _stagedMatchNumbers.contains(match.matchNumber))
+        .toList();
   }
 
   void stageMatches(List<String> matchNumbers) {
@@ -96,16 +100,20 @@ class _LoadedGameMatchStatusProvider extends _StagedGameMatchStatusProvider {
   }
 
   List<GameMatch> getLoadedMatches(List<GameMatch> matches) {
-    return matches.where((match) => _loadedMatchNumbers.contains(match.matchNumber)).toList();
+    return matches
+        .where((match) => _loadedMatchNumbers.contains(match.matchNumber))
+        .toList();
   }
 
   bool isMatchLoaded(String matchNumber) {
     return _loadedMatchNumbers.contains(matchNumber);
   }
 
-  bool hasTableSubmittedPriorScoreSheets(String table, List<GameMatch> matches) {
+  bool hasTableSubmittedPriorScoreSheets(
+      String table, List<GameMatch> matches) {
     // get all matches that are complete
-    List<GameMatch> completedMatches = matches.where((match) => match.completed).toList();
+    List<GameMatch> completedMatches =
+        matches.where((match) => match.completed).toList();
 
     // Check if any of the completed matches have the specified table with a submitted score sheet
     for (var match in completedMatches) {
@@ -123,7 +131,8 @@ class _LoadedGameMatchStatusProvider extends _StagedGameMatchStatusProvider {
   bool canLoad(List<GameMatch> matches) {
     // check if all staged match tables have submitted prior score sheets
     bool tablesReady = _stagedMatchNumbers.every((matchNumber) {
-      GameMatch? match = matches.firstWhereOrNull((match) => match.matchNumber == matchNumber);
+      GameMatch? match =
+          matches.firstWhereOrNull((match) => match.matchNumber == matchNumber);
       if (match == null) return false;
       return match.gameMatchTables.every((table) {
         return hasTableSubmittedPriorScoreSheets(table.table, matches);
@@ -132,11 +141,15 @@ class _LoadedGameMatchStatusProvider extends _StagedGameMatchStatusProvider {
 
     // check to make sure that the staged matches are incomplete
     bool matchesIncomplete = _stagedMatchNumbers.every((matchNumber) {
-      GameMatch? match = matches.firstWhereOrNull((match) => match.matchNumber == matchNumber);
+      GameMatch? match =
+          matches.firstWhereOrNull((match) => match.matchNumber == matchNumber);
       if (match == null) return false;
       return !match.completed;
     });
-    return _stagedMatchNumbers.isNotEmpty && _loadedMatchNumbers.isEmpty && tablesReady && matchesIncomplete;
+    return _stagedMatchNumbers.isNotEmpty &&
+        _loadedMatchNumbers.isEmpty &&
+        tablesReady &&
+        matchesIncomplete;
   }
 
   bool get canUnload {
@@ -185,10 +198,12 @@ class _RunningGameMatchStatusProvider extends _ReadyGameMatchStatusProvider {
   }
 }
 
-class GameMatchStatusProvider extends _RunningGameMatchStatusProvider with ServerEventSubscribeNotifierMixin {
+class GameMatchStatusProvider extends _RunningGameMatchStatusProvider
+    with ServerEventSubscribeNotifierMixin {
   late final VoidCallback _networkListener;
 
-  void _onChangeMatchStatus(bool isMatchesReady, bool isMatchesRunning, List<String> loadedMatchNumbers) {
+  void _onChangeMatchStatus(bool isMatchesReady, bool isMatchesRunning,
+      List<String> loadedMatchNumbers) {
     bool shouldNotify = false;
 
     if (_isMatchesReady != isMatchesReady) {
@@ -201,7 +216,8 @@ class GameMatchStatusProvider extends _RunningGameMatchStatusProvider with Serve
       shouldNotify = true;
     }
 
-    if (!const IterableEquality().equals(_loadedMatchNumbers, loadedMatchNumbers)) {
+    if (!const IterableEquality()
+        .equals(_loadedMatchNumbers, loadedMatchNumbers)) {
       _loadedMatchNumbers = loadedMatchNumbers;
       shouldNotify = true;
     }
@@ -226,7 +242,8 @@ class GameMatchStatusProvider extends _RunningGameMatchStatusProvider with Serve
     subscribeToEvent(TmsServerSocketEvent.matchStateEvent, (event) {
       if (event.message != null) {
         try {
-          TmsServerMatchStateEvent matchStateEvent = TmsServerMatchStateEvent.fromJsonString(json: event.message!);
+          TmsServerMatchStateEvent matchStateEvent =
+              TmsServerMatchStateEvent.fromJsonString(json: event.message!);
           switch (matchStateEvent.state) {
             // stage 1
             case TmsServerMatchState.unload:
@@ -234,18 +251,18 @@ class GameMatchStatusProvider extends _RunningGameMatchStatusProvider with Serve
               break;
             // stage 2
             case TmsServerMatchState.load:
-              _onChangeMatchStatus(false, false, matchStateEvent.gameMatchNumbers);
+              _onChangeMatchStatus(
+                  false, false, matchStateEvent.gameMatchNumbers);
               break;
             // stage 3
             case TmsServerMatchState.ready:
-              _onChangeMatchStatus(true, false, matchStateEvent.gameMatchNumbers);
+              _onChangeMatchStatus(
+                  true, false, matchStateEvent.gameMatchNumbers);
               break;
             // stage 4
             case TmsServerMatchState.running:
-              _onChangeMatchStatus(true, true, matchStateEvent.gameMatchNumbers);
-              break;
-            default:
-              TmsLogger().e("Unknown match state event: ${matchStateEvent.state}");
+              _onChangeMatchStatus(
+                  true, true, matchStateEvent.gameMatchNumbers);
               break;
           }
         } catch (e) {

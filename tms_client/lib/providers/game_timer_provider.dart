@@ -14,7 +14,8 @@ enum TimerRunState {
   stopped,
 }
 
-class GameTimerProvider extends TournamentConfigProvider with ServerEventSubscribeNotifierMixin {
+class GameTimerProvider extends TournamentConfigProvider
+    with ServerEventSubscribeNotifierMixin {
   GameTimerService _gameTimerService = GameTimerService();
   TimerRunState _timerState = TimerRunState.idle;
   int _timer = 150; // in seconds (default)
@@ -29,7 +30,8 @@ class GameTimerProvider extends TournamentConfigProvider with ServerEventSubscri
 
   void removeTimerStateChangeListener(Function(TimerRunState state) callback) {
     _callbacks.remove(callback);
-    TmsLogger().w("Removing callback from GameTimerProvider callbacks: ${_callbacks.length}");
+    TmsLogger().w(
+        "Removing callback from GameTimerProvider callbacks: ${_callbacks.length}");
   }
 
   void _triggerCallbacks(TimerRunState state) {
@@ -57,7 +59,8 @@ class GameTimerProvider extends TournamentConfigProvider with ServerEventSubscri
       if (event.message != null) {
         // handle timer event
         try {
-          TmsServerMatchTimerEvent timerEvent = TmsServerMatchTimerEvent.fromJsonString(json: event.message!);
+          TmsServerMatchTimerEvent timerEvent =
+              TmsServerMatchTimerEvent.fromJsonString(json: event.message!);
           switch (timerEvent.state) {
             case TmsServerMatchTimerState.startWithCountdown:
               _setTimer(timerEvent.time);
@@ -93,9 +96,6 @@ class GameTimerProvider extends TournamentConfigProvider with ServerEventSubscri
               _timerState = TimerRunState.idle;
               _triggerCallbacks(_timerState);
               break;
-            default:
-              TmsLogger().w("Unknown timer event state: ${timerEvent.state}");
-              break;
           }
           notifyListeners();
         } catch (e) {
@@ -127,5 +127,7 @@ class GameTimerProvider extends TournamentConfigProvider with ServerEventSubscri
         _timerState != TimerRunState.stopped;
   }
 
-  bool get canReload => _timerState == TimerRunState.ended || _timerState == TimerRunState.stopped;
+  bool get canReload =>
+      _timerState == TimerRunState.ended ||
+      _timerState == TimerRunState.stopped;
 }

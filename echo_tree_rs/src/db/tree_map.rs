@@ -4,7 +4,6 @@ use log::{error, warn};
 
 use super::managed_tree::ManagedTree;
 
-
 pub struct TreeMap {
   db: sled::Db,
   tree_map: HashMap<String, ManagedTree>,
@@ -24,12 +23,10 @@ impl TreeMap {
   pub fn clear(&mut self) {
     // clear the trees in the map
     warn!("Clearing Trees");
-    self.tree_map.iter_mut().for_each(|(k, v)| {
-      match v.clear() {
-        Ok(_) => warn!("Cleared Tree: {}", k),
-        Err(e) => {
-          error!("Clear Failed: {}", e);
-        }
+    self.tree_map.iter_mut().for_each(|(k, v)| match v.clear() {
+      Ok(_) => warn!("Cleared Tree: {}", k),
+      Err(e) => {
+        error!("Clear Failed: {}", e);
       }
     });
   }
@@ -40,30 +37,29 @@ impl TreeMap {
     for (k, v) in self.tree_map.iter_mut() {
       match v.drop() {
         Ok(_) => warn!("dropped tree: {}", k),
-        Err(e) => error!("drop_tree failed for {}: {}", k, e)
+        Err(e) => error!("drop_tree failed for {}: {}", k, e),
       };
     }
 
     self.tree_map.clear();
   }
 
-
   pub fn open_tree(&mut self, tree: String) {
     if self.tree_map.contains_key(&tree) {
       warn!("tree already exists: {}", tree);
-      return
+      return;
     }
 
     if tree.starts_with(self.metadata_path.as_str()) {
       warn!("metadata trees are forbidden: {}", tree);
-      return
+      return;
     }
 
     let managed_tree = match ManagedTree::new(&self.db, tree.clone()) {
       Ok(t) => t,
       Err(e) => {
         error!("ManagedTree::new failed for {}: {}", tree, e);
-        return
+        return;
       }
     };
 
@@ -73,19 +69,19 @@ impl TreeMap {
   pub fn remove_tree(&mut self, tree: String) -> Option<ManagedTree> {
     if !self.tree_map.contains_key(&tree) {
       warn!("tree does not exist: {}", tree);
-      return None
+      return None;
     }
 
     if tree.starts_with(self.metadata_path.as_str()) {
       warn!("metadata trees are forbidden: {}", tree);
-      return None
+      return None;
     }
 
     let managed_tree = match self.tree_map.get_mut(&tree) {
       Some(t) => t,
       None => {
         warn!("tree not found: {}", tree);
-        return None
+        return None;
       }
     };
 
@@ -94,7 +90,7 @@ impl TreeMap {
       Ok(_) => (),
       Err(e) => {
         error!("drop_tree failed for {}: {}", tree, e);
-        return None
+        return None;
       }
     };
     self.tree_map.remove(&tree);
@@ -110,11 +106,11 @@ impl TreeMap {
     self.tree_map.get_mut(&tree)
   }
 
-  pub fn iter(&self) -> std::collections::hash_map::Iter<String, ManagedTree> {
+  pub fn iter(&self) -> std::collections::hash_map::Iter<'_, String, ManagedTree> {
     self.tree_map.iter()
   }
 
-  pub fn iter_mut(&mut self) -> std::collections::hash_map::IterMut<String, ManagedTree> {
+  pub fn iter_mut(&mut self) -> std::collections::hash_map::IterMut<'_, String, ManagedTree> {
     self.tree_map.iter_mut()
   }
 }

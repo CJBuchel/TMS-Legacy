@@ -6,6 +6,7 @@ use tms_server::network::ClientMap;
 use tms_server::network::*;
 use tms_server::services::SharedServices;
 use tms_server::services::SharedServicesTrait;
+use tms_server::tunnel;
 use tms_server::web_server::certificates::CertificateKeys;
 use tms_server::web_server::web_server::WebConfig;
 use tms_server::web_server::web_server::WebServer;
@@ -58,8 +59,25 @@ async fn main() {
   // create services
   let services = SharedServices::new_instance(db.clone(), clients.clone());
 
+  // startup tunnel if args provided
+  match (ServerArgs::get_proxy_token(), ServerArgs::get_proxy_subdomain()) {
+    (Some(token), Some(subdomain)) => {
+      log::info!("Starting tms.mobi tunnel for subdomain: {}", subdomain);
+
+      tokio::spawn(async move {
+        if let Err(e) = tunnel::run_tunnel_with_retry(token, subdomain, ServerArgs::get_port()).await {
+          log::error!("Tunnel task failed: {}", e);
+        }
+      });
+    }
+    (Some(_), None) => {
+      log::warn!("tms.mobi token provided but no subdomain - skipping tunnel startup");
+    }
+    _ => {}
+  }
+
   // // create network
-  let network = Network::new(db.clone(), clients.clone(), services, ip.clone(), ServerArgs::get_tls(), ServerArgs::get_port());
+  let network = Network::new(db.clone(), clients.clone(), services, ServerArgs::get_tls());
 
   // check arguments for certificates
   let cert_path = ServerArgs::get_cert_path();

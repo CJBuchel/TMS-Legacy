@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:echo_tree_flutter/widgets/echo_tree_provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/game_table.dart';
@@ -8,9 +9,9 @@ import 'package:tms/providers/local_storage_provider.dart';
 import 'package:tms/services/game_table_service.dart';
 import 'package:tms/utils/logger.dart';
 import 'package:tms/utils/sorter_util.dart';
-import 'package:collection/collection.dart';
 
-class GameTableProvider extends EchoTreeProvider<String, GameTable> with ServerEventSubscribeNotifierMixin {
+class GameTableProvider extends EchoTreeProvider<String, GameTable>
+    with ServerEventSubscribeNotifierMixin {
   GameTableService _service = GameTableService();
 
   String _localGameTable = "";
@@ -48,7 +49,8 @@ class GameTableProvider extends EchoTreeProvider<String, GameTable> with ServerE
     subscribeToEvent(TmsServerSocketEvent.matchStateEvent, (event) {
       if (event.message != null) {
         try {
-          TmsServerMatchStateEvent matchStateEvent = TmsServerMatchStateEvent.fromJsonString(json: event.message!);
+          TmsServerMatchStateEvent matchStateEvent =
+              TmsServerMatchStateEvent.fromJsonString(json: event.message!);
           switch (matchStateEvent.state) {
             case TmsServerMatchState.unload:
               _onMatchStateChange([]);
@@ -61,8 +63,6 @@ class GameTableProvider extends EchoTreeProvider<String, GameTable> with ServerE
               break;
             case TmsServerMatchState.running:
               _onMatchStateChange(matchStateEvent.gameMatchNumbers);
-              break;
-            default:
               break;
           }
         } catch (e) {
@@ -91,7 +91,8 @@ class GameTableProvider extends EchoTreeProvider<String, GameTable> with ServerE
   // and if the table exists in the db
   bool isLocalGameTableSet() {
     bool isTableSet = _localGameTable.isNotEmpty;
-    bool doesTableExist = this.items.containsValue(GameTable(tableName: _localGameTable));
+    bool doesTableExist =
+        this.items.containsValue(GameTable(tableName: _localGameTable));
     return isTableSet && doesTableExist;
   }
 
@@ -156,7 +157,8 @@ class GameTableProvider extends EchoTreeProvider<String, GameTable> with ServerE
     for (GameMatch match in tableMatches) {
       if (match.completed) {
         // check if table submitted
-        bool tableSubmitted = match.gameMatchTables.any((t) => t.table == _localGameTable && t.scoreSubmitted);
+        bool tableSubmitted = match.gameMatchTables
+            .any((t) => t.table == _localGameTable && t.scoreSubmitted);
         if (!tableSubmitted) {
           return match;
         }
@@ -165,7 +167,8 @@ class GameTableProvider extends EchoTreeProvider<String, GameTable> with ServerE
 
     // get the next match which is not submitted
     for (GameMatch match in tableMatches) {
-      bool tableSubmitted = match.gameMatchTables.any((t) => t.table == _localGameTable && t.scoreSubmitted);
+      bool tableSubmitted = match.gameMatchTables
+          .any((t) => t.table == _localGameTable && t.scoreSubmitted);
       if (!tableSubmitted) {
         return match;
       }
@@ -175,7 +178,10 @@ class GameTableProvider extends EchoTreeProvider<String, GameTable> with ServerE
   }
 
   String? getIdFromTableName(String tableName) {
-    return this.items.keys.firstWhereOrNull((key) => this.items[key]?.tableName == tableName);
+    return this
+        .items
+        .keys
+        .firstWhereOrNull((key) => this.items[key]?.tableName == tableName);
   }
 
   Future<int> insertTable(String? tableId, String table) async {

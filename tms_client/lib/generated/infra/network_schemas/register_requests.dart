@@ -47,15 +47,13 @@ class RegisterRequest {
 class RegisterResponse {
   final String authToken;
   final String uuid;
-  final String url;
-  final String serverIp;
+  final String protocol;
   final List<TmsTreeRole> roles;
 
   const RegisterResponse({
     required this.authToken,
     required this.uuid,
-    required this.url,
-    required this.serverIp,
+    required this.protocol,
     required this.roles,
   });
 
@@ -77,11 +75,7 @@ class RegisterResponse {
 
   @override
   int get hashCode =>
-      authToken.hashCode ^
-      uuid.hashCode ^
-      url.hashCode ^
-      serverIp.hashCode ^
-      roles.hashCode;
+      authToken.hashCode ^ uuid.hashCode ^ protocol.hashCode ^ roles.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -90,7 +84,6 @@ class RegisterResponse {
           runtimeType == other.runtimeType &&
           authToken == other.authToken &&
           uuid == other.uuid &&
-          url == other.url &&
-          serverIp == other.serverIp &&
+          protocol == other.protocol &&
           roles == other.roles;
 }

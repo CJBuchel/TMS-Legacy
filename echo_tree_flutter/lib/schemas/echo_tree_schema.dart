@@ -334,27 +334,27 @@ class EchoTreeRegisterRequest {
 class EchoTreeRegisterResponse {
     String authToken;
     Map<String, String> hierarchy;
-    String url;
+    String protocol;
     String uuid;
 
     EchoTreeRegisterResponse({
         required this.authToken,
         required this.hierarchy,
-        required this.url,
+        required this.protocol,
         required this.uuid,
     });
 
     factory EchoTreeRegisterResponse.fromJson(Map<String, dynamic> json) => EchoTreeRegisterResponse(
         authToken: json["auth_token"],
         hierarchy: Map.from(json["hierarchy"]).map((k, v) => MapEntry<String, String>(k, v)),
-        url: json["url"],
+        protocol: json["protocol"],
         uuid: json["uuid"],
     );
 
     Map<String, dynamic> toJson() => {
         "auth_token": authToken,
         "hierarchy": Map.from(hierarchy).map((k, v) => MapEntry<String, dynamic>(k, v)),
-        "url": url,
+        "protocol": protocol,
         "uuid": uuid,
     };
 }
@@ -508,7 +508,7 @@ class EnumValues<T> {
     EnumValues(this.map);
 
     Map<T, String> get reverse {
-        reverseMap = map.map((k, v) => MapEntry(v, k));
-        return reverseMap;
+            reverseMap = map.map((k, v) => MapEntry(v, k));
+            return reverseMap;
     }
 }

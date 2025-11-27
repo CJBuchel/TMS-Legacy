@@ -220,7 +220,7 @@
       "required": [
         "auth_token",
         "hierarchy",
-        "url",
+        "protocol",
         "uuid"
       ],
       "properties": {
@@ -233,7 +233,7 @@
             "type": "string"
           }
         },
-        "url": {
+        "protocol": {
           "type": "string"
         },
         "uuid": {

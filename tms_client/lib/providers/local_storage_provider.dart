@@ -56,15 +56,17 @@ abstract class _TmsLocalStorageBase extends ChangeNotifier {
 
 // shared preferences
 class TmsLocalStorageProvider extends _TmsLocalStorageBase {
-  static final TmsLocalStorageProvider _instance = TmsLocalStorageProvider._internal();
+  static final TmsLocalStorageProvider _instance =
+      TmsLocalStorageProvider._internal();
   TmsLocalStorageProvider._internal();
 
   factory TmsLocalStorageProvider() {
     return _instance;
   }
 
-  set serverHttpProtocol(String value) => setString("serverHttpProtocol", value);
-  String get serverHttpProtocol => getString("serverHttpProtocol") ?? "https";
+  set serverHttpProtocol(String value) =>
+      setString("serverHttpProtocol", value);
+  String get serverHttpProtocol => getString("serverHttpProtocol") ?? "http";
 
   set serverPort(int value) => setInt("serverPort", value);
   int get serverPort => getInt("serverPort") ?? defaultServerPort;
@@ -73,15 +75,15 @@ class TmsLocalStorageProvider extends _TmsLocalStorageBase {
   set serverIp(String value) => setString("serverIp", value);
   String get serverIp => getString("serverIp") ?? ""; // should be localhost
 
-  // external ip used for sharing (cannot be localhost)
-  set serverExternalIp(String value) => setString("serverExternalIp", value);
-  String get serverExternalIp => getString("serverExternalIp") ?? "";
-
   String get serverAddress => "$serverHttpProtocol://$serverIp:$serverPort";
-  String get serverExternalAddress => "$serverHttpProtocol://$serverExternalIp:$serverPort";
 
-  set wsConnectionString(String value) => setString("wsConnectionString", value);
-  String get wsConnectionString => getString("wsConnectionString") ?? "";
+  bool get tls => serverHttpProtocol == "https";
+
+  set wsProtocol(String value) => setString("wsProtocol", value);
+  String get wsProtocol => getString("wsProtocol") ?? "ws";
+
+  String get wsConnectionString =>
+      "$wsProtocol://$serverIp:$serverPort/ws/${uuid}";
 
   set authToken(String value) => setString("authToken", value);
   String get authToken => getString("authToken") ?? "";
@@ -105,14 +107,16 @@ class TmsLocalStorageProvider extends _TmsLocalStorageBase {
 
   List<TmsTreeRole> get authRoles {
     List<String>? roles = getStringList("authRoles");
-    return roles?.map((e) => TmsTreeRole.fromJsonString(json: e)).toList() ?? [];
+    return roles?.map((e) => TmsTreeRole.fromJsonString(json: e)).toList() ??
+        [];
   }
 
   set isLoggedIn(bool value) => setBool("isLoggedIn", value);
   bool get isLoggedIn => getBool("isLoggedIn") ?? false;
 
   set themeMode(ThemeMode value) => setInt("themeMode", value.index);
-  ThemeMode get themeMode => ThemeMode.values[getInt("themeMode") ?? 0]; // default to system theme
+  ThemeMode get themeMode =>
+      ThemeMode.values[getInt("themeMode") ?? 0]; // default to system theme
 
   set gameTable(String table) => setString("gameTable", table);
   String get gameTable => getString("gameTable") ?? "";
@@ -120,12 +124,18 @@ class TmsLocalStorageProvider extends _TmsLocalStorageBase {
   set gameReferee(String referee) => setString("gameReferee", referee);
   String get gameReferee => getString("gameReferee") ?? "";
 
-  set timerAssignedTables(List<String> tables) => setStringList("timerAssignedTables", tables);
-  List<String> get timerAssignedTables => getStringList("timerAssignedTables") ?? [];
+  set timerAssignedTables(List<String> tables) =>
+      setStringList("timerAssignedTables", tables);
+  List<String> get timerAssignedTables =>
+      getStringList("timerAssignedTables") ?? [];
 
-  set scoreboardShowMatchInfo(bool value) => setBool("scoreboardShowMatchInfo", value);
-  bool get scoreboardShowMatchInfo => getBool("scoreboardShowMatchInfo") ?? false;
+  set scoreboardShowMatchInfo(bool value) =>
+      setBool("scoreboardShowMatchInfo", value);
+  bool get scoreboardShowMatchInfo =>
+      getBool("scoreboardShowMatchInfo") ?? false;
 
-  set scoreboardShowJudgingInfo(bool value) => setBool("scoreboardShowJudgingInfo", value);
-  bool get scoreboardShowJudgingInfo => getBool("scoreboardShowJudgingInfo") ?? false;
+  set scoreboardShowJudgingInfo(bool value) =>
+      setBool("scoreboardShowJudgingInfo", value);
+  bool get scoreboardShowJudgingInfo =>
+      getBool("scoreboardShowJudgingInfo") ?? false;
 }

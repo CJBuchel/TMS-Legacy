@@ -18,7 +18,9 @@ enum EchoTreeConnection {
 }
 
 class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
-  String _address = "http://localhost:2121";
+  String _ipAddr = "localhost";
+  int _port = 2121;
+  bool _tls = false;
   String _authToken = "";
   String _uuid = "";
   String _connectedUrl = "";
@@ -26,7 +28,8 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
   WebSocketChannel? _channel;
 
   // main connection flag
-  ValueNotifier<EchoTreeConnection> _state = ValueNotifier(EchoTreeConnection.disconnected);
+  ValueNotifier<EchoTreeConnection> _state =
+      ValueNotifier(EchoTreeConnection.disconnected);
   BlockingLoopTimer? _checksumTimer;
 
   EchoTreeNetworkService() {
@@ -43,24 +46,30 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
 
   // getters
   ValueNotifier<EchoTreeConnection> get state => _state;
-  String get address => _address;
+  String get ipAddr => _ipAddr;
+  int get port => _port;
+  bool get tls => _tls;
+  String get httpProtocol => tls ? "https" : "http";
+  String get wsProtocol => tls ? "wss" : "ws";
   String get authToken => _authToken;
   String get uuid => _uuid;
   String get connectedUrl => _connectedUrl;
   Map<String, String> get roles => _roles;
 
   Future<bool> _checkPulse() async {
-    final response = await http.get(Uri.parse("$_address/echo_tree/pulse"));
+    final response = await http
+        .get(Uri.parse("$httpProtocol://$ipAddr:$port/echo_tree/pulse"));
     return response.statusCode == HttpStatus.ok ? true : false;
   }
 
   Future<EchoTreeRegisterResponse> register({List<String>? echoTrees}) async {
     // register the client
     List<String> trees = echoTrees ?? [];
-    final request = EchoTreeRegisterRequest(echoTrees: trees, roles: roles).toJson();
+    final request =
+        EchoTreeRegisterRequest(echoTrees: trees, roles: roles).toJson();
 
     final response = await http.post(
-      Uri.parse("$address/echo_tree/register"),
+      Uri.parse("$httpProtocol://$ipAddr:$port/echo_tree/register"),
       body: jsonEncode(request),
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +86,7 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
   Future<int> unregister() async {
     // unregister the client
     final response = await http.delete(
-      Uri.parse("$address/echo_tree/register"),
+      Uri.parse("$httpProtocol://$ipAddr:$port/echo_tree/register"),
       headers: {
         "X-Client-Id": _uuid,
         "X-Auth-Token": _authToken,
@@ -97,7 +106,7 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
     final request = EchoTreeRoleAuthenticateRequest(roles: roles).toJson();
 
     return await http.post(
-      Uri.parse("$address/echo_tree/role_auth"),
+      Uri.parse("$httpProtocol://$ipAddr:$port/echo_tree/role_auth"),
       body: jsonEncode(request),
       headers: {
         "X-Client-Id": _uuid,
@@ -116,7 +125,10 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
   void _serverSubscribe(List<String> treeNames) {
     // get checksums (filter by treeNames)
     Map<String, int> treeNameMap = Map.fromEntries(
-      Database().getChecksums.entries.where((element) => treeNames.contains(element.key)),
+      Database()
+          .getChecksums
+          .entries
+          .where((element) => treeNames.contains(element.key)),
     );
     final event = SubscribeEvent(treeNames: treeNameMap).toJson();
     final message = EchoTreeClientSocketMessage(
@@ -140,7 +152,8 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
   // send checksum event to server (if connected)
   Future<void> _sendChecksumsEvent() async {
     if (_state.value != EchoTreeConnection.connected) return;
-    final event = ChecksumEvent(treeChecksums: Database().getChecksums).toJson();
+    final event =
+        ChecksumEvent(treeChecksums: Database().getChecksums).toJson();
     final message = EchoTreeClientSocketMessage(
       authToken: _authToken,
       messageEvent: EchoTreeClientSocketEvent.CHECKSUM_EVENT,
@@ -154,12 +167,15 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
       _channel?.stream.listen((event) {
         try {
           final json = jsonDecode(event);
-          EchoTreeServerSocketMessage message = EchoTreeServerSocketMessage.fromJson(json);
+          EchoTreeServerSocketMessage message =
+              EchoTreeServerSocketMessage.fromJson(json);
           EchoTreeMessageBroker().broker(message);
 
           // reset the checksum timer on a proper data change
-          if (message.messageEvent == EchoTreeServerSocketEvent.ECHO_ITEM_EVENT ||
-              message.messageEvent == EchoTreeServerSocketEvent.ECHO_TREE_EVENT) {
+          if (message.messageEvent ==
+                  EchoTreeServerSocketEvent.ECHO_ITEM_EVENT ||
+              message.messageEvent ==
+                  EchoTreeServerSocketEvent.ECHO_TREE_EVENT) {
             _checksumTimer?.reset(); // reset the timer on server response
           }
         } catch (e) {
@@ -179,12 +195,16 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
   }
 
   Future<bool> connect(
-    String address, {
+    String ipAddr,
+    int port,
+    bool tls, {
     Map<String, String>? roles, // e.g {"admin": "password"}
     List<String>? echoTrees,
   }) async {
     // reset values
-    _address = address;
+    _ipAddr = ipAddr;
+    _port = port;
+    _tls = tls;
     _roles = roles ?? {};
 
     // check server pulse
@@ -193,9 +213,9 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
       final response = await register();
 
       // set the client properties
-      _connectedUrl = response.url;
       _authToken = response.authToken;
       _uuid = response.uuid;
+      _connectedUrl = "$wsProtocol://$ipAddr:$port/echo_tree/ws/$_uuid";
 
       // initialize the database
       if (response.hierarchy.isNotEmpty) {
@@ -216,7 +236,7 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
       return true;
     } else {
       _state.value = EchoTreeConnection.disconnected;
-      EchoTreeLogger().e("Failed to connect to server: $address");
+      EchoTreeLogger().e("Failed to connect to server: $_connectedUrl");
       return false;
     }
   }

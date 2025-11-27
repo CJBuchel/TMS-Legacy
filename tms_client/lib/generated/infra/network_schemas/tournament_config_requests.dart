@@ -6,7 +6,7 @@
 import '../../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
 
 enum BlueprintType {
   agnostic,
@@ -265,4 +265,43 @@ class TournamentConfigSetTimerLengthRequest {
       other is TournamentConfigSetTimerLengthRequest &&
           runtimeType == other.runtimeType &&
           timerLength == other.timerLength;
+}
+
+class TournamentConfigSetTmsMobiConfigRequest {
+  final String? subdomain;
+  final String? token;
+
+  const TournamentConfigSetTmsMobiConfigRequest({
+    this.subdomain,
+    this.token,
+  });
+
+  static TournamentConfigSetTmsMobiConfigRequest default_() => TmsRustLib
+      .instance.api
+      .crateInfraNetworkSchemasTournamentConfigRequestsTournamentConfigSetTmsMobiConfigRequestDefault();
+
+  static TournamentConfigSetTmsMobiConfigRequest fromJsonString(
+          {required String json}) =>
+      TmsRustLib.instance.api
+          .crateInfraNetworkSchemasTournamentConfigRequestsTournamentConfigSetTmsMobiConfigRequestFromJsonString(
+              json: json);
+
+  String toJsonString() => TmsRustLib.instance.api
+          .crateInfraNetworkSchemasTournamentConfigRequestsTournamentConfigSetTmsMobiConfigRequestToJsonString(
+        that: this,
+      );
+
+  static String toSchema() => TmsRustLib.instance.api
+      .crateInfraNetworkSchemasTournamentConfigRequestsTournamentConfigSetTmsMobiConfigRequestToSchema();
+
+  @override
+  int get hashCode => subdomain.hashCode ^ token.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TournamentConfigSetTmsMobiConfigRequest &&
+          runtimeType == other.runtimeType &&
+          subdomain == other.subdomain &&
+          token == other.token;
 }

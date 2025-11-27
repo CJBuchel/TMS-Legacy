@@ -1,7 +1,14 @@
-use std::{collections::HashMap, net::Ipv4Addr};
+use crate::{
+  common::{client_echo::ClientEcho, ClientMap, EchoDB},
+  db::{
+    backup_manager::BackupManager,
+    db::{Database, DatabaseConfig},
+  },
+  network::filters,
+};
 use echo_tree_infra::server_socket_protocol::EchoTreeEventTree;
 use local_ip_address::local_ip;
-use crate::{common::{client_echo::ClientEcho, ClientMap, EchoDB}, db::{backup_manager::BackupManager, db::{Database, DatabaseConfig}}, network::filters};
+use std::{collections::HashMap, net::Ipv4Addr};
 
 pub mod schema_util;
 pub mod tree_manager;
@@ -16,7 +23,6 @@ pub struct EchoTreeServerConfig {
 
 impl Default for EchoTreeServerConfig {
   fn default() -> Self {
-
     let local_ip: String = match local_ip() {
       Ok(ip) => ip.to_string(),
       Err(e) => {
@@ -29,7 +35,7 @@ impl Default for EchoTreeServerConfig {
       db_path: "tree.kvdb".to_string(),
       port: 2121,
       local_ip,
-      addr: [127,0,0,1].into(),
+      addr: [127, 0, 0, 1].into(),
     }
   }
 }
@@ -37,7 +43,6 @@ impl Default for EchoTreeServerConfig {
 #[derive(Clone)]
 pub struct EchoTreeServer {
   database: EchoDB,
-  config: EchoTreeServerConfig,
   clients: ClientMap,
 }
 
@@ -65,14 +70,9 @@ impl EchoTreeServer {
       metadata_path: "metadata".to_string(),
     };
 
-
     let database: EchoDB = std::sync::Arc::new(tokio::sync::RwLock::new(Database::new(db_config)));
     let echo_tree_clients = std::sync::Arc::new(tokio::sync::RwLock::new(std::collections::HashMap::new()));
-    EchoTreeServer {
-      database,
-      config,
-      clients: echo_tree_clients,
-    }
+    EchoTreeServer { database, clients: echo_tree_clients }
   }
 
   pub async fn get_role_manager(&self) -> crate::db::role_manager::RoleManager {
@@ -84,7 +84,7 @@ impl EchoTreeServer {
   }
 
   pub fn get_internal_routes(&self, tls: bool) -> impl warp::Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
-    filters::client_filter::client_filter(self.clients.clone(), self.database.clone(), self.config.local_ip.clone(), tls, self.config.port)
+    filters::client_filter::client_filter(self.clients.clone(), self.database.clone(), tls)
   }
 
   pub async fn clear(&mut self) {
@@ -92,12 +92,15 @@ impl EchoTreeServer {
     db.clear().await;
 
     // echo change to all clients
-    let echo_trees: Vec<EchoTreeEventTree> = db.get_tree_map().await.iter().map(|(tree_name, tree)| {
-      EchoTreeEventTree {
+    let echo_trees: Vec<EchoTreeEventTree> = db
+      .get_tree_map()
+      .await
+      .iter()
+      .map(|(tree_name, tree)| EchoTreeEventTree {
         tree_name: tree_name.clone(),
         tree: tree.get_as_hashmap().unwrap_or_default(),
-      }
-    }).collect();
+      })
+      .collect();
 
     self.clients.read().await.echo_tree(echo_trees);
   }
@@ -126,14 +129,17 @@ impl EchoTreeServer {
       tree.calculate_checksum();
       log::info!("Restored tree [{}] with checksum: {}", tree_name, tree.get_checksum());
     });
-    
+
     // echo change to all clients
-    let echo_trees: Vec<EchoTreeEventTree> = db.get_tree_map().await.iter().map(|(tree_name, tree)| {
-      EchoTreeEventTree {
+    let echo_trees: Vec<EchoTreeEventTree> = db
+      .get_tree_map()
+      .await
+      .iter()
+      .map(|(tree_name, tree)| EchoTreeEventTree {
         tree_name: tree_name.clone(),
         tree: tree.get_as_hashmap().unwrap_or_default(),
-      }
-    }).collect();
+      })
+      .collect();
 
     self.clients.read().await.echo_tree(echo_trees);
     Ok(())

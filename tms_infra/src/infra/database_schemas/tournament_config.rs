@@ -22,8 +22,8 @@ impl Default for TournamentConfig {
       retain_backups: 5,
       end_game_timer_length: 30,
       timer_length: 150,
-      blueprint_type: BlueprintType::Agnostic,
       season: None,
+      blueprint_type: BlueprintType::Agnostic,
     }
   }
 }

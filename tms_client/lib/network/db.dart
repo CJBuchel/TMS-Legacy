@@ -1,8 +1,8 @@
 import 'package:echo_tree_flutter/client/network_service.dart';
 import 'package:echo_tree_flutter/echo_tree_flutter.dart';
+import 'package:tms/network/connectivity.dart';
 import 'package:tms/providers/local_storage_provider.dart';
 import 'package:tms/utils/logger.dart';
-import 'package:tms/network/connectivity.dart';
 
 class DbController {
   final NetworkConnectivity _connectivity = NetworkConnectivity();
@@ -19,8 +19,6 @@ class DbController {
       case EchoTreeConnection.disconnected:
         st = NetworkConnectionState.disconnected;
         break;
-      default:
-        st = NetworkConnectionState.disconnected;
     }
 
     return st;
@@ -41,11 +39,15 @@ class DbController {
   Future<void> connect() async {
     TmsLogger().d("Connecting to EchoTree DB...");
     Map<String, String> roles = Map<String, String>.fromEntries(
-      TmsLocalStorageProvider().authRoles.map((e) => MapEntry(e.roleId, e.password)),
+      TmsLocalStorageProvider()
+          .authRoles
+          .map((e) => MapEntry(e.roleId, e.password)),
     );
 
     try {
-      await EchoTreeClient().connect(TmsLocalStorageProvider().serverAddress, roles: roles);
+      await EchoTreeClient().connect(TmsLocalStorageProvider().serverIp,
+          TmsLocalStorageProvider().serverPort, TmsLocalStorageProvider().tls,
+          roles: roles);
     } catch (e) {
       TmsLogger().e("Error connecting to EchoTree DB: $e");
     }

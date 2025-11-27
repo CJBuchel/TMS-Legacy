@@ -3,6 +3,7 @@ use structopt::StructOpt;
 pub mod database;
 pub mod network;
 pub mod services;
+pub mod tunnel;
 pub mod web_server;
 
 #[derive(Debug, StructOpt)]
@@ -21,6 +22,12 @@ pub struct ServerArgs {
 
   #[structopt(long = "key", help = "Path to the key file, --key=key.rsa")]
   pub key_path: Option<String>,
+
+  #[structopt(long = "proxy_token", help = "Token for the tms.mobi site, --proxy_token my_secret_token")]
+  pub proxy_token: Option<String>,
+
+  #[structopt(long = "proxy_domain", help = "Subdomain for the tms.mobi (i.e curtin.tms.mobi) site, --proxy_domain curtin")]
+  pub proxy_subdomain: Option<String>,
 }
 
 impl ServerArgs {
@@ -48,5 +55,13 @@ impl ServerArgs {
 
   pub fn get_key_path() -> Option<String> {
     ServerArgs::from_args().key_path
+  }
+
+  pub fn get_proxy_token() -> Option<String> {
+    ServerArgs::from_args().proxy_token
+  }
+
+  pub fn get_proxy_subdomain() -> Option<String> {
+    ServerArgs::from_args().proxy_subdomain
   }
 }

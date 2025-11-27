@@ -66,7 +66,7 @@ class FloatingQrButton extends StatelessWidget {
   // }
 
   void _displayServerQrCode(BuildContext context) {
-    String addr = TmsLocalStorageProvider().serverExternalAddress;
+    String addr = TmsLocalStorageProvider().serverAddress;
     String qrData = "$addr/ui";
     TmsLogger().i("Server QR data: $qrData");
     _displayQrCode(context, qrData, Colors.blue, Colors.red);

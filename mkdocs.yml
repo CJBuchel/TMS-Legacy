@@ -7,18 +7,35 @@ site_author: Connor (CJ) Buchel
 repo_name: CJBuchel/TMS
 repo_url: https://github.com/CJBuchel/TMS/
 
+# Navigation
+nav:
+  - Home:
+      - Overview: index.md
+  - Setup:
+      - Server Install: setup/server-install.md
+      - Tournament Setup: setup/setup.md
+  - User Guides: guides/guides.md
+  - Features:
+      - Integrity Messages: features/integrity-messages.md
+  - Support:
+      - Bug Reports: support/bug-reports.md
+      - Change Requests: support/change-requests.md
+      - Q&A: https://github.com/CJBuchel/TMS/discussions
+
 # Site configuration
 theme:
   name: material
   font:
-    text: 'Ubuntu'
-    code: 'Ubuntu Mono'
+    text: "Ubuntu"
+    code: "Ubuntu Mono"
   logo: assets/TMS_LOGO_WHITE.svg
   favicon: assets/T_LOGO_WHITE.svg
   features:
     - navigation.footer
     - navigation.tabs
     - navigation.sections
+    - navigation.indexes
+    - navigation.expand
     - toc.integrate
     - navigation.top
     - search.suggest
@@ -57,6 +74,8 @@ extra:
 markdown_extensions:
   - attr_list
   - admonition
+  - md_in_html
+  - pymdownx.blocks.caption
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -71,3 +90,6 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg

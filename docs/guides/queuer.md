@@ -8,9 +8,12 @@ Our recommended usage is for each Queuer to have an iPad/Tablet.
 
 The role of the queuer is to ensure teams are arriving to robot game matches on time. The queuer page of TMS provides data on upcoming matches. 
 
-## Page Objects:
+---
+
 ### **TTL**
 Time To Live, Mins:Secs until match play begins. At 0 the referees will be wanting to begin the match.
+
+---
 
 ### **Status**
 Displays explict queuing stages
@@ -22,8 +25,12 @@ Displays explict queuing stages
 | `Now Queuing`       | This match's teams now needs to go to the robot game area, potentially immediately |
 | `On Deck` | This match is currently in play |
 
+---
+
 ### **Match Number**
 This gray box contains the match number, with the time the match will be beginning below.
+
+---
 
 ### **Team Boxes**
 For every match the teams competing are listed in boxes, one for each team. 

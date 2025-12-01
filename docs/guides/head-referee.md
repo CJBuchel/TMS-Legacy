@@ -10,13 +10,13 @@ The head referee page contains;
 - Loading, starting and rescheduling matches
 
 ### Before a Match
-1. Click on the match you want to start.
-    - press the blue arrow to load it
-2. You will then see the match loaded on the left side with what teams.
-3. When you are getting ready to start the match, click on load match and then ready match.
+1. Click on the match you want to start, then click the blue arrow to prepare the match to be loaded
+2. You will then see the match details on the left side, where you can replace or delete a team from the match
+    - If you choose to replace or delete a team from the match, you'll need to add them in a later match if required, you can also do this by pressing the reschedule button mentioned below
+3. Before you can start the match, you'll need to load and ready it on the left side of the screen
 4. Once the match is ready to start you have 2 options on the bottom left of the screen:
     - Countdown: This will start a countdown from 5 to begin the match and start the timer
-    - Start: This will immediately start the timer without any countdown
+    - Start: This will immediately start the match without any countdown
 
 ### During a Match
 During the match there is not too much to do apart from watching the tables and making sure that the referees are making the right calls and nothing is being missed.

@@ -75,7 +75,7 @@ impl BaseSeason for Unearthed {
         },
         Mission {
           id: "m01".to_string(),
-          label: "M01 - Surface Brushing".to_string(),
+          label: "M01 - Surface Brushing 🔴".to_string(),
           image_url: None,
         },
         Mission {
@@ -90,12 +90,12 @@ impl BaseSeason for Unearthed {
         },
         Mission {
           id: "m04".to_string(),
-          label: "M04 - Careful Recovery".to_string(),
+          label: "M04 - Careful Recovery 🔴".to_string(),
           image_url: None,
         },
         Mission {
           id: "m05".to_string(),
-          label: "M05 - Who Lived Here?".to_string(),
+          label: "M05 - Who Lived Here? 🔴".to_string(),
           image_url: None,
         },
         Mission {
@@ -115,7 +115,7 @@ impl BaseSeason for Unearthed {
         },
         Mission {
           id: "m09".to_string(),
-          label: "M09 - What's on Sale?".to_string(),
+          label: "M09 - What's on Sale? 🔴".to_string(),
           image_url: None,
         },
         Mission {
@@ -125,22 +125,22 @@ impl BaseSeason for Unearthed {
         },
         Mission {
           id: "m11".to_string(),
-          label: "M11 - Angler Artefacts".to_string(),
+          label: "M11 - Angler Artefacts 🔴".to_string(),
           image_url: None,
         },
         Mission {
           id: "m12".to_string(),
-          label: "M12 - Salvage Operation".to_string(),
+          label: "M12 - Salvage Operation 🔴".to_string(),
           image_url: None,
         },
         Mission {
           id: "m13".to_string(),
-          label: "M13 - Statue Rebuild".to_string(),
+          label: "M13 - Statue Rebuild 🔴".to_string(),
           image_url: None,
         },
         Mission {
           id: "m14".to_string(),
-          label: "M14 - Forum".to_string(),
+          label: "M14 - Forum 🔴".to_string(),
           image_url: None,
         },
         Mission {
@@ -388,7 +388,7 @@ impl BaseSeason for Unearthed {
         },
         Question {
           id: "m13a".to_string(),
-          label: "'Is the statue completely raised?".to_string(),
+          label: "Is the statue completely raised?".to_string(),
           label_short: "Statue raised?".to_string(),
           input: QuestionInput::Categorical(CategoricalQuestion {
             options: vec![CategoricalOption { label: "No".to_string(), score: 0 }, CategoricalOption { label: "Yes".to_string(), score: 30 }],

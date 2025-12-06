@@ -79,6 +79,7 @@ jobs:
         parameters:
           flutterTarget: "apk"
           cacheFlutterBuild: false
+          cacheDependencies: false
       # publish artifacts template
       - template: templates/client-artifact-template.yml
         parameters:

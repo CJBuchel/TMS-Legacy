@@ -1,3 +1,7 @@
+# THIS PROJECT IS UNDER MAINTENANCE
+# DO NOT CONTRIBUTE TO THIS LEGACY CODE
+- Checkout the [master](https://github.com/CJBuchel/TMS/tree/master) and [rebuild](https://github.com/CJBuchel/TMS/tree/rebuild) branches for contributing
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/CJBuchel/TMS/legacy/images/TMS_LOGO.png"/>
 </p>

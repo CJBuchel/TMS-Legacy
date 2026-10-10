@@ -262,9 +262,11 @@ jobs:
       - name: Build and save image
         run: |
           # lay the package out the way the Dockerfile expects a local build
-          tar -xzf "$RUNNER_TEMP/tms.tar.gz"
-          mkdir -p target/x86_64-unknown-linux-musl/release
-          mv tms_server target/x86_64-unknown-linux-musl/release/
+          # (unpacked to one side: the package's tms_server binary would collide with the tms_server source directory)
+          mkdir -p "$RUNNER_TEMP/package" target/x86_64-unknown-linux-musl/release tms_client/build
+          tar -xzf "$RUNNER_TEMP/tms.tar.gz" -C "$RUNNER_TEMP/package"
+          cp "$RUNNER_TEMP/package/tms_server" target/x86_64-unknown-linux-musl/release/
+          cp -r "$RUNNER_TEMP/package/tms_client/build/web" tms_client/build/
           docker build -t "$DOCKER_REPOSITORY:latest" .
           docker save -o "$RUNNER_TEMP/docker-image.tar" "$DOCKER_REPOSITORY:latest"
 
@@ -426,7 +428,7 @@ jobs:
         working-directory: tms_client
         run: |
           echo "::warning::iOS signing was not available or failed, so the IPA is unsigned and will not go to TestFlight."
-          flutter build ios --release --no-codesign -v \
+          flutter build ios --release --no-codesign \
             --build-name "${{ needs.setup.outputs.version }}" \
             --build-number "${{ needs.setup.outputs.build_number }}"
           rm -rf "$RUNNER_TEMP/ipa" "$RUNNER_TEMP/unsigned"

@@ -21,5 +21,10 @@ chrono = "0.4.45"
 strum = "0.28.0"
 strum_macros = "0.28.0"
 
+# libc 0.2.190 limits the _dyld_* functions to macOS, but backtrace 0.3.76 (pulled in by flutter_rust_bridge) still calls
+# them on iOS, so the iOS client fails to compile. Remove this once backtrace no longer needs them.
+[target.'cfg(target_os = "ios")'.dependencies]
+libc = "<0.2.190"
+
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ["cfg(frb_expand)"] }

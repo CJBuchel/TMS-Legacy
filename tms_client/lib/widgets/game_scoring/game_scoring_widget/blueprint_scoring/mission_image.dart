@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:tms/generated/infra/fll_infra/mission.dart';
 import 'package:tms/utils/logger.dart';
@@ -11,21 +11,21 @@ class MissionImage extends StatefulWidget {
   final double? borderRadius;
 
   const MissionImage({
-    Key? key,
+    super.key,
     required this.mission,
     required this.season,
     this.width,
     this.height,
     this.borderRadius,
-  }) : super(key: key);
+  });
 
   @override
-  _MissionImageState createState() => _MissionImageState();
+  State<MissionImage> createState() => _MissionImageState();
 }
 
 class _MissionImageState extends State<MissionImage> {
   Image _image = const Image(
-    image: const AssetImage('assets/images/FIRST_LOGO.png'),
+    image: AssetImage('assets/images/FIRST_LOGO.png'),
     width: 160,
     height: 90,
     fit: BoxFit.fill,
@@ -58,7 +58,8 @@ class _MissionImageState extends State<MissionImage> {
 
   void _fetchImage() {
     // fetch image from assets
-    final String imagePath = 'assets/images/missions/${widget.season}/${widget.mission.id}.png';
+    // blueprint can override the image (seasons with multiple games share an asset folder)
+    final String imagePath = widget.mission.imageUrl ?? 'assets/images/missions/${widget.season}/${widget.mission.id}.png';
 
     _assetExists(imagePath).then((exists) {
       if (exists && mounted) {
@@ -67,7 +68,7 @@ class _MissionImageState extends State<MissionImage> {
             image: AssetImage(imagePath),
             width: widget.width,
             height: widget.height,
-            fit: BoxFit.fill,
+            fit: BoxFit.contain,
           );
         });
       }

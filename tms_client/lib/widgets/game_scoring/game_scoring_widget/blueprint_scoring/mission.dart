@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tms/generated/infra/fll_infra/mission.dart';
 import 'package:tms/utils/color_modifiers.dart';
@@ -11,11 +11,11 @@ class MissionWidget extends StatelessWidget {
   final String season;
 
   const MissionWidget({
-    Key? key,
+    super.key,
     required this.mission,
     required this.missionQuestions,
     required this.season,
-  }) : super(key: key);
+  });
 
   List<Widget> getMissionHeader(BuildContext context) {
     double width = 160;
@@ -40,7 +40,7 @@ class MissionWidget extends StatelessWidget {
         decoration: const BoxDecoration(
           // color: Color(0xFF4C779F),
           color: Colors.green,
-          borderRadius: const BorderRadius.only(
+          borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10),
             bottomRight: Radius.circular(10),
           ),

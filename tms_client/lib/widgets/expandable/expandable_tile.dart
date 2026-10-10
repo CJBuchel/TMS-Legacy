@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ExpansionController extends ValueNotifier<bool> {
   ExpansionController({bool isExpanded = false}) : super(isExpanded);
@@ -26,13 +26,13 @@ class ExpandableTile extends StatefulWidget {
   final ExpansionController? controller;
 
   const ExpandableTile({
-    Key? key,
+    super.key,
     required this.header,
     required this.body,
     this.controller,
     this.onChange,
     this.borderRadius = const BorderRadius.all(Radius.circular(8)),
-  }) : super(key: key);
+  });
 
   @override
   State<ExpandableTile> createState() => _ExpandableTileState();
@@ -97,7 +97,7 @@ class _ExpandableTileState extends State<ExpandableTile> with SingleTickerProvid
           widget.header,
           SizeTransition(
             sizeFactor: _expandAnimation,
-            axisAlignment: 1.0,
+            alignment: const AlignmentDirectional(-1.0, 1.0),
             child: widget.body,
           ),
         ],

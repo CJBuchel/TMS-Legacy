@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/robot_game_providers/game_table_provider.dart';
 import 'package:tms/widgets/dialogs/confirm_dialogs.dart';
@@ -22,9 +22,9 @@ class SelectGameTable extends StatefulWidget {
   final double fontSize;
 
   const SelectGameTable({
-    Key? key,
+    super.key,
     this.fontSize = 16,
-  }) : super(key: key);
+  });
 
   @override
   State<SelectGameTable> createState() => _SelectGameTableState();

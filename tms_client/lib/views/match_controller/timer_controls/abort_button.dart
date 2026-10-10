@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/game_timer_provider.dart';
 import 'package:tms/widgets/buttons/barber_pole_button.dart';
@@ -12,8 +12,8 @@ const _backgroundColor = Colors.red;
 
 class AbortButton extends StatelessWidget {
   const AbortButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +28,7 @@ class AbortButton extends StatelessWidget {
           Provider.of<GameTimerProvider>(context, listen: false)
               .stopTimer()
               .then((status) {
+            if (!context.mounted) return;
             if (status != HttpStatus.ok) {
               SnackBarDialog.fromStatus(message: "Abort", status: status)
                   .show(context);

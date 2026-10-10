@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 // Creates an animated infinite list which will scroll forever
 // Under the hood this creates 2 duplicate lists, one after the other
@@ -12,12 +12,12 @@ class AnimatedInfiniteVerticalList extends StatefulWidget {
   final bool duplicateWhenChildrenOdd;
 
   const AnimatedInfiniteVerticalList({
-    Key? key,
+    super.key,
     required this.children,
     required this.childHeight,
     this.scrollSpeed = 5,
     this.duplicateWhenChildrenOdd = true,
-  }) : super(key: key);
+  });
 
   @override
   State<AnimatedInfiniteVerticalList> createState() => _AniInfVertState();

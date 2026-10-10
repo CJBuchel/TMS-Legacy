@@ -50,7 +50,6 @@
 		247AB18B2CB6CABD00A3FB4F /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		247AB18C2CB6CABD00A3FB4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		247AB18D2CB6CABD00A3FB4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		247AB18F2CB6CABD00A3FB4F /* libtms_infra.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtms_infra.a; sourceTree = "<group>"; };
 		247AB1902CB6CABD00A3FB4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		247AB1922CB6CABD00A3FB4F /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
@@ -99,7 +98,6 @@
 				247AB18B2CB6CABD00A3FB4F /* GeneratedPluginRegistrant.m */,
 				247AB18C2CB6CABD00A3FB4F /* Info.plist */,
 				247AB18E2CB6CABD00A3FB4F /* LaunchScreen.storyboard */,
-				247AB18F2CB6CABD00A3FB4F /* libtms_infra.a */,
 				247AB1912CB6CABD00A3FB4F /* Main.storyboard */,
 				247AB1922CB6CABD00A3FB4F /* Runner-Bridging-Header.h */,
 			);

@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/app.dart';
 import 'package:tms/providers/local_storage_provider.dart';
 
 class TmsAppBarThemeAction extends StatelessWidget {
-  const TmsAppBarThemeAction({Key? key}) : super(key: key);
+  const TmsAppBarThemeAction({super.key});
   // theme provider
 
   // filter theme mode to only light or dark mode. If system mode is selected, then check platform theme
@@ -21,7 +21,7 @@ class TmsAppBarThemeAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Selector<TmsLocalStorageProvider, ThemeMode>(
       selector: (_, localStorageProvider) => localStorageProvider.themeMode,
-      builder: (_, themeMode, __) => IconButton(
+      builder: (_, themeMode, _) => IconButton(
         onPressed: () {
           TMSApp.of(context).changeTheme(
             getTheme(context, themeMode) == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark,

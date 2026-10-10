@@ -10,7 +10,9 @@ pub async fn role_auth_handler(client_uuid: String, body: EchoTreeRoleAuthentica
 
   // check authentication
   let role_read_trees: Vec<String> = body.roles.iter().flat_map(|(role_id, password)| {
-    let read_trees = futures::executor::block_on(async {
+    
+
+    futures::executor::block_on(async {
       match db.get_role_manager().await.authenticate_role(role_id.clone(), password.clone()) {
         true => {
           let trees = db.get_role_manager().await.get_role_read_access(role_id.clone());
@@ -22,13 +24,13 @@ pub async fn role_auth_handler(client_uuid: String, body: EchoTreeRoleAuthentica
           [].to_vec()
         },
       }
-    });
-
-    read_trees
+    })
   }).collect();
 
   let role_read_write_trees: Vec<String> = body.roles.iter().flat_map(|(role_id, password)| {
-    let read_write_trees = futures::executor::block_on(async {
+    
+
+    futures::executor::block_on(async {
       match db.get_role_manager().await.authenticate_role(role_id.clone(), password.clone()) {
         true => {
           let trees = db.get_role_manager().await.get_role_read_write_access(role_id.clone());
@@ -40,9 +42,7 @@ pub async fn role_auth_handler(client_uuid: String, body: EchoTreeRoleAuthentica
           [].to_vec()
         },
       }
-    });
-
-    read_write_trees
+    })
   }).collect();
 
   // update client role access

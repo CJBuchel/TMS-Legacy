@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class TeamsRankingHeader extends StatelessWidget {
   final int numRounds;
 
-  const TeamsRankingHeader({Key? key, required this.numRounds}) : super(key: key);
+  const TeamsRankingHeader({super.key, required this.numRounds});
 
   Widget _scoresHeader(Color? evenColor, Color? oddColor) {
     List<Widget> scoreHeaders = [];

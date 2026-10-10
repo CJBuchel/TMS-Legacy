@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/views/match_controller/match_selector/match_row/expanded_row_body/delete_match_button.dart';
 import 'package:tms/views/match_controller/match_selector/match_row/expanded_row_body/edit_match_button.dart';
@@ -9,7 +9,7 @@ class ExpandedRowBody extends StatelessWidget {
   final GameMatch match;
   final bool isStaged;
 
-  const ExpandedRowBody({
+  const ExpandedRowBody({super.key, 
     required this.match,
     required this.isStaged,
   });

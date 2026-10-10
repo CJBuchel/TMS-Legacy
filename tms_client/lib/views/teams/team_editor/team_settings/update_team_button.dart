@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
 import 'package:tms/services/team_service.dart';
 import 'package:tms/widgets/dialogs/confirm_future_dialog.dart';
@@ -24,10 +24,10 @@ class UpdateTeamButton extends StatelessWidget {
   }
 
   const UpdateTeamButton({
-    Key? key,
+    super.key,
     required this.teamId,
     required this.updatedTeam,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

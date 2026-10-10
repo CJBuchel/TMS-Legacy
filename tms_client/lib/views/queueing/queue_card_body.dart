@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/utils/color_modifiers.dart';
 import 'package:tms/views/queueing/check_in_segment.dart';
@@ -9,14 +9,14 @@ class QueueCardBody extends StatefulWidget {
   final bool isCompleted;
 
   const QueueCardBody({
-    Key? key,
+    super.key,
     required this.match,
     required this.isLoaded,
     required this.isCompleted,
-  }) : super(key: key);
+  });
 
   @override
-  _QueueCardBodyState createState() => _QueueCardBodyState();
+  State<QueueCardBody> createState() => _QueueCardBodyState();
 }
 
 class _QueueCardBodyState extends State<QueueCardBody>

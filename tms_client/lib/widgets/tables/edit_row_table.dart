@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/widgets/tables/base_table.dart';
 
 class EditTableRow extends BaseTableRow {
@@ -10,14 +10,17 @@ class EditTableRow extends BaseTableRow {
 
   EditTableRow({
     this.key,
-    required List<BaseTableCell> cells,
-    BoxDecoration? decoration,
+    required super.cells,
+    super.decoration,
     this.onDelete,
     this.onEdit,
-  }) : super(cells: cells, decoration: decoration);
+  });
 }
 
 class EditTable extends BaseTable {
+  // narrows the row type of the base table
+  @override
+  // ignore: overridden_fields
   final List<EditTableRow> rows;
   final Function(int index, Key? key)? onDelete;
   final Function(int index, Key? key)? onEdit;
@@ -34,7 +37,7 @@ class EditTable extends BaseTable {
     );
   }
 
-  EditTable({
+  EditTable({super.key, 
     List<BaseTableCell>? headers,
     required this.rows,
     this.onDelete,
@@ -43,8 +46,8 @@ class EditTable extends BaseTable {
     Widget deleteIcon = const Icon(Icons.delete, color: Colors.red),
     Widget editIcon = const Icon(Icons.edit, color: Colors.blue),
     Widget addIcon = const Icon(Icons.add, color: Colors.green),
-    BoxDecoration? headerDecoration,
-  }) : super(headers: headers, rows: rows, headerDecoration: headerDecoration) {
+    super.headerDecoration,
+  }) : super(headers: headers, rows: rows) {
     // add blank to start and end of headers
     if (headers != null) {
       headers.insert(0, const BaseTableCell(child: SizedBox.shrink()));

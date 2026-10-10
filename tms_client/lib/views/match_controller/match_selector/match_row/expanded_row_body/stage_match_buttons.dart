@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/providers/robot_game_providers/game_match_status_provider.dart';
@@ -8,10 +8,10 @@ class StageMatchButtons extends StatelessWidget {
   final bool isStaged;
 
   const StageMatchButtons({
-    Key? key,
+    super.key,
     required this.match,
     required this.isStaged,
-  }) : super(key: key);
+  });
 
   Widget _unstageButton(BuildContext context) {
     return IconButton(

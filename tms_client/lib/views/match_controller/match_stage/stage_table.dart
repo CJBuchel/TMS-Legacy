@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
@@ -22,10 +22,10 @@ class StageTable extends StatelessWidget {
   final ValueNotifier<String> selectedMatch = ValueNotifier<String>("");
 
   StageTable({
-    Key? key,
+    super.key,
     required this.tableData,
     required this.stagedMatchNumbers,
-  }) : super(key: key);
+  });
 
   Widget _header(String text) {
     return Padding(

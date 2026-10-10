@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/robot_game_providers/game_match_status_provider.dart';
 import 'package:tms/widgets/timers/judging_schedule_timer.dart';
@@ -18,7 +18,7 @@ class _MatchStatusData {
 }
 
 class TimersOverview extends StatelessWidget {
-  const TimersOverview({Key? key}) : super(key: key);
+  const TimersOverview({super.key});
 
   Widget _item(Widget child) {
     return Expanded(

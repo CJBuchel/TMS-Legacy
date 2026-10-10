@@ -22,10 +22,7 @@ impl GameScoreSheetExtensions for Database {
     let tree = self.inner.read().await.get_tree(ROBOT_GAME_SCORES.to_string()).await;
     let game_score_sheet = tree.get(&game_score_sheet_id).cloned();
 
-    match game_score_sheet {
-      Some(game_score_sheet) => Some(GameScoreSheet::from_json_string(&game_score_sheet)),
-      None => None,
-    }
+    game_score_sheet.map(|game_score_sheet| GameScoreSheet::from_json_string(&game_score_sheet))
   }
 
   async fn get_game_score_sheets_by_team(&self, team_id: String) -> HashMap<String, GameScoreSheet> {
@@ -55,12 +52,11 @@ impl GameScoreSheetExtensions for Database {
           let errors = FllBlueprintMap::validate(score_season.to_owned(), game_score_sheet.score_sheet_answers.to_owned());
 
           // if any errors return error
-          if let Some(errors) = errors {
-            if errors.len() > 0 {
+          if let Some(errors) = errors
+            && !errors.is_empty() {
               let stringified_errors = errors.iter().map(|e| format!("{} : {}", e.question_ids, e.message)).collect::<Vec<String>>().join("\n");
               return Err(stringified_errors);
             }
-          }
 
           // modify the score sheet to include the calculated score
           let score = FllBlueprintMap::calculate_score(blueprint, game_score_sheet.score_sheet_answers.to_owned());
@@ -97,7 +93,7 @@ impl GameScoreSheetExtensions for Database {
     log::warn!("Updating rankings...");
     // get all team score sheets
     let tree = self.inner.read().await.get_tree(ROBOT_GAME_SCORES.to_string()).await;
-    let game_score_sheets = tree.iter().map(|(_, game_score_sheet)| GameScoreSheet::from_json_string(game_score_sheet)).collect::<Vec<GameScoreSheet>>();
+    let game_score_sheets = tree.values().map(|game_score_sheet| GameScoreSheet::from_json_string(game_score_sheet)).collect::<Vec<GameScoreSheet>>();
     // calculate team rankings
     self.calculate_team_rankings(game_score_sheets).await?;
     Ok(())

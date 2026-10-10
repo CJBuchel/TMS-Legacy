@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class BaseTableCell {
   final Widget child;
@@ -28,18 +28,18 @@ class BaseTable extends StatelessWidget {
   final BoxDecoration? headerDecoration;
 
   const BaseTable({
-    Key? key,
+    super.key,
     this.headers,
     required this.rows,
 
     // misc
     this.headerDecoration,
-  }) : super(key: key);
+  });
 
   Widget cellWidget(Widget child, int flex) {
     return Expanded(
-      child: child,
       flex: flex,
+      child: child,
     );
   }
 

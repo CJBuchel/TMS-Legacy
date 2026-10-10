@@ -39,10 +39,7 @@ impl JudgingCategoryExtensions for Database {
     let tree = self.inner.read().await.get_tree(JUDGING_CATEGORIES.to_string()).await;
     let category = tree.get(&judging_cat_id).cloned();
 
-    match category {
-      Some(category) => Some(TmsCategory::from_json_string(&category)),
-      None => None,
-    }
+    category.map(|category| TmsCategory::from_json_string(&category))
   }
 
   async fn remove_judging_category(&self, judging_cat_id: String) -> Result<(), String> {

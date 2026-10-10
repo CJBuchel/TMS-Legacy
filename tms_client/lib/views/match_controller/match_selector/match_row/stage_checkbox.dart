@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/providers/robot_game_providers/game_match_status_provider.dart';
@@ -9,7 +9,7 @@ class StageCheckbox extends StatelessWidget {
   final bool canStage;
   final bool isStaged;
 
-  const StageCheckbox({
+  const StageCheckbox({super.key, 
     required this.match,
     required this.canStage,
     required this.isStaged,

@@ -11,22 +11,22 @@ pub async fn handle_rejection(err: warp::Rejection) -> Result<impl warp::Reply, 
   if err.is_not_found() {
     code = StatusCode::NOT_FOUND;
     message = "Not Found";
-  } else if let Some(_) = err.find::<UnauthorizedToken>() {
+  } else if err.find::<UnauthorizedToken>().is_some() {
     code = StatusCode::UNAUTHORIZED;
     message = "Unauthorized Auth Token";
-  } else if let Some(_) = err.find::<ClientNotFound>() {
+  } else if err.find::<ClientNotFound>().is_some() {
     code = StatusCode::NOT_FOUND;
     message = "Client Not Found";
-  } else if let Some(_) = err.find::<UnauthorizedClient>() {
+  } else if err.find::<UnauthorizedClient>().is_some() {
     code = StatusCode::UNAUTHORIZED;
     message = "Unauthorized Client Access";
-  } else if let Some(_) = err.find::<UnauthorizedLogin>() {
+  } else if err.find::<UnauthorizedLogin>().is_some() {
     code = StatusCode::UNAUTHORIZED;
     message = "Unauthorized Login";
   } else if let Some(e) = err.find::<BadRequestWithMessage>() {
     code = StatusCode::BAD_REQUEST;
     message = e.message.as_str();
-  } else if let Some(_) = err.find::<AuthenticationRequired>() {
+  } else if err.find::<AuthenticationRequired>().is_some() {
     code = StatusCode::NETWORK_AUTHENTICATION_REQUIRED;
     message = "Authentication Required";
   }

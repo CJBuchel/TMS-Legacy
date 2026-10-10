@@ -2,10 +2,12 @@
 site_name: TMS Documentation
 site_url: https://cjbuchel.github.io/TMS/
 site_author: Connor (CJ) Buchel
+site_description: User, administrator and technical documentation for the FLL Tournament Management System (TMS).
 
 # Repository information
 repo_name: CJBuchel/TMS
 repo_url: https://github.com/CJBuchel/TMS/
+edit_uri: edit/legacy/docs/
 
 # Site configuration
 theme:
@@ -15,14 +17,22 @@ theme:
     code: 'Ubuntu Mono'
   logo: assets/TMS_LOGO_WHITE.svg
   favicon: assets/T_LOGO_WHITE.svg
+  icon:
+    repo: fontawesome/brands/github
   features:
     - navigation.footer
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.path
     - toc.integrate
     - navigation.top
     - search.suggest
     - search.highlight
+    - search.share
     - content.tabs.link
     - content.code.annotate
     - content.code.copy
@@ -32,20 +42,32 @@ theme:
   language: en
   palette:
     # dark theme
-    - scheme: slate
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
       toggle:
         icon: material/brightness-4
-        name: Switch to dark mode
+        name: Switch to light mode
       primary: teal
       accent: indigo
 
     # light theme
-    - scheme: default
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
       primary: teal
       accent: indigo
+
+plugins:
+  - search
+
+# fail the build on broken links and anchors
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
 
 # Extra configuration
 extra:
@@ -55,15 +77,29 @@ extra:
 
 # extensions
 markdown_extensions:
+  - abbr
   - attr_list
   - admonition
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.details
   - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
   - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -71,3 +107,45 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - How TMS works: getting-started/overview.md
+      - Quick start: getting-started/quick-start.md
+      - Connecting a device: getting-started/connecting.md
+      - Event day walkthrough: getting-started/event-day.md
+  - I am a...:
+      - Roles at a glance: roles/index.md
+      - Event administrator: roles/event-admin.md
+      - Head referee: roles/head-referee.md
+      - Referee: roles/referee.md
+      - Queuer: roles/queuer.md
+      - Emcee: roles/emcee.md
+      - Judge advisor: roles/judge-advisor.md
+      - Judge: roles/judge.md
+      - Screen and AV operator: roles/av-operator.md
+  - Guides:
+      - Scoring and scoresheets: guides/scoring.md
+      - Seasons and games: guides/seasons.md
+      - Schedules: guides/schedule.md
+      - Rankings and the scoreboard: guides/rankings.md
+      - Match timer: guides/timer.md
+      - Integrity checks: guides/integrity.md
+  - Administration:
+      - Installing the server: admin/installation.md
+      - Server options: admin/server-options.md
+      - Event setup: admin/event-setup.md
+      - Users and passwords: admin/users.md
+      - Backups and restore: admin/backups.md
+      - Network planning: admin/networking.md
+      - Remote access: admin/remote-access.md
+  - Technical support:
+      - Troubleshooting: support/troubleshooting.md
+      - Logs and files: support/logs.md
+      - FAQ: support/faq.md
+  - Developers:
+      - Architecture: dev/architecture.md
+      - Building from source: dev/building.md
+      - Adding a season: dev/adding-a-season.md
+      - Testing and quality checks: dev/testing.md

@@ -14,7 +14,7 @@ class JudgingPodProvider extends EchoTreeProvider<String, JudgingPod> {
 
   List<JudgingPod> get podsByName {
     // sort by name/compare alphabetically
-    return this.items.values.toList()..sort((a, b) => a.podName.compareTo(b.podName));
+    return items.values.toList()..sort((a, b) => a.podName.compareTo(b.podName));
   }
 
   List<JudgingPod> get pods => podsByName;
@@ -22,7 +22,7 @@ class JudgingPodProvider extends EchoTreeProvider<String, JudgingPod> {
   List<String> get podNames => podsByName.map((e) => e.podName).toList();
 
   String? getIdFromPodName(String podName) {
-    return this.items.keys.firstWhereOrNull((key) => this.items[key]?.podName == podName);
+    return items.keys.firstWhereOrNull((key) => items[key]?.podName == podName);
   }
 
   Future<int> insertPod(String? podId, String pod) async {

@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 
 class TmsAppBarLeading extends StatelessWidget {
   final GoRouterState state;
 
   const TmsAppBarLeading({
-    Key? key,
+    super.key,
     required this.state,
-  }) : super(key: key);
+  });
 
   Widget _showHome(BuildContext context) {
     if (state.matchedLocation == '/') {

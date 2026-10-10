@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class AnimatedInfiniteHorizontalList extends StatefulWidget {
   final List<Widget> children;
@@ -7,11 +7,11 @@ class AnimatedInfiniteHorizontalList extends StatefulWidget {
   final int scrollSpeed;
 
   const AnimatedInfiniteHorizontalList({
-    Key? key,
+    super.key,
     required this.children,
     required this.childWidth,
     this.scrollSpeed = 5,
-  }) : super(key: key);
+  });
 
   @override
   State<AnimatedInfiniteHorizontalList> createState() => _AniInfHorState();

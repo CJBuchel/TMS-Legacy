@@ -4,19 +4,12 @@ use serde::{Deserialize, Serialize};
 use crate::{DataSchemeExtensions, JudgingSession};
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
+#[derive(Default)]
 pub struct JudgingSessionInsertRequest {
   pub session_id: Option<String>,
   pub session: JudgingSession,
 }
 
-impl Default for JudgingSessionInsertRequest {
-  fn default() -> Self {
-    Self {
-      session_id: None,
-      session: JudgingSession::default(),
-    }
-  }
-}
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
 pub struct JudgingSessionRemoveRequest {

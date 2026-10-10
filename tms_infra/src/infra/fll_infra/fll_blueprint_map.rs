@@ -1,8 +1,14 @@
 use std::collections::HashMap;
 
-use super::{BaseSeason, FllBlueprint, MasterPiece, QuestionAnswer, QuestionValidationError, Submerged, Unearthed};
+use super::{BaseSeason, BioglowFounders, BioglowFuture, FllBlueprint, MasterPiece, QuestionAnswer, QuestionValidationError, Submerged, Unearthed};
 
-const SEASONS: &[(&str, &'static dyn BaseSeason)] = &[("2023", &MasterPiece {}), ("2024", &Submerged {}), ("2025", &Unearthed {})];
+const SEASONS: &[(&str, &'static dyn BaseSeason)] = &[
+  ("2023", &MasterPiece {}),
+  ("2024", &Submerged {}),
+  ("2025", &Unearthed {}),
+  ("2026-Founders", &BioglowFounders {}),
+  ("2026-Future", &BioglowFuture {}),
+];
 
 pub struct FllBlueprintMap {}
 
@@ -11,10 +17,7 @@ impl FllBlueprintMap {
     // switch to hashmap, for faster lookup
     let answers_map: HashMap<String, QuestionAnswer> = answers.iter().map(|a| (a.question_id.clone(), a.clone())).collect();
     // match_season!(season, validate(answers))
-    match SEASONS.iter().find(|(s, _)| *s == season) {
-      Some((_, season)) => Some(season.validate(&answers_map)),
-      None => None,
-    }
+    SEASONS.iter().find(|(s, _)| *s == season).map(|(_, season)| season.validate(&answers_map))
   }
 
   pub fn calculate_score(blueprint: FllBlueprint, answers: Vec<QuestionAnswer>) -> i32 {
@@ -26,10 +29,7 @@ impl FllBlueprintMap {
 
   pub fn get_fll_blueprint(season: String) -> Option<FllBlueprint> {
     // match_season!(season, get_fll_game())
-    match SEASONS.iter().find(|(s, _)| *s == season) {
-      Some((_, season)) => Some(season.get_fll_game()),
-      None => None,
-    }
+    SEASONS.iter().find(|(s, _)| *s == season).map(|(_, season)| season.get_fll_game())
   }
 
   pub fn get_seasons() -> Vec<String> {

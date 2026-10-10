@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tms/models/team_on_table_info.dart';
 import 'package:tms/widgets/team_widgets/team_on_table_row.dart';
@@ -9,10 +9,10 @@ class TeamsOnTableList extends StatelessWidget {
   final bool isLeft;
 
   const TeamsOnTableList({
-    Key? key,
+    super.key,
     required this.teamsInfo,
     required this.isLeft,
-  }) : super(key: key);
+  });
 
   Color? _getBackgroundColor(int index, {bool isLeft = true}) {
     if (isLeft) {
@@ -54,6 +54,7 @@ class TeamsOnTableList extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: AnimatedInfiniteVerticalList(
+          childHeight: childHeight,
           children: List<Widget>.generate(teamsInfo.length, (index) {
             return Container(
               height: childHeight,
@@ -61,7 +62,6 @@ class TeamsOnTableList extends StatelessWidget {
               child: TeamOnTableRow(info: teamsInfo[index], isLeft: isLeft),
             );
           }),
-          childHeight: childHeight,
         ),
       ),
     );

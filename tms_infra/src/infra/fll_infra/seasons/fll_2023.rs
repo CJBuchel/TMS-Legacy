@@ -7,8 +7,10 @@ use crate::{
 
 use super::BaseSeason;
 
+#[flutter_rust_bridge::frb(ignore)]
 pub struct MasterPiece {}
 
+#[flutter_rust_bridge::frb(ignore)]
 impl BaseSeason for MasterPiece {
   fn validate(&self, answers: &HashMap<String, QuestionAnswer>) -> Vec<QuestionValidationError> {
     let mut errors: Vec<QuestionValidationError> = vec![];

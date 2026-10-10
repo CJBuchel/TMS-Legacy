@@ -74,7 +74,9 @@ class EchoTreeProvider<K, V> extends ChangeNotifier {
 
     // remove items that are not in the tree
     final keysToRemove = items.keys.where((key) => !rawData.containsKey(key));
-    keysToRemove.forEach((key) => items.remove(key));
+    for (var key in keysToRemove) {
+      items.remove(key);
+    }
   }
 
   @override

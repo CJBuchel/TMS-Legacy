@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tms/widgets/dialogs/base_dialog.dart';
 import 'package:tms/widgets/dialogs/dialog_style.dart';

@@ -1,10 +1,10 @@
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/views/teams/team_editor/team_editor.dart';
 import 'package:tms/views/teams/team_selector.dart';
 
 class Teams extends StatelessWidget {
-  Teams({Key? key}) : super(key: key);
+  Teams({super.key});
 
   final ValueNotifier<String?> _selectedTeamId = ValueNotifier(null);
 

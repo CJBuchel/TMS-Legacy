@@ -11,8 +11,6 @@ jobs:
           cacheBuild: false # we're not building the app here
       # Install requirements for rust & flutter
       - template: templates/steps/rust-steps/install-rust.yml
-        parameters:
-          rustToolchain: 'nightly'
       - template: templates/steps/flutter-steps/install-flutter.yml
       # install wasm target and codegen
       - template: templates/steps/repo-steps/install-ffi-deps.yml

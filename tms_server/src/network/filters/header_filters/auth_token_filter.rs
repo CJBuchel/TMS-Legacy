@@ -17,7 +17,7 @@ pub fn check_auth_token_filter(clients: ClientMap) -> impl Filter<Extract = (), 
         Some(client) => {
           if client.auth_token == auth_token {
             log::debug!("Client authorized: {}", client_id);
-            return Ok(());
+            Ok(())
           } else {
             log::warn!("Client auth failed: {}", client_id);
             Err(warp::reject::custom(UnauthorizedToken))

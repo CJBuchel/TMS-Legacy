@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum TableSignalState {
   SIG,
@@ -11,10 +11,10 @@ class GameTableStatus extends StatelessWidget {
   final AnimationController blinkController;
 
   const GameTableStatus({
-    Key? key,
+    super.key,
     required this.state,
     required this.blinkController,
-  }) : super(key: key);
+  });
 
   Widget _statusText(TableSignalState state) {
     Color? color = Colors.red;
@@ -35,15 +35,15 @@ class GameTableStatus extends StatelessWidget {
     return AnimatedBuilder(
       animation: blinkController,
       builder: (context, child) {
-        Color? status_color = color;
+        Color? statusColor = color;
         if (state == TableSignalState.SIG) {
-          status_color = blinkController.value < 0.5 ? color : Colors.transparent;
+          statusColor = blinkController.value < 0.5 ? color : Colors.transparent;
         }
 
         return Text(
           text,
           style: TextStyle(
-            color: status_color,
+            color: statusColor,
             fontWeight: FontWeight.bold,
           ),
         );
@@ -53,10 +53,8 @@ class GameTableStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: RepaintBoundary(
-        child: _statusText(state),
-      ),
+    return RepaintBoundary(
+      child: _statusText(state),
     );
   }
 }

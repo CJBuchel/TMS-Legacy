@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/models/team_score_sheet.dart';
 import 'package:tms/providers/robot_game_providers/game_scores_provider.dart';
@@ -7,10 +7,10 @@ import 'package:tms/utils/color_modifiers.dart';
 import 'package:tms/views/dashboard/scoring_overview/scoring_tile.dart/scoring_overview_tile.dart';
 
 class ScoringOverview extends StatefulWidget {
-  const ScoringOverview({Key? key}) : super(key: key);
+  const ScoringOverview({super.key});
 
   @override
-  _ScoringOverviewState createState() => _ScoringOverviewState();
+  State<ScoringOverview> createState() => _ScoringOverviewState();
 }
 
 class _ScoringOverviewState extends State<ScoringOverview> {

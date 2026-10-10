@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/user.dart';
 import 'package:tms/providers/auth_provider.dart';
@@ -17,6 +17,8 @@ import 'package:tms/widgets/tables/edit_row_table.dart';
 class Users extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  Users({super.key});
 
   Future<int> _insertUser(
       BuildContext context, String? userId, List<String> roles) async {
@@ -166,6 +168,7 @@ class Users extends StatelessWidget {
         "User: ${user.username} permissions updated: ${updatedPermissions.getRoles()}}");
     var status = await Provider.of<AuthProvider>(context, listen: false)
         .insertUser(userId, updatedUser);
+    if (!context.mounted) return;
     SnackBarDialog.fromStatus(
             message: "Update ${user.username}", status: status)
         .show(context);
@@ -275,7 +278,7 @@ class Users extends StatelessWidget {
           Selector<AuthProvider, List<User>>(
             selector: (context, authProvider) => authProvider.users,
             shouldRebuild: (previous, next) => !listEquals(previous, next),
-            builder: (_, users, __) {
+            builder: (_, users, _) {
               return EditTable(
                 onAdd: () => _addUser(context),
                 headers: [

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/tms_time/tms_date_time.dart';
 import 'package:tms/generated/infra/database_schemas/tms_time/tms_time.dart';
 import 'package:tms/utils/tms_time_utils.dart';
@@ -8,19 +8,19 @@ class EditTimeWidget extends StatefulWidget {
   final TmsDateTime? initialTime;
   final Function(TmsDateTime)? onChanged;
 
-  EditTimeWidget({
-    Key? key,
+  const EditTimeWidget({
+    super.key,
     this.label,
     this.initialTime,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
-  _EditTimeWidgetState createState() => _EditTimeWidgetState();
+  State<EditTimeWidget> createState() => _EditTimeWidgetState();
 }
 
 class _EditTimeWidgetState extends State<EditTimeWidget> {
-  late ValueNotifier<TmsDateTime> _time = ValueNotifier(widget.initialTime ?? dateTimeToTmsDateTime(DateTime.now()));
+  late final ValueNotifier<TmsDateTime> _time = ValueNotifier(widget.initialTime ?? dateTimeToTmsDateTime(DateTime.now()));
 
   void _setTime(TimeOfDay time) {
     _time.value = TmsDateTime(time: TmsTime(hour: time.hour, minute: time.minute, second: 0));

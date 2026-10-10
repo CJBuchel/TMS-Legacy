@@ -1,5 +1,5 @@
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/tms_time/tms_date_time.dart';
@@ -75,6 +75,8 @@ class GameMatches extends StatelessWidget {
   final ValueNotifier<TmsDateTime> _selectedStartTime =
       ValueNotifier(TmsDateTime());
   final ValueNotifier<bool> _selectedCompleted = ValueNotifier(false);
+
+  GameMatches({super.key});
 
   List<EditTableRow> _rows(BuildContext context, List<GameMatch> gameMatches) {
     return gameMatches.asMap().entries.map((entry) {
@@ -162,8 +164,8 @@ class GameMatches extends StatelessWidget {
           BaseTableCell(
             child: Center(
               child: CircleAvatar(
-                child: Text(m.matchNumber),
                 backgroundColor: m.completed ? Colors.green : Colors.red,
+                child: Text(m.matchNumber),
               ),
             ),
             flex: 1,

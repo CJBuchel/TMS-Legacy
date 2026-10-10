@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
 
 class NextTeamToScore extends StatelessWidget {
@@ -6,10 +6,10 @@ class NextTeamToScore extends StatelessWidget {
   final double fontSize;
 
   const NextTeamToScore({
-    Key? key,
+    super.key,
     this.nextTeam,
     this.fontSize = 16,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

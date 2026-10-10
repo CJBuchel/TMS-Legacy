@@ -28,7 +28,7 @@ class EchoTreeNetworkService extends EchoTreeSubscriptionManager {
   WebSocketChannel? _channel;
 
   // main connection flag
-  ValueNotifier<EchoTreeConnection> _state =
+  final ValueNotifier<EchoTreeConnection> _state =
       ValueNotifier(EchoTreeConnection.disconnected);
   BlockingLoopTimer? _checksumTimer;
 

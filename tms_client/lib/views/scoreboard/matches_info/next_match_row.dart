@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
@@ -10,16 +10,16 @@ class NextMatchRow extends StatelessWidget {
   final int index;
 
   const NextMatchRow({
-    Key? key,
+    super.key,
     required this.nextMatch,
     required this.index,
-  }) : super(key: key);
+  });
 
   Widget _teamOnTable(GameMatchTable gmTable, double childWidth) {
     return Selector<TeamsProvider, Team>(
       selector: (_, provider) => provider.getTeam(gmTable.teamNumber),
       builder: (context, team, _) {
-        return Container(
+        return SizedBox(
           width: childWidth,
           child: Center(
             child: Text("${gmTable.teamNumber} | ${team.name} | ${gmTable.table}"),
@@ -66,8 +66,8 @@ class NextMatchRow extends StatelessWidget {
         Expanded(
           child: AnimatedInfiniteHorizontalList(
             scrollSpeed: 25,
-            children: _teamsOnTables(nextMatch.gameMatchTables, childWidth),
             childWidth: childWidth,
+            children: _teamsOnTables(nextMatch.gameMatchTables, childWidth),
           ),
         ),
       ],

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/robot_game_providers/game_match_status_provider.dart';
 import 'package:tms/views/match_controller/timer_controls/start_buttons.dart';
@@ -17,6 +17,8 @@ class _MatchStatusData {
 }
 
 class AnnouncerTimerControls extends StatelessWidget {
+  const AnnouncerTimerControls({super.key});
+
   Widget _statusText(String text, {Color? color}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),

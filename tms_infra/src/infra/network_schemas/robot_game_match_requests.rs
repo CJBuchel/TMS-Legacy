@@ -4,19 +4,12 @@ use serde::{Deserialize, Serialize};
 use crate::{DataSchemeExtensions, GameMatch};
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
+#[derive(Default)]
 pub struct RobotGameMatchInsertRequest {
   pub match_id: Option<String>,
   pub game_match: GameMatch,
 }
 
-impl Default for RobotGameMatchInsertRequest {
-  fn default() -> Self {
-    Self {
-      match_id: None,
-      game_match: GameMatch::default(),
-    }
-  }
-}
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
 pub struct RobotGameMatchRemoveRequest {
@@ -30,15 +23,11 @@ impl Default for RobotGameMatchRemoveRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
+#[derive(Default)]
 pub struct RobotGameMatchLoadRequest {
   pub game_match_numbers: Vec<String>,
 }
 
-impl Default for RobotGameMatchLoadRequest {
-  fn default() -> Self {
-    Self { game_match_numbers: vec![] }
-  }
-}
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
 pub struct RobotGameToggleTeamCheckInRequest {

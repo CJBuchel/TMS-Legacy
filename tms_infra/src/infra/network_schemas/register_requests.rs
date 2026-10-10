@@ -4,16 +4,12 @@ use serde::{Deserialize, Serialize};
 use crate::infra::{DataSchemeExtensions, TmsTreeRole};
 
 #[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Default)]
 pub struct RegisterRequest {
   pub username: Option<String>, // optionally log in with username/password
   pub password: Option<String>,
 }
 
-impl Default for RegisterRequest {
-  fn default() -> Self {
-    Self { username: None, password: None }
-  }
-}
 
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct RegisterResponse {

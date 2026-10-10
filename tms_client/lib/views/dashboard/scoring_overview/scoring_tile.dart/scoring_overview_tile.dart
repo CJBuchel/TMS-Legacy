@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/models/team_score_sheet.dart';
 import 'package:tms/utils/tms_time_utils.dart';
 import 'package:tms/views/dashboard/scoring_overview/scoring_tile.dart/score_center_info.dart';
@@ -9,7 +9,7 @@ class ScoreOverviewTile extends StatelessWidget {
   final Color backgroundColor;
   final TeamScoreSheet teamScoreSheet;
 
-  const ScoreOverviewTile({
+  const ScoreOverviewTile({super.key, 
     required this.backgroundColor,
     required this.teamScoreSheet,
   });
@@ -84,7 +84,7 @@ class ScoreOverviewTile extends StatelessWidget {
                   ),
                 ),
                 // tags, align these at the end
-                Container(
+                SizedBox(
                   width: constraints.maxWidth,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,

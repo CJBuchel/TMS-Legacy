@@ -7,6 +7,7 @@ use crate::DataSchemeExtensions;
 use super::{TmsDuration, TmsTimeBased};
 
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[derive(Default)]
 pub struct TmsDate {
   pub year: i32,  // 4-digit year
   pub month: u32, // 1-12
@@ -52,12 +53,12 @@ impl TmsTimeBased for TmsDate {
       return 1;
     }
 
-    return 0;
+    0
   }
 
   
   fn duration(&self) -> TmsDuration {
-    let years = self.year as i32;
+    let years = self.year;
     let months = self.month as i32;
     let days = self.day as i32;
 
@@ -93,21 +94,12 @@ impl TmsTimeBased for TmsDate {
   fn add_duration(&self, duration: TmsDuration) -> Self {
     let added_duration = self.duration().add(duration);
     Self {
-      year: (self.year + added_duration.years.unwrap_or(self.year)) as i32,
+      year: (self.year + added_duration.years.unwrap_or(self.year)),
       month: (self.month as i32 + added_duration.months.unwrap_or(self.month as i32)) as u32,
       day: (self.day as i32 + added_duration.days.unwrap_or(self.day as i32)) as u32,
     }
   }
 }
 
-impl Default for TmsDate {
-  fn default() -> Self {
-    Self {
-      year: 0,
-      month: 0,
-      day: 0,
-    }
-  }
-}
 
 impl DataSchemeExtensions for TmsDate {}

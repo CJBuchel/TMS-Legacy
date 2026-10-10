@@ -13,7 +13,7 @@ pub async fn backup_restore_handler(request: BackupRestoreRequest, db: SharedDat
     }
     Err(e) => {
       log::error!("Failed to restore backup: {}", e);
-      return Err(warp::reject::custom(crate::network::BadRequestWithMessage { message: "Failed to restore backup".to_string() }));
+      Err(warp::reject::custom(crate::network::BadRequestWithMessage { message: "Failed to restore backup".to_string() }))
     }
   }
 }
@@ -96,8 +96,8 @@ pub async fn backup_get_names_handler(db: SharedDatabase) -> Result<impl warp::R
   }
 
   if backup_files.is_empty() {
-    return Err(warp::reject::custom(crate::network::BadRequestWithMessage { message: "No backups found".to_string() }));
+    Err(warp::reject::custom(crate::network::BadRequestWithMessage { message: "No backups found".to_string() }))
   } else {
-    return Ok(warp::reply::json(&BackupGetNamesResponse { backups }));
+    Ok(warp::reply::json(&BackupGetNamesResponse { backups }))
   }
 }

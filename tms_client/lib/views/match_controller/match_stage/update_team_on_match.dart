@@ -1,5 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
 import 'package:tms/providers/robot_game_providers/game_table_provider.dart';
@@ -27,15 +27,15 @@ class UpdateTeamOnMatchWidget extends StatelessWidget {
   final ValueNotifier<Team?> selectedTeam;
   final ValueNotifier<String> selectedMatch;
 
-  UpdateTeamOnMatchWidget({
-    Key? key,
+  const UpdateTeamOnMatchWidget({
+    super.key,
     required this.isEditing,
     required this.tableData,
     required this.stagedMatchNumbers,
     required this.selectedTable,
     required this.selectedTeam,
     required this.selectedMatch,
-  }) : super(key: key);
+  });
 
   Widget _selectAvailableTeamWidget(List<Team> availableTeams) {
     if (availableTeams.isEmpty) {
@@ -48,17 +48,18 @@ class UpdateTeamOnMatchWidget extends StatelessWidget {
       popupProps: const PopupProps.menu(
         showSearchBox: true,
       ),
-      items: availableTeams,
+      compareFn: (a, b) => a == b,
+      items: (filter, loadProps) => availableTeams,
       itemAsString: (team) => "${team.teamNumber} - ${team.name}",
-      dropdownDecoratorProps: const DropDownDecoratorProps(
-        dropdownSearchDecoration: InputDecoration(
+      decoratorProps: const DropDownDecoratorProps(
+        decoration: InputDecoration(
           border: OutlineInputBorder(),
           contentPadding: EdgeInsets.all(10),
           labelText: "Team",
           hintText: "Select Team",
         ),
       ),
-      onChanged: (value) {
+      onSelected: (value) {
         if (value != null) selectedTeam.value = value;
       },
       selectedItem: selectedTeam.value,
@@ -77,16 +78,16 @@ class UpdateTeamOnMatchWidget extends StatelessWidget {
         showSelectedItems: true,
         showSearchBox: true,
       ),
-      items: availableTables,
-      dropdownDecoratorProps: const DropDownDecoratorProps(
-        dropdownSearchDecoration: InputDecoration(
+      items: (filter, loadProps) => availableTables,
+      decoratorProps: const DropDownDecoratorProps(
+        decoration: InputDecoration(
           border: OutlineInputBorder(),
           contentPadding: EdgeInsets.all(10),
           labelText: "On Table",
           hintText: "Select Table",
         ),
       ),
-      onChanged: (value) {
+      onSelected: (value) {
         if (value != null) selectedTable.value = value;
       },
       selectedItem: selectedTable.value,
@@ -105,16 +106,16 @@ class UpdateTeamOnMatchWidget extends StatelessWidget {
         showSelectedItems: true,
         showSearchBox: true,
       ),
-      items: availableMatchNumbers,
-      dropdownDecoratorProps: const DropDownDecoratorProps(
-        dropdownSearchDecoration: InputDecoration(
+      items: (filter, loadProps) => availableMatchNumbers,
+      decoratorProps: const DropDownDecoratorProps(
+        decoration: InputDecoration(
           border: OutlineInputBorder(),
           contentPadding: EdgeInsets.all(10),
           labelText: "In Match",
           hintText: "Select Match",
         ),
       ),
-      onChanged: (value) {
+      onSelected: (value) {
         if (value != null) selectedMatch.value = value;
       },
       selectedItem: selectedMatch.value,

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/tournament_integrity_message.dart';
 import 'package:tms/widgets/expandable/expandable_tile.dart';
 import 'package:tms/widgets/integrity_checks/icon_tooltip_integrity_check.dart';
@@ -8,9 +8,9 @@ class IntegrityMessageTile extends StatelessWidget {
   final ExpansionController _expansionController = ExpansionController(isExpanded: false);
 
   IntegrityMessageTile({
-    Key? key,
+    super.key,
     required this.messages,
-  }) : super(key: key);
+  });
 
   Widget _tile(BuildContext context, TournamentIntegrityMessage m) {
     return ListTile(

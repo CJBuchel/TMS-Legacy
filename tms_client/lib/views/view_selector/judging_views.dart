@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/user.dart';
@@ -7,8 +7,8 @@ import 'package:tms/views/view_selector/image_button_card.dart';
 
 class JudgingViews extends StatelessWidget {
   const JudgingViews({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

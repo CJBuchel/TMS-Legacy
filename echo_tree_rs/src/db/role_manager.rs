@@ -120,10 +120,10 @@ impl RoleManager {
 
     // compare the password
     if role.password == password {
-      return true
+      true
     } else {
       warn!("password mismatch for role: {}", role_id);
-      return false
+      false
     }
   }
 }

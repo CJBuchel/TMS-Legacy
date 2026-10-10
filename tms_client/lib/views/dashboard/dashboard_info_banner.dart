@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/judging_session_provider.dart';
 import 'package:tms/providers/robot_game_providers/game_match_provider.dart';
@@ -26,6 +25,8 @@ class _Data {
 }
 
 class DashboardInfoBanner extends StatelessWidget {
+  const DashboardInfoBanner({super.key});
+
   Widget _buildProgressIndicator({
     required String label,
     required int completed,
@@ -36,15 +37,30 @@ class DashboardInfoBanner extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CircularPercentIndicator(
-          animation: true,
-          radius: 30.0,
-          lineWidth: 6.0,
-          percent: progress,
-          center: Text("$completed/$total"),
-          progressColor: color,
-          footer: Text(label),
+        SizedBox(
+          width: 60,
+          height: 60,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // animate the ring from its previous value
+              TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0, end: progress.clamp(0.0, 1.0)),
+                duration: const Duration(milliseconds: 500),
+                builder: (context, value, _) => SizedBox.expand(
+                  child: CircularProgressIndicator(
+                    value: value,
+                    strokeWidth: 6,
+                    color: color,
+                    backgroundColor: const Color(0xFFB8C7CB),
+                  ),
+                ),
+              ),
+              Text("$completed/$total"),
+            ],
+          ),
         ),
+        Text(label),
       ],
     );
   }

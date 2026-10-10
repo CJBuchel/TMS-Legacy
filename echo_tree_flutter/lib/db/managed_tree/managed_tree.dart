@@ -5,7 +5,7 @@ import 'package:echo_tree_flutter/db/checksum.dart';
 import 'package:echo_tree_flutter/db/managed_tree/managed_tree_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class _SP_Wrapper {
+class _SpWrapper {
   SharedPreferences? _ls;
 
   // check if shared preferences is ready
@@ -18,7 +18,7 @@ class _SP_Wrapper {
     }
   }
 
-  SP_Wrapper() {
+  _SpWrapper() {
     _checkInitialized();
   }
 
@@ -30,8 +30,8 @@ class _SP_Wrapper {
 }
 
 class ManagedTree {
-  String _treePath;
-  _SP_Wrapper _spWrapper = _SP_Wrapper();
+  final String _treePath;
+  final _SpWrapper _spWrapper = _SpWrapper();
   // checksum
   int _checksum = 0;
   final CRC32 _crc32 = CRC32();
@@ -39,7 +39,7 @@ class ManagedTree {
   // stream controller
   final StreamController<ManagedTreeEvent> _updatesController = StreamController<ManagedTreeEvent>.broadcast();
 
-  ManagedTree(String treePath) : _treePath = treePath + ":";
+  ManagedTree(String treePath) : _treePath = "$treePath:";
 
   void _updateChecksum() {
     Map<String, String> data = getDataMap();

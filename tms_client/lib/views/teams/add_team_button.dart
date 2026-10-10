@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
 import 'package:tms/services/team_service.dart';
 import 'package:tms/widgets/dialogs/confirm_future_dialog.dart';
@@ -6,8 +6,8 @@ import 'package:tms/widgets/dialogs/dialog_style.dart';
 
 class AddTeamButton extends StatelessWidget {
   AddTeamButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final TextEditingController _teamNumberController = TextEditingController();
   final TextEditingController _teamNameController = TextEditingController();

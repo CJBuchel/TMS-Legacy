@@ -27,10 +27,7 @@ impl V1Block for ScheduleJudgeBlock {
   type Output = ScheduleJudgeBlock;
 
   fn from_csv(csv: &str) -> Result<Self::Output, String> {
-    let block_lines = match Self::get_block_lines(csv, BLOCK_JUDGING) {
-      Ok(lines) => lines,
-      Err(e) => return Err(e),
-    };
+    let block_lines = Self::get_block_lines(csv, BLOCK_JUDGING)?;
 
     let mut n_judging_events: usize = 0;
     let mut n_judging_time_slots: usize = 0;
@@ -80,17 +77,16 @@ impl V1Block for ScheduleJudgeBlock {
         "Room Names" => {
           for i in 1..fields.len() {
             // skip first field (which is "Room Names")
-            if let Some(room_name) = fields.get(i) {
-              if !room_name.trim().is_empty() {
+            if let Some(room_name) = fields.get(i)
+              && !room_name.trim().is_empty() {
                 judging_room_names.push(room_name.to_string());
               }
-            }
           }
         }
 
         _ => {
           let mut in_rooms: Vec<ScheduleInRoomT> = vec![];
-          let session_number = fields.get(0).unwrap_or(&"").to_string();
+          let session_number = fields.first().unwrap_or(&"").to_string();
           let start_time = fields.get(1).unwrap_or(&"").to_string();
           let end_time = fields.get(2).unwrap_or(&"").to_string();
 
@@ -102,12 +98,11 @@ impl V1Block for ScheduleJudgeBlock {
                 let team_number = team_number_field.to_string();
 
                 // Only add if we have a valid room name at this index
-                if let Some(room_name) = judging_room_names.get(i) {
-                  if !team_number.trim().is_empty() {
+                if let Some(room_name) = judging_room_names.get(i)
+                  && !team_number.trim().is_empty() {
                     let in_room = ScheduleInRoomT { room_name: room_name.clone(), team_number };
                     in_rooms.push(in_room);
                   }
-                }
               }
             }
 

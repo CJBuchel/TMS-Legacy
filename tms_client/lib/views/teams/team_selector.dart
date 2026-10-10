@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
 import 'package:tms/generated/infra/database_schemas/tournament_integrity_message.dart';
@@ -13,15 +13,15 @@ import 'package:tms/widgets/integrity_checks/icon_tooltip_integrity_check.dart';
 class TeamSelector extends StatefulWidget {
   final Function(String teamId) onTeamSelected;
 
-  const TeamSelector({Key? key, required this.onTeamSelected}) : super(key: key);
+  const TeamSelector({super.key, required this.onTeamSelected});
 
   @override
-  _TeamSelectorState createState() => _TeamSelectorState();
+  State<TeamSelector> createState() => _TeamSelectorState();
 }
 
 class _TeamSelectorState extends State<TeamSelector> {
-  TextEditingController _teamSearchController = TextEditingController();
-  TextEditingController _rankSearchController = TextEditingController();
+  final TextEditingController _teamSearchController = TextEditingController();
+  final TextEditingController _rankSearchController = TextEditingController();
   String _teamSearchText = "";
   String _rankSearchText = "";
 
@@ -168,7 +168,7 @@ class _TeamSelectorState extends State<TeamSelector> {
                           ),
                           trailing: Selector<TournamentIntegrityProvider, List<TournamentIntegrityMessage>>(
                             selector: (_, provider) => provider.getTeamMessages(team.teamNumber),
-                            builder: (_, messages, __) {
+                            builder: (_, messages, _) {
                               return IconTooltipIntegrityCheck(messages: messages);
                             },
                           ),

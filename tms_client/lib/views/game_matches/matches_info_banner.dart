@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/tournament_integrity_message.dart';
@@ -10,10 +10,10 @@ import 'package:tms/widgets/timers/match_schedule_timer.dart';
 class MatchesInfoBanner extends StatelessWidget {
   final List<GameMatch> gameMatches;
 
-  MatchesInfoBanner({
-    Key? key,
+  const MatchesInfoBanner({
+    super.key,
     required this.gameMatches,
-  }) : super(key: key);
+  });
 
   Widget _completedMatches() {
     int completedMatches = gameMatches.where((match) => match.completed).length;
@@ -58,15 +58,15 @@ class MatchesInfoBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 100,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           // time to next match
-          Container(
+          const SizedBox(
             width: 150,
-            child: const Center(
+            child: Center(
               child: MatchScheduleTimer(
                 negativeStyle: TextStyle(color: Colors.red),
                 positiveStyle: TextStyle(color: Colors.green),

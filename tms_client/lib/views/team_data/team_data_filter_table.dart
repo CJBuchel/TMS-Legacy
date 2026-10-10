@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/models/team_data_model.dart';
 import 'package:tms/utils/color_modifiers.dart';
 import 'package:tms/utils/converters.dart';
@@ -15,18 +15,18 @@ class TeamDataFilterTable extends StatefulWidget {
   final int maxNumberRounds;
   final List<TeamDataModel> teamData;
 
-  const TeamDataFilterTable({
+  const TeamDataFilterTable({super.key, 
     required this.maxNumberRounds,
     required this.teamData,
   });
 
   @override
-  _TeamDataFilterTableState createState() => _TeamDataFilterTableState();
+  State<TeamDataFilterTable> createState() => _TeamDataFilterTableState();
 }
 
 class _TeamDataFilterTableState extends State<TeamDataFilterTable> {
-  Map<String, FilterColumn> _columns = {};
-  Map<String, String> _filters = {};
+  final Map<String, FilterColumn> _columns = {};
+  final Map<String, String> _filters = {};
 
   @override
   void initState() {
@@ -176,7 +176,7 @@ class _TeamDataFilterTableState extends State<TeamDataFilterTable> {
       Colors.cyan,
     ];
 
-    return colors[i % colors.length].withOpacity(0.2);
+    return colors[i % colors.length].withValues(alpha: 0.2);
   }
 
   bool _applyFilters(TeamDataModel data) {

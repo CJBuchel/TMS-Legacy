@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/auth_provider.dart';
@@ -29,7 +29,7 @@ import 'package:tms/widgets/scaffolds/base_scaffold_drawer_router.dart';
 class _DelayedViewWrapper extends StatelessWidget {
   final Widget child;
 
-  const _DelayedViewWrapper({Key? key, required this.child}) : super(key: key);
+  const _DelayedViewWrapper({required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ final _protectedRoutes = <GoRoute>[
         builder: (context, state) => BaseScaffoldDrawerRouter(
           state: state,
           child:
-              _DelayedViewWrapper(child: NoMobileViewWrapper(child: Setup())),
+              const _DelayedViewWrapper(child: NoMobileViewWrapper(child: Setup())),
         ),
       ),
       GoRoute(
@@ -66,7 +66,7 @@ final _protectedRoutes = <GoRoute>[
         name: 'dashboard',
         builder: (context, state) => BaseScaffoldDrawerRouter(
           state: state,
-          child: _DelayedViewWrapper(
+          child: const _DelayedViewWrapper(
               child: NoMobileViewWrapper(child: Dashboard())),
         ),
       ),
@@ -85,7 +85,7 @@ final _protectedRoutes = <GoRoute>[
         builder: (context, state) => BaseScaffoldDrawerRouter(
           state: state,
           child:
-              _DelayedViewWrapper(child: NoMobileViewWrapper(child: Backups())),
+              const _DelayedViewWrapper(child: NoMobileViewWrapper(child: Backups())),
         ),
       ),
     ],
@@ -107,7 +107,7 @@ final _protectedRoutes = <GoRoute>[
         name: 'team_data',
         builder: (context, state) => BaseScaffoldDrawerRouter(
           state: state,
-          child: _DelayedViewWrapper(
+          child: const _DelayedViewWrapper(
               child: NoMobileViewWrapper(child: TeamData())),
         ),
       ),
@@ -182,7 +182,7 @@ final _protectedRoutes = <GoRoute>[
         name: 'match_announcer',
         builder: (context, state) => BaseScaffoldDrawerRouter(
           state: state,
-          child: _DelayedViewWrapper(
+          child: const _DelayedViewWrapper(
               child: NoMobileViewWrapper(child: MatchAnnouncer())),
         ),
       ),
@@ -257,7 +257,7 @@ final tmsRouter = GoRouter(
       path: '/game_match_timer',
       name: 'game_match_timer',
       builder: (context, state) => BaseScaffold(
-          state: state, child: _DelayedViewWrapper(child: GameMatchTimer())),
+          state: state, child: const _DelayedViewWrapper(child: GameMatchTimer())),
     ),
     GoRoute(
       path: '/scoreboard',

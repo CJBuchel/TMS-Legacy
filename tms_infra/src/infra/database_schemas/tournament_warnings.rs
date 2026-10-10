@@ -7,7 +7,9 @@ use crate::infra::DataSchemeExtensions;
 use super::tournament_code::TournamentCode;
 
 #[derive(Display, Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[derive(Default)]
 pub enum TournamentWarningCode {
+  #[default]
   W000,
   W001,
   W002,
@@ -56,10 +58,5 @@ impl TournamentCode for TournamentWarningCode {
   }
 }
 
-impl Default for TournamentWarningCode {
-  fn default() -> Self {
-    TournamentWarningCode::W000
-  }
-}
 
 impl DataSchemeExtensions for TournamentWarningCode {}

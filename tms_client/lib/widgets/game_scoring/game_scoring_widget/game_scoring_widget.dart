@@ -1,5 +1,5 @@
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_score_sheet.dart';
 import 'package:tms/generated/infra/fll_infra/fll_blueprint.dart';
@@ -13,6 +13,7 @@ import 'package:tms/utils/logger.dart';
 import 'package:tms/widgets/game_scoring/game_scoring_widget/agnostic_scoring/agnostic_scoring.dart';
 import 'package:tms/widgets/game_scoring/game_scoring_widget/blueprint_scoring/mission.dart';
 import 'package:tms/widgets/game_scoring/game_scoring_widget/blueprint_scoring/private_comment.dart';
+import 'package:tms/widgets/game_scoring/game_scoring_widget/blueprint_scoring/question/categorical_question.dart';
 import 'package:tms/widgets/game_scoring/game_scoring_widget/blueprint_scoring/question/question.dart';
 
 class _BlueprintData {
@@ -24,34 +25,35 @@ class _BlueprintData {
       {required this.type, required this.season, required this.blueprint});
 }
 
-class _QuestionKeyData {
+class QuestionKeyData {
   final GlobalKey key = GlobalKey();
   final Question question;
 
-  _QuestionKeyData({required this.question});
+  QuestionKeyData({required this.question});
 }
 
 class GameScoringWidget extends StatelessWidget {
   final ScrollController? scrollController;
-  final List<_QuestionKeyData> questionKeys = [];
+  final List<QuestionKeyData> questionKeys = [];
   final GameScoreSheet? scoreSheet;
 
   GameScoringWidget({
-    Key? key,
+    super.key,
     required this.scrollController,
     this.scoreSheet,
-  }) : super(key: key);
+  });
 
   void _initializeQuestionKeys(List<Question> questions) {
     questionKeys.clear();
     questionKeys.addAll(List.generate(questions.length,
-        (index) => _QuestionKeyData(question: questions[index])));
+        (index) => QuestionKeyData(question: questions[index])));
   }
 
   void _scrollToNextQuestion(int currentIndex) {
     // If the scrollController is null or has no clients, return
-    if (scrollController == null || !(scrollController?.hasClients ?? false))
+    if (scrollController == null || !(scrollController?.hasClients ?? false)) {
       return;
+    }
     if (currentIndex + 1 < questionKeys.length) {
       final nextKey = questionKeys[currentIndex + 1];
       final nextContext = nextKey.key.currentContext;
@@ -139,7 +141,7 @@ class GameScoringWidget extends StatelessWidget {
                     (context, index) {
                       Mission mission = data.blueprint.robotGameMissions[index];
                       // List<Question> allQuestions = data.blueprint.robotGameQuestions;
-                      List<_QuestionKeyData> missionQuestions = questionKeys
+                      List<QuestionKeyData> missionQuestions = questionKeys
                           .where((q) => q.question.id.startsWith(mission.id))
                           .toList();
 
@@ -155,8 +157,14 @@ class GameScoringWidget extends StatelessWidget {
                             onAnswer: (a) async {
                               TmsLogger().d(
                                   "Answered question ${questionKeyData.question.id} with answer $a");
-                              _scrollToNextQuestion(
-                                  questionKeys.indexOf(questionKeyData));
+                              // counters are tapped repeatedly, so stay on the question
+                              final isCounter = questionKeyData.question.input.when(
+                                categorical: CategoricalQuestionWidget.usesCounter,
+                              );
+                              if (!isCounter) {
+                                _scrollToNextQuestion(
+                                    questionKeys.indexOf(questionKeyData));
+                              }
                               Provider.of<GameScoringProvider>(context,
                                       listen: false)
                                   .onAnswer(

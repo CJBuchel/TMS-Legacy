@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_score_sheet.dart';
 import 'package:tms/providers/teams_provider.dart';
@@ -8,7 +8,7 @@ class ScoreCenterInfo extends StatelessWidget {
   final Color backgroundColor;
   final GameScoreSheet teamScoreSheet;
 
-  const ScoreCenterInfo({
+  const ScoreCenterInfo({super.key, 
     required this.backgroundColor,
     required this.teamScoreSheet,
   });

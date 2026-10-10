@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/judging_session.dart';
@@ -16,16 +16,16 @@ class TeamInfoBanner extends StatelessWidget {
   final Team team;
 
   const TeamInfoBanner({
-    Key? key,
+    super.key,
     required this.teamId,
     required this.team,
-  }) : super(key: key);
+  });
 
   Widget _matchesInfo() {
     return Selector<GameMatchProvider, List<GameMatch>>(
       selector: (_, p) => p.getMatchesByTeamNumber(team.teamNumber),
       shouldRebuild: (previous, next) => !listEquals(previous, next),
-      builder: (_, gameMatches, __) {
+      builder: (_, gameMatches, _) {
         int completedRounds = gameMatches.where((match) => match.completed).length;
         return Row(
           children: [
@@ -68,7 +68,7 @@ class TeamInfoBanner extends StatelessWidget {
     return Selector<JudgingSessionProvider, List<JudgingSession>>(
       selector: (_, p) => p.getSessionsByTeamNumber(team.teamNumber),
       shouldRebuild: (previous, next) => !listEquals(previous, next),
-      builder: (_, sessions, __) {
+      builder: (_, sessions, _) {
         int completedSessions = sessions.where((session) => session.completed).length;
         return Row(
           children: [

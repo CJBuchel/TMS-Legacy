@@ -114,11 +114,11 @@ String secondsToTimeString(int seconds) {
   // Build time string based on the presence of hours and minutes
   String timeString = '';
   if (hours.abs() > 0) {
-    timeString += _padTime(hours, 2) + ':';
+    timeString += '${_padTime(hours, 2)}:';
   }
   if (minutes.abs() > 0 || hours > 0) {
     // Include minutes if there are hours
-    timeString += _padTime(minutes, 2) + ':';
+    timeString += '${_padTime(minutes, 2)}:';
   }
   if (seconds.abs() >= 10) {
     timeString += _padTime(secs, 2);

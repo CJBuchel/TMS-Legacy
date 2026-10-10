@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/tms_time/tms_date_time.dart';
 import 'package:tms/widgets/timers/time_until.dart';
 
@@ -7,10 +7,10 @@ class NextMatchTimeToScore extends StatelessWidget {
   final double fontSize;
 
   const NextMatchTimeToScore({
-    Key? key,
+    super.key,
     this.startTime,
     this.fontSize = 16,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,13 @@
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/views/dashboard/dashboard_info_banner.dart';
 import 'package:tms/views/dashboard/integrity_overview/integrity_overview.dart';
 import 'package:tms/views/dashboard/scoring_overview/scoring_overview.dart';
 import 'package:tms/views/dashboard/timers_overview.dart';
 
 class Dashboard extends StatelessWidget {
+  const Dashboard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return EchoTreeLifetime(
@@ -18,7 +20,7 @@ class Dashboard extends StatelessWidget {
       ],
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return Column(
+          return const Column(
             children: [
               // header (matches, sessions, score submissions)
               SizedBox(
@@ -26,7 +28,7 @@ class Dashboard extends StatelessWidget {
                 child: DashboardInfoBanner(),
               ),
               // event summery
-              const Expanded(
+              Expanded(
                 child: Row(
                   children: [
                     Expanded(

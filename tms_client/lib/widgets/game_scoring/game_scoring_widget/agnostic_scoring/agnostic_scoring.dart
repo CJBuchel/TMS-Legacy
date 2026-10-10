@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -8,9 +8,9 @@ class AgnosticScoringWidget extends StatelessWidget {
   final Function(int, String) onScoreChanged;
 
   AgnosticScoringWidget({
-    Key? key,
+    super.key,
     required this.onScoreChanged,
-  }) : super(key: key);
+  });
 
   final TextEditingController _scoreController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
@@ -98,8 +98,8 @@ class AgnosticScoringWidget extends StatelessWidget {
   Widget _scoreButton(BuildContext context, String label, int delta, Color color) {
     return Column(
       children: [
-        _buildScoreButton(context, "+${label}", delta, color, false),
-        _buildScoreButton(context, "-${label}", -delta, color, true),
+        _buildScoreButton(context, "+$label", delta, color, false),
+        _buildScoreButton(context, "-$label", -delta, color, true),
       ],
     );
   }

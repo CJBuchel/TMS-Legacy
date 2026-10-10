@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tms/widgets/app_bar/actions/settings_action.dart';
@@ -11,9 +11,9 @@ class TmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final GoRouterState state;
 
   const TmsAppBar({
-    Key? key,
+    super.key,
     required this.state,
-  }) : super(key: key);
+  });
 
   List<Widget> _actions(BuildContext context) {
     // switch actions to submenu if the screen is small
@@ -41,8 +41,8 @@ class TmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false, // we have a manual checker in Leading
-      leading: TmsAppBarLeading(state: this.state),
-      title: TmsAppBarTitle(),
+      leading: TmsAppBarLeading(state: state),
+      title: const TmsAppBarTitle(),
       centerTitle: true,
       // leadingWidth: 100,
       actions: _actions(context),

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
@@ -18,8 +18,8 @@ class SubmitAnswersButton extends StatelessWidget {
   final String table;
   final String referee;
 
-  SubmitAnswersButton({
-    Key? key,
+  const SubmitAnswersButton({
+    super.key,
     this.buttonHeight = 40,
     this.scrollController,
     this.team,
@@ -27,7 +27,7 @@ class SubmitAnswersButton extends StatelessWidget {
     required this.round,
     required this.table,
     required this.referee,
-  }) : super(key: key);
+  });
 
   void _submitAnswersDialog(BuildContext context) {
     bool commentRequired =

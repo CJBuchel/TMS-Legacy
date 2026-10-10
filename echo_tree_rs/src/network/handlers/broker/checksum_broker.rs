@@ -40,7 +40,7 @@ pub async fn checksum_broker(uuid: String, msg: EchoTreeClientSocketMessage, cli
 
           log::warn!("client {}: tree [{}] checksum mismatch: {} != {}", uuid, tree_name, tree.get_checksum(), checksum);
 
-          if let Some(tree_hashmap) = tree.get_as_hashmap().ok() {
+          if let Ok(tree_hashmap) = tree.get_as_hashmap() {
             new_client_trees.push(EchoTreeEventTree {
               tree_name: tree_name.clone(),
               tree: tree_hashmap,

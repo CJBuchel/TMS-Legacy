@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class CategoryButtonWidget extends StatelessWidget {
   final String category;
@@ -11,7 +11,7 @@ class CategoryButtonWidget extends StatelessWidget {
   final Function(bool)? onSelected;
 
   const CategoryButtonWidget({
-    Key? key,
+    super.key,
     required this.category,
     required this.isSelected,
     this.leadingIcon,
@@ -20,7 +20,7 @@ class CategoryButtonWidget extends StatelessWidget {
     this.hoverColor = Colors.blueAccent,
     this.textColor = Colors.white,
     this.onSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -86,11 +86,11 @@ class CategoryButtons extends StatelessWidget {
   final ValueNotifier<CategoryButton> _selectedCategory = ValueNotifier<CategoryButton>(CategoryButton(category: ''));
 
   CategoryButtons({
-    Key? key,
+    super.key,
     required this.buttons,
     this.defaultCategory,
     this.onCategoryChange,
-  }) : super(key: key) {
+  }) {
     if (defaultCategory != null) {
       _selectedCategory.value = buttons.firstWhere((element) => element.category == defaultCategory);
     } else {

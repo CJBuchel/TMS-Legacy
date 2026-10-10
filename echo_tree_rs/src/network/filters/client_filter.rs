@@ -51,7 +51,7 @@ pub fn client_filter(clients: ClientMap, database: EchoDB, tls: bool) -> impl wa
 
   let cors = warp::cors().allow_any_origin().allow_headers(vec!["content-type"]).allow_methods(vec!["GET", "POST", "DELETE", "OPTIONS"]);
 
-  let routes = pulse_route.or(register_routes).or(unregister_routes).or(role_auth_route).or(ws_route).with(cors);
+  
 
-  routes
+  pulse_route.or(register_routes).or(unregister_routes).or(role_auth_route).or(ws_route).with(cors)
 }

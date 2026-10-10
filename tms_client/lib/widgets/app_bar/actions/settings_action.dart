@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/network/connectivity.dart';
@@ -8,9 +8,9 @@ class TmsAppBarSettingsAction extends StatelessWidget {
   final GoRouterState state;
 
   const TmsAppBarSettingsAction({
-    Key? key,
+    super.key,
     required this.state,
-  }) : super(key: key);
+  });
 
   Icon _state2Wifi(NetworkConnectionState state) {
     IconData icon = Icons.settings;
@@ -30,7 +30,7 @@ class TmsAppBarSettingsAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Selector<ConnectionProvider, NetworkConnectionState>(
       selector: (_, connectionProvider) => connectionProvider.state,
-      builder: (_, connectionSate, __) => IconButton(
+      builder: (_, connectionSate, _) => IconButton(
         onPressed: () {
           if (state.matchedLocation == '/connection') {
             context.go('/');

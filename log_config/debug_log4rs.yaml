@@ -67,3 +67,6 @@ loggers:
       - echo_tree_rs_stdout
       - echo_tree_rs
     additive: false
+  # the client probes https before http, which warp reports as a connection error on a plain http server
+  warp::server:
+    level: off

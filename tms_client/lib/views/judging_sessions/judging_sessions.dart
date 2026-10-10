@@ -1,6 +1,6 @@
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/judging_session.dart';
 import 'package:tms/generated/infra/database_schemas/tms_time/tms_date_time.dart';
@@ -75,6 +75,8 @@ class JudgingSessions extends StatelessWidget {
   final ValueNotifier<TmsDateTime> _selectedEndTime = ValueNotifier(TmsDateTime());
   final ValueNotifier<bool> _selectedCompleted = ValueNotifier(false);
 
+  JudgingSessions({super.key});
+
   List<EditTableRow> _rows(BuildContext context, List<JudgingSession> sessions) {
     return sessions.asMap().entries.map((entry) {
       int i = entry.key;
@@ -148,8 +150,8 @@ class JudgingSessions extends StatelessWidget {
           BaseTableCell(
             child: Center(
               child: CircleAvatar(
-                child: Text(s.sessionNumber),
                 backgroundColor: s.completed ? Colors.green : Colors.red,
+                child: Text(s.sessionNumber),
               ),
             ),
             flex: 1,

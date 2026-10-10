@@ -9,7 +9,7 @@ steps:
       mode: "auto"
       channel: "stable"
       version: "custom"
-      customVersion: "3.35.7"
+      customVersion: "3.47.7"
   # Get Flutter dependencies
   - task: FlutterCommand@0
     displayName: "Install Flutter dependencies"

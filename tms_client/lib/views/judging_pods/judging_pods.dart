@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/judging_pod.dart';
 import 'package:tms/providers/judging_pod_provider.dart';
@@ -13,6 +13,8 @@ import 'package:tms/widgets/tables/edit_row_table.dart';
 
 class JudgingPods extends StatelessWidget {
   final TextEditingController _podController = TextEditingController();
+
+  JudgingPods({super.key});
 
   BaseTableCell _buildCell(Widget child) {
     return BaseTableCell(

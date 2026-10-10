@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/fll_infra/fll_blueprint_map.dart';
 import 'package:tms/generated/infra/network_schemas/tournament_config_requests.dart';
@@ -10,7 +10,7 @@ import 'package:tms/widgets/dialogs/snackbar_dialog.dart';
 const String AGNOSTIC = "Agnostic";
 
 class SeasonSetup extends StatelessWidget {
-  SeasonSetup({Key? key}) : super(key: key);
+  SeasonSetup({super.key});
   final ValueNotifier<String> selectedSeason = ValueNotifier<String>(AGNOSTIC);
 
   Widget seasonDropdown(String season) {
@@ -29,7 +29,7 @@ class SeasonSetup extends StatelessWidget {
                 value: value,
                 child: Text(value),
               );
-            }).toList(),
+            }),
           ],
           onChanged: (String? value) {
             if (value != null) selectedSeason.value = value;
@@ -50,10 +50,14 @@ class SeasonSetup extends StatelessWidget {
       onSet: () async {
         if (selectedSeason.value == AGNOSTIC) {
           TmsLogger().i("Setting season to Agnostic");
-          await config.setSeasonAgnostic().then((status) => showSnackBar(context, status));
+          await config.setSeasonAgnostic().then((status) {
+            if (context.mounted) showSnackBar(context, status);
+          });
         } else {
           TmsLogger().i("Setting season to ${selectedSeason.value}");
-          await config.setSeason(selectedSeason.value).then((status) => showSnackBar(context, status));
+          await config.setSeason(selectedSeason.value).then((status) {
+            if (context.mounted) showSnackBar(context, status);
+          });
         }
       },
     );

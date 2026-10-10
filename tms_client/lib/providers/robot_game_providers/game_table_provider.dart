@@ -12,7 +12,7 @@ import 'package:tms/utils/sorter_util.dart';
 
 class GameTableProvider extends EchoTreeProvider<String, GameTable>
     with ServerEventSubscribeNotifierMixin {
-  GameTableService _service = GameTableService();
+  final GameTableService _service = GameTableService();
 
   String _localGameTable = "";
   String _localReferee = "";
@@ -79,20 +79,20 @@ class GameTableProvider extends EchoTreeProvider<String, GameTable>
   }
 
   List<GameTable> get tablesByName {
-    List<GameTable> tables = this.items.values.toList();
+    List<GameTable> tables = items.values.toList();
     tables.sort((a, b) => a.tableName.compareTo(b.tableName));
     return tables;
   }
 
   List<GameTable> get tables => tablesByName;
-  List<String> get tableNames => this.tables.map((e) => e.tableName).toList();
+  List<String> get tableNames => tables.map((e) => e.tableName).toList();
 
   // check if table is set in local storage
   // and if the table exists in the db
   bool isLocalGameTableSet() {
     bool isTableSet = _localGameTable.isNotEmpty;
     bool doesTableExist =
-        this.items.containsValue(GameTable(tableName: _localGameTable));
+        items.containsValue(GameTable(tableName: _localGameTable));
     return isTableSet && doesTableExist;
   }
 
@@ -178,10 +178,9 @@ class GameTableProvider extends EchoTreeProvider<String, GameTable>
   }
 
   String? getIdFromTableName(String tableName) {
-    return this
-        .items
+    return items
         .keys
-        .firstWhereOrNull((key) => this.items[key]?.tableName == tableName);
+        .firstWhereOrNull((key) => items[key]?.tableName == tableName);
   }
 
   Future<int> insertTable(String? tableId, String table) async {

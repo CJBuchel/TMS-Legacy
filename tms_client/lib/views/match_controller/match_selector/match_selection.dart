@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/tournament_integrity_message.dart';
@@ -25,7 +25,7 @@ class _MatchItemData {
 }
 
 class MatchSelection extends StatelessWidget {
-  MatchSelection({Key? key}) : super(key: key);
+  MatchSelection({super.key});
 
   // expansion controllers for each match item
   final List<ExpansionController> _controllers = [];
@@ -89,11 +89,11 @@ class MatchSelection extends StatelessWidget {
             controller: _controllers[listIndex],
             onChangeExpand: (isExpanded) {
               if (isExpanded) {
-                _controllers.forEach((element) {
+                for (var element in _controllers) {
                   if (element != _controllers[listIndex]) {
                     element.collapse();
                   }
-                });
+                }
               }
             },
             backgroundColor: backgroundColor,

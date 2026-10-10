@@ -1,4 +1,3 @@
-use tms_infra::*;
 
 use crate::{database::*, network::*};
 
@@ -15,9 +14,9 @@ pub async fn login_handler(body: LoginRequest, uuid: String, clients: ClientMap,
         log::info!("User `{}` logged in", body.username);
         // get roles and their passwords
         let roles = db.read().await.get_user_roles(user_id).await;
-        return Ok(warp::reply::json(&LoginResponse { roles }));
+        Ok(warp::reply::json(&LoginResponse { roles }))
       } else {
-        log::error!("Login attempt failed for `{}`, reason: BAD PASSWORD: `{}`", body.username, body.password);
+        log::error!("Login attempt failed for `{}`, reason: BAD PASSWORD", body.username);
         Err(warp::reject::custom(UnauthorizedLogin))
       }
     }

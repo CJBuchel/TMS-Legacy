@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/auth_provider.dart';
 
@@ -23,7 +23,7 @@ import 'package:tms/providers/tournament_integrity_provider.dart';
 class ProviderMap extends StatelessWidget {
   final Widget app;
 
-  const ProviderMap({Key? key, required this.app}) : super(key: key);
+  const ProviderMap({super.key, required this.app});
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
@@ -11,13 +11,13 @@ class LoadedTable extends StatefulWidget {
   final List<Team> teams;
 
   const LoadedTable({
-    Key? key,
+    super.key,
     required this.loadedMatches,
     required this.teams,
-  }) : super(key: key);
+  });
 
   @override
-  _LoadedTableState createState() => _LoadedTableState();
+  State<LoadedTable> createState() => _LoadedTableState();
 }
 
 class _LoadedTableState extends State<LoadedTable> with SingleTickerProviderStateMixin {

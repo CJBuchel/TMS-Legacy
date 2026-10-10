@@ -26,7 +26,7 @@ impl Default for EchoTreeServerConfig {
     let local_ip: String = match local_ip() {
       Ok(ip) => ip.to_string(),
       Err(e) => {
-        log::error!("Failed to get local ip: {}, using 127.0.0.1", e.to_string());
+        log::error!("Failed to get local ip: {}, using 127.0.0.1", e);
         String::from("127.0.0.1")
       }
     };
@@ -83,7 +83,7 @@ impl EchoTreeServer {
     self.clients.clone()
   }
 
-  pub fn get_internal_routes(&self, tls: bool) -> impl warp::Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+  pub fn get_internal_routes(&self, tls: bool) -> impl warp::Filter<Extract = impl warp::Reply + use<>, Error = warp::Rejection> + Clone + use<> {
     filters::client_filter::client_filter(self.clients.clone(), self.database.clone(), tls)
   }
 

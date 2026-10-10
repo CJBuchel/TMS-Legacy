@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
@@ -28,7 +28,7 @@ class _LoadedMatchData {
 }
 
 class MatchStage extends StatelessWidget {
-  const MatchStage({Key? key}) : super(key: key);
+  const MatchStage({super.key});
 
   Widget _matchStageTables(BuildContext context, List<Team> teams) {
     return Selector2<GameMatchProvider, GameMatchStatusProvider, _LoadedMatchData>(
@@ -77,7 +77,7 @@ class MatchStage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Selector<TeamsProvider, List<Team>>(
       selector: (_, provider) => provider.teams,
-      builder: (context, teams, __) {
+      builder: (context, teams, _) {
         return _matchStageTables(context, teams);
       },
     );

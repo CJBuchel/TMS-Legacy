@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -9,7 +9,7 @@ import 'package:tms/widgets/app_bar/app_bar.dart';
 class _DrawStack extends StatelessWidget {
   final Widget child;
 
-  const _DrawStack({Key? key, required this.child}) : super(key: key);
+  const _DrawStack({required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +66,12 @@ class BaseScaffoldDrawerRouterItem extends StatelessWidget {
   final UserPermissions? permissions;
 
   const BaseScaffoldDrawerRouterItem({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     required this.goNamed,
     this.permissions,
-  }) : super(key: key);
+  });
 
   Widget _tile(BuildContext context) {
     return ListTile(
@@ -103,11 +103,11 @@ class BaseScaffoldDrawerRouter extends StatelessWidget {
   final List<BaseScaffoldDrawerRouterItem>? items;
 
   const BaseScaffoldDrawerRouter({
-    Key? key,
+    super.key,
     required this.state,
     required this.child,
     this.items,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -125,8 +125,8 @@ class BaseScaffoldDrawerRouter extends StatelessWidget {
                   ...(items ??
                       [
                         const Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: const Text('Admin Tools', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text('Admin Tools', style: TextStyle(fontSize: 12, color: Colors.grey)),
                         ),
                         BaseScaffoldDrawerRouterItem(
                           icon: Icons.dashboard,
@@ -153,8 +153,8 @@ class BaseScaffoldDrawerRouter extends StatelessWidget {
                           permissions: UserPermissions(admin: true),
                         ),
                         const Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: const Text('Teams', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text('Teams', style: TextStyle(fontSize: 12, color: Colors.grey)),
                         ),
                         BaseScaffoldDrawerRouterItem(
                           icon: Icons.people,
@@ -169,8 +169,8 @@ class BaseScaffoldDrawerRouter extends StatelessWidget {
                           permissions: UserPermissions(judgeAdvisor: true),
                         ),
                         const Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: const Text('Robot Games', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text('Robot Games', style: TextStyle(fontSize: 12, color: Colors.grey)),
                         ),
                         BaseScaffoldDrawerRouterItem(
                           icon: Icons.edit_document,
@@ -203,8 +203,8 @@ class BaseScaffoldDrawerRouter extends StatelessWidget {
                           permissions: UserPermissions(headReferee: true),
                         ),
                         const Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: const Text('Judging', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text('Judging', style: TextStyle(fontSize: 12, color: Colors.grey)),
                         ),
                         BaseScaffoldDrawerRouterItem(
                           icon: Icons.table_chart,

@@ -20,27 +20,21 @@ impl UserExtensions for Database {
     let tree = self.inner.read().await.get_tree(USERS.to_string()).await;
     let user = tree.get(&user_id).cloned();
 
-    match user {
-      Some(user) => Some(User::from_json_string(&user)),
-      None => None,
-    }
+    user.map(|user| User::from_json_string(&user))
   }
 
   async fn get_user_by_username(&self, username: String) -> Option<(String, User)> {
     let tree = self.inner.read().await.get_tree(USERS.to_string()).await;
-    let user = tree.iter().find_map(|(id, user)| {
+    
+
+    tree.iter().find_map(|(id, user)| {
       let user = User::from_json_string(user);
       if user.username == username {
         Some((id.clone(), user))
       } else {
         None
       }
-    });
-
-    match user {
-      Some((id, user)) => Some((id, user)),
-      None => None,
-    }
+    })
   }
 
   async fn insert_user(&self, user: User, user_id: Option<String>) -> Result<(), String> {

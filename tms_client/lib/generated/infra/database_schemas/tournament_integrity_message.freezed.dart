@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,373 +9,298 @@ part of 'tournament_integrity_message.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$TournamentIntegrityCode {
-  Enum get field0 => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(TournamentErrorCode field0) error,
-    required TResult Function(TournamentWarningCode field0) warning,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(TournamentErrorCode field0)? error,
-    TResult? Function(TournamentWarningCode field0)? warning,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(TournamentErrorCode field0)? error,
-    TResult Function(TournamentWarningCode field0)? warning,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(TournamentIntegrityCode_Error value) error,
-    required TResult Function(TournamentIntegrityCode_Warning value) warning,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(TournamentIntegrityCode_Error value)? error,
-    TResult? Function(TournamentIntegrityCode_Warning value)? warning,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(TournamentIntegrityCode_Error value)? error,
-    TResult Function(TournamentIntegrityCode_Warning value)? warning,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+ Enum get field0;
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TournamentIntegrityCode&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'TournamentIntegrityCode(field0: $field0)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $TournamentIntegrityCodeCopyWith<$Res> {
-  factory $TournamentIntegrityCodeCopyWith(TournamentIntegrityCode value,
-          $Res Function(TournamentIntegrityCode) then) =
-      _$TournamentIntegrityCodeCopyWithImpl<$Res, TournamentIntegrityCode>;
+class $TournamentIntegrityCodeCopyWith<$Res>  {
+$TournamentIntegrityCodeCopyWith(TournamentIntegrityCode _, $Res Function(TournamentIntegrityCode) __);
 }
 
-/// @nodoc
-class _$TournamentIntegrityCodeCopyWithImpl<$Res,
-        $Val extends TournamentIntegrityCode>
-    implements $TournamentIntegrityCodeCopyWith<$Res> {
-  _$TournamentIntegrityCodeCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [TournamentIntegrityCode].
+extension TournamentIntegrityCodePatterns on TournamentIntegrityCode {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  /// Create a copy of TournamentIntegrityCode
-  /// with the given fields replaced by the non-null parameter values.
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( TournamentIntegrityCode_Error value)?  error,TResult Function( TournamentIntegrityCode_Warning value)?  warning,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case TournamentIntegrityCode_Error() when error != null:
+return error(_that);case TournamentIntegrityCode_Warning() when warning != null:
+return warning(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( TournamentIntegrityCode_Error value)  error,required TResult Function( TournamentIntegrityCode_Warning value)  warning,}){
+final _that = this;
+switch (_that) {
+case TournamentIntegrityCode_Error():
+return error(_that);case TournamentIntegrityCode_Warning():
+return warning(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( TournamentIntegrityCode_Error value)?  error,TResult? Function( TournamentIntegrityCode_Warning value)?  warning,}){
+final _that = this;
+switch (_that) {
+case TournamentIntegrityCode_Error() when error != null:
+return error(_that);case TournamentIntegrityCode_Warning() when warning != null:
+return warning(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( TournamentErrorCode field0)?  error,TResult Function( TournamentWarningCode field0)?  warning,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case TournamentIntegrityCode_Error() when error != null:
+return error(_that.field0);case TournamentIntegrityCode_Warning() when warning != null:
+return warning(_that.field0);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( TournamentErrorCode field0)  error,required TResult Function( TournamentWarningCode field0)  warning,}) {final _that = this;
+switch (_that) {
+case TournamentIntegrityCode_Error():
+return error(_that.field0);case TournamentIntegrityCode_Warning():
+return warning(_that.field0);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( TournamentErrorCode field0)?  error,TResult? Function( TournamentWarningCode field0)?  warning,}) {final _that = this;
+switch (_that) {
+case TournamentIntegrityCode_Error() when error != null:
+return error(_that.field0);case TournamentIntegrityCode_Warning() when warning != null:
+return warning(_that.field0);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$TournamentIntegrityCode_ErrorImplCopyWith<$Res> {
-  factory _$$TournamentIntegrityCode_ErrorImplCopyWith(
-          _$TournamentIntegrityCode_ErrorImpl value,
-          $Res Function(_$TournamentIntegrityCode_ErrorImpl) then) =
-      __$$TournamentIntegrityCode_ErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({TournamentErrorCode field0});
-}
-
-/// @nodoc
-class __$$TournamentIntegrityCode_ErrorImplCopyWithImpl<$Res>
-    extends _$TournamentIntegrityCodeCopyWithImpl<$Res,
-        _$TournamentIntegrityCode_ErrorImpl>
-    implements _$$TournamentIntegrityCode_ErrorImplCopyWith<$Res> {
-  __$$TournamentIntegrityCode_ErrorImplCopyWithImpl(
-      _$TournamentIntegrityCode_ErrorImpl _value,
-      $Res Function(_$TournamentIntegrityCode_ErrorImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of TournamentIntegrityCode
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? field0 = null,
-  }) {
-    return _then(_$TournamentIntegrityCode_ErrorImpl(
-      null == field0
-          ? _value.field0
-          : field0 // ignore: cast_nullable_to_non_nullable
-              as TournamentErrorCode,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$TournamentIntegrityCode_ErrorImpl
-    extends TournamentIntegrityCode_Error {
-  const _$TournamentIntegrityCode_ErrorImpl(this.field0) : super._();
-
-  @override
-  final TournamentErrorCode field0;
-
-  @override
-  String toString() {
-    return 'TournamentIntegrityCode.error(field0: $field0)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$TournamentIntegrityCode_ErrorImpl &&
-            (identical(other.field0, field0) || other.field0 == field0));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, field0);
-
-  /// Create a copy of TournamentIntegrityCode
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$TournamentIntegrityCode_ErrorImplCopyWith<
-          _$TournamentIntegrityCode_ErrorImpl>
-      get copyWith => __$$TournamentIntegrityCode_ErrorImplCopyWithImpl<
-          _$TournamentIntegrityCode_ErrorImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(TournamentErrorCode field0) error,
-    required TResult Function(TournamentWarningCode field0) warning,
-  }) {
-    return error(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(TournamentErrorCode field0)? error,
-    TResult? Function(TournamentWarningCode field0)? warning,
-  }) {
-    return error?.call(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(TournamentErrorCode field0)? error,
-    TResult Function(TournamentWarningCode field0)? warning,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(field0);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(TournamentIntegrityCode_Error value) error,
-    required TResult Function(TournamentIntegrityCode_Warning value) warning,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(TournamentIntegrityCode_Error value)? error,
-    TResult? Function(TournamentIntegrityCode_Warning value)? warning,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(TournamentIntegrityCode_Error value)? error,
-    TResult Function(TournamentIntegrityCode_Warning value)? warning,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class TournamentIntegrityCode_Error extends TournamentIntegrityCode {
-  const factory TournamentIntegrityCode_Error(
-      final TournamentErrorCode field0) = _$TournamentIntegrityCode_ErrorImpl;
-  const TournamentIntegrityCode_Error._() : super._();
-
-  @override
-  TournamentErrorCode get field0;
-
-  /// Create a copy of TournamentIntegrityCode
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TournamentIntegrityCode_ErrorImplCopyWith<
-          _$TournamentIntegrityCode_ErrorImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$TournamentIntegrityCode_WarningImplCopyWith<$Res> {
-  factory _$$TournamentIntegrityCode_WarningImplCopyWith(
-          _$TournamentIntegrityCode_WarningImpl value,
-          $Res Function(_$TournamentIntegrityCode_WarningImpl) then) =
-      __$$TournamentIntegrityCode_WarningImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({TournamentWarningCode field0});
-}
-
-/// @nodoc
-class __$$TournamentIntegrityCode_WarningImplCopyWithImpl<$Res>
-    extends _$TournamentIntegrityCodeCopyWithImpl<$Res,
-        _$TournamentIntegrityCode_WarningImpl>
-    implements _$$TournamentIntegrityCode_WarningImplCopyWith<$Res> {
-  __$$TournamentIntegrityCode_WarningImplCopyWithImpl(
-      _$TournamentIntegrityCode_WarningImpl _value,
-      $Res Function(_$TournamentIntegrityCode_WarningImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of TournamentIntegrityCode
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? field0 = null,
-  }) {
-    return _then(_$TournamentIntegrityCode_WarningImpl(
-      null == field0
-          ? _value.field0
-          : field0 // ignore: cast_nullable_to_non_nullable
-              as TournamentWarningCode,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$TournamentIntegrityCode_WarningImpl
-    extends TournamentIntegrityCode_Warning {
-  const _$TournamentIntegrityCode_WarningImpl(this.field0) : super._();
 
-  @override
-  final TournamentWarningCode field0;
+class TournamentIntegrityCode_Error extends TournamentIntegrityCode {
+  const TournamentIntegrityCode_Error(this.field0): super._();
+  
 
-  @override
-  String toString() {
-    return 'TournamentIntegrityCode.warning(field0: $field0)';
-  }
+@override final  TournamentErrorCode field0;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$TournamentIntegrityCode_WarningImpl &&
-            (identical(other.field0, field0) || other.field0 == field0));
-  }
+/// Create a copy of TournamentIntegrityCode
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TournamentIntegrityCode_ErrorCopyWith<TournamentIntegrityCode_Error> get copyWith => _$TournamentIntegrityCode_ErrorCopyWithImpl<TournamentIntegrityCode_Error>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, field0);
 
-  /// Create a copy of TournamentIntegrityCode
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$TournamentIntegrityCode_WarningImplCopyWith<
-          _$TournamentIntegrityCode_WarningImpl>
-      get copyWith => __$$TournamentIntegrityCode_WarningImplCopyWithImpl<
-          _$TournamentIntegrityCode_WarningImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(TournamentErrorCode field0) error,
-    required TResult Function(TournamentWarningCode field0) warning,
-  }) {
-    return warning(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(TournamentErrorCode field0)? error,
-    TResult? Function(TournamentWarningCode field0)? warning,
-  }) {
-    return warning?.call(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(TournamentErrorCode field0)? error,
-    TResult Function(TournamentWarningCode field0)? warning,
-    required TResult orElse(),
-  }) {
-    if (warning != null) {
-      return warning(field0);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(TournamentIntegrityCode_Error value) error,
-    required TResult Function(TournamentIntegrityCode_Warning value) warning,
-  }) {
-    return warning(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(TournamentIntegrityCode_Error value)? error,
-    TResult? Function(TournamentIntegrityCode_Warning value)? warning,
-  }) {
-    return warning?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(TournamentIntegrityCode_Error value)? error,
-    TResult Function(TournamentIntegrityCode_Warning value)? warning,
-    required TResult orElse(),
-  }) {
-    if (warning != null) {
-      return warning(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TournamentIntegrityCode_Error&&(identical(other.field0, field0) || other.field0 == field0));
 }
 
-abstract class TournamentIntegrityCode_Warning extends TournamentIntegrityCode {
-  const factory TournamentIntegrityCode_Warning(
-          final TournamentWarningCode field0) =
-      _$TournamentIntegrityCode_WarningImpl;
-  const TournamentIntegrityCode_Warning._() : super._();
 
-  @override
-  TournamentWarningCode get field0;
+@override
+int get hashCode => Object.hash(runtimeType,field0);
 
-  /// Create a copy of TournamentIntegrityCode
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TournamentIntegrityCode_WarningImplCopyWith<
-          _$TournamentIntegrityCode_WarningImpl>
-      get copyWith => throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'TournamentIntegrityCode.error(field0: $field0)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class $TournamentIntegrityCode_ErrorCopyWith<$Res> implements $TournamentIntegrityCodeCopyWith<$Res> {
+  factory $TournamentIntegrityCode_ErrorCopyWith(TournamentIntegrityCode_Error value, $Res Function(TournamentIntegrityCode_Error) _then) = _$TournamentIntegrityCode_ErrorCopyWithImpl;
+@useResult
+$Res call({
+ TournamentErrorCode field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$TournamentIntegrityCode_ErrorCopyWithImpl<$Res>
+    implements $TournamentIntegrityCode_ErrorCopyWith<$Res> {
+  _$TournamentIntegrityCode_ErrorCopyWithImpl(this._self, this._then);
+
+  final TournamentIntegrityCode_Error _self;
+  final $Res Function(TournamentIntegrityCode_Error) _then;
+
+/// Create a copy of TournamentIntegrityCode
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(TournamentIntegrityCode_Error(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as TournamentErrorCode,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class TournamentIntegrityCode_Warning extends TournamentIntegrityCode {
+  const TournamentIntegrityCode_Warning(this.field0): super._();
+  
+
+@override final  TournamentWarningCode field0;
+
+/// Create a copy of TournamentIntegrityCode
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TournamentIntegrityCode_WarningCopyWith<TournamentIntegrityCode_Warning> get copyWith => _$TournamentIntegrityCode_WarningCopyWithImpl<TournamentIntegrityCode_Warning>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TournamentIntegrityCode_Warning&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'TournamentIntegrityCode.warning(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $TournamentIntegrityCode_WarningCopyWith<$Res> implements $TournamentIntegrityCodeCopyWith<$Res> {
+  factory $TournamentIntegrityCode_WarningCopyWith(TournamentIntegrityCode_Warning value, $Res Function(TournamentIntegrityCode_Warning) _then) = _$TournamentIntegrityCode_WarningCopyWithImpl;
+@useResult
+$Res call({
+ TournamentWarningCode field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$TournamentIntegrityCode_WarningCopyWithImpl<$Res>
+    implements $TournamentIntegrityCode_WarningCopyWith<$Res> {
+  _$TournamentIntegrityCode_WarningCopyWithImpl(this._self, this._then);
+
+  final TournamentIntegrityCode_Warning _self;
+  final $Res Function(TournamentIntegrityCode_Warning) _then;
+
+/// Create a copy of TournamentIntegrityCode
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(TournamentIntegrityCode_Warning(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as TournamentWarningCode,
+  ));
+}
+
+
+}
+
+// dart format on

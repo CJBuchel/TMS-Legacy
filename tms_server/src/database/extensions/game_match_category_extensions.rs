@@ -38,10 +38,7 @@ impl GameMatchCategoryExtensions for Database {
     let tree = self.inner.read().await.get_tree(ROBOT_GAME_CATEGORIES.to_string()).await;
     let category = tree.get(&game_match_cat_id).cloned();
 
-    match category {
-      Some(category) => Some(TmsCategory::from_json_string(&category)),
-      None => None,
-    }
+    category.map(|category| TmsCategory::from_json_string(&category))
   }
 
   async fn remove_game_match_category(&self, game_match_cat_id: String) -> Result<(), String> {

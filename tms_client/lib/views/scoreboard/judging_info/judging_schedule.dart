@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/judging_session.dart';
 import 'package:tms/providers/local_storage_provider.dart';
@@ -14,11 +14,10 @@ import 'package:tms/widgets/timers/judging_schedule_timer.dart';
 class JudgingSchedule extends StatefulWidget {
   final List<JudgingSession> judgingSessions;
 
-  const JudgingSchedule({Key? key, required this.judgingSessions})
-      : super(key: key);
+  const JudgingSchedule({super.key, required this.judgingSessions});
 
   @override
-  _JudgingInfoState createState() => _JudgingInfoState();
+  State<JudgingSchedule> createState() => _JudgingInfoState();
 }
 
 class _JudgingInfoState extends State<JudgingSchedule> {
@@ -82,7 +81,7 @@ class _JudgingInfoState extends State<JudgingSchedule> {
 
     JudgingSession? nextSession = futureJudgingSessions.firstOrNull;
 
-    return Container(
+    return SizedBox(
       height: 40,
       child: Row(
         children: [
@@ -146,7 +145,7 @@ class _JudgingInfoState extends State<JudgingSchedule> {
       selector: (_, provider) => provider.scoreboardShowJudgingInfo,
       builder: (context, show, _) {
         if (show) {
-          return Container(
+          return SizedBox(
             height: 160, // 3*40, then + 40 for header
             child: Column(
               children: [

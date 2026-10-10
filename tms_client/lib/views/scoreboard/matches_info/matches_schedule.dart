@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/utils/color_modifiers.dart';
 import 'package:tms/views/scoreboard/matches_info/next_match_row.dart';
@@ -7,7 +7,7 @@ import 'package:tms/widgets/timers/match_schedule_timer.dart';
 class MatchesSchedule extends StatelessWidget {
   final List<GameMatch> matches;
 
-  const MatchesSchedule({Key? key, required this.matches}) : super(key: key);
+  const MatchesSchedule({super.key, required this.matches});
 
   Widget _headerRow(BuildContext context) {
     Color? evenDarkBackground = const Color(0xFF1B6A92);
@@ -21,7 +21,7 @@ class MatchesSchedule extends StatelessWidget {
 
     GameMatch? nextMatch = matches.firstOrNull;
 
-    return Container(
+    return SizedBox(
       height: 40,
       child: Row(
         children: [
@@ -76,7 +76,7 @@ class MatchesSchedule extends StatelessWidget {
 
     List<GameMatch> nextMatches = matches.take(3).toList();
 
-    return Container(
+    return SizedBox(
       height: 160, // 3*40, then + 40 for header
       child: Column(
         children: [

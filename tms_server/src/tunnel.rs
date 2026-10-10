@@ -1,7 +1,7 @@
 // src/tunnel.rs
 use anyhow::{Context, Result};
 use log::{debug, error, info, warn};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::process::{Child, Command};
@@ -21,7 +21,7 @@ fn strip_ansi_codes(s: &str) -> String {
       if chars.as_str().starts_with('[') {
         chars.next(); // consume '['
                       // Skip until we find a letter (the command character)
-        while let Some(c) = chars.next() {
+        for c in chars.by_ref() {
           if c.is_ascii_alphabetic() {
             break;
           }
@@ -73,7 +73,7 @@ impl FrpTunnel {
   }
 
   /// Download frpc binary from GitHub releases
-  async fn download_frpc(target_dir: &PathBuf) -> Result<PathBuf> {
+  async fn download_frpc(target_dir: &Path) -> Result<PathBuf> {
     let (binary_name, platform, archive_ext) = Self::get_platform_info();
     let download_url = format!("https://github.com/fatedier/frp/releases/download/v{}/frp_{}_{}.{}", FRP_VERSION, FRP_VERSION, platform, archive_ext);
 
@@ -105,7 +105,7 @@ impl FrpTunnel {
       // Find frpc.exe in the archive
       for i in 0..archive.len() {
         let mut file = archive.by_index(i)?;
-        if file.name().ends_with(binary_name) {
+        if file.name()?.ends_with(binary_name) {
           let mut contents = Vec::new();
           std::io::Read::read_to_end(&mut file, &mut contents)?;
           tokio::fs::write(&frpc_path, contents).await?;

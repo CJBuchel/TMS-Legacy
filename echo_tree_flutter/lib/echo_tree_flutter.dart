@@ -13,7 +13,7 @@ class EchoTreeClient extends EchoTreeNetworkService {
   EchoTreeClient._internal();
 
   void insert(String treeName, String key, String json) async {
-    if (state != EchoTreeConnection.connected) {
+    if (state.value != EchoTreeConnection.connected) {
       return;
     }
 
@@ -36,7 +36,7 @@ class EchoTreeClient extends EchoTreeNetworkService {
   }
 
   void get(String treeName, String key) {
-    if (state != EchoTreeConnection.connected) {
+    if (state.value != EchoTreeConnection.connected) {
       return;
     }
 
@@ -58,7 +58,7 @@ class EchoTreeClient extends EchoTreeNetworkService {
   }
 
   void delete(Map<String, String> treeItems) {
-    if (state != EchoTreeConnection.connected) {
+    if (state.value != EchoTreeConnection.connected) {
       return;
     }
 
@@ -79,7 +79,7 @@ class EchoTreeClient extends EchoTreeNetworkService {
   }
 
   void setTree(Map<String, Map<String, String>> trees) {
-    if (state != EchoTreeConnection.connected) {
+    if (state.value != EchoTreeConnection.connected) {
       return;
     }
 
@@ -100,7 +100,7 @@ class EchoTreeClient extends EchoTreeNetworkService {
   }
 
   void getTree(List<String> treeNames) {
-    if (state != EchoTreeConnection.connected) {
+    if (state.value != EchoTreeConnection.connected) {
       return;
     }
 

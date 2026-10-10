@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/providers/teams_provider.dart';
@@ -10,7 +10,7 @@ class TableItem extends StatelessWidget {
   final Color? backgroundColor;
   final Color submittedColor;
 
-  const TableItem({
+  const TableItem({super.key, 
     required this.isMatchComplete,
     required this.table,
     this.backgroundColor,

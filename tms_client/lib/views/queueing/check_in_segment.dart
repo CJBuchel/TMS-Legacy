@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/providers/teams_provider.dart';
@@ -16,11 +16,11 @@ class CheckInSegment extends StatelessWidget {
   final bool isLoaded;
 
   const CheckInSegment({
-    Key? key,
+    super.key,
     required this.matchNumber,
     required this.table,
     required this.isLoaded,
-  }) : super(key: key);
+  });
 
   Widget buildTeam() {
     return Padding(
@@ -46,7 +46,7 @@ class CheckInSegment extends StatelessWidget {
 
   Widget buildTable() {
     return Text(
-      '${table.table}',
+      table.table,
       style: const TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 14,
@@ -97,6 +97,7 @@ class CheckInSegment extends StatelessWidget {
               .toggleTeamCheckIn(matchNumber, table.teamNumber)
               .then(
             (status) {
+              if (!context.mounted) return;
               if (status != HttpStatus.ok) {
                 SnackBarDialog.fromStatus(
                   message: "Team Check In: ${table.teamNumber}",

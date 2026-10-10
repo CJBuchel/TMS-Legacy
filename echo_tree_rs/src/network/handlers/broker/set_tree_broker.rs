@@ -29,7 +29,7 @@ pub async fn set_tree_broker(uuid: String, msg: EchoTreeClientSocketMessage, cli
   };
 
   // create list of tree names the client is trying to access
-  let tree_names: Vec<String> = msg.trees.iter().map(|(t, _)| t.clone()).collect();
+  let tree_names: Vec<String> = msg.trees.keys().cloned().collect();
   let unauthorized_tree_names: Vec<String> = client.filter_unauthorized_read_write_trees(tree_names.clone());
   let mut changed_trees: Vec<ManagedTree> = Vec::new();
 

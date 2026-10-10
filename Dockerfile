@@ -1,4 +1,7 @@
-FROM alpine:3.18
+FROM alpine:3.23
+
+# root certificates, used when the server downloads over https (reverse proxy client)
+RUN apk add --no-cache ca-certificates
 
 WORKDIR /tms
 

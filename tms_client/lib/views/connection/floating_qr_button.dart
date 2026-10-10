@@ -1,46 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tms/providers/local_storage_provider.dart';
 import 'package:tms/utils/logger.dart';
 
-enum WiFiEncryptionType {
-  WPA,
-  WPA_HIDDEN,
-}
-
+// Shows a QR code other devices can scan to open the web client of the connected server
 class FloatingQrButton extends StatelessWidget {
-  final ValueNotifier<bool> _isDialOpen = ValueNotifier(false);
+  const FloatingQrButton({super.key});
 
-  // String _getQrWifiData() {
-  //   // WIFI configs
+  void _displayServerQrCode(BuildContext context) {
+    String addr = TmsLocalStorageProvider().serverAddress;
+    String qrData = "$addr/ui";
+    TmsLogger().i("Server QR data: $qrData");
 
-  //   // S - SSID
-  //   // P - Password The wireless password. Leave blank for T:nopass.
-  //   // T - Type Options: WEP, WPA, WPA2-EAP, or nopass (omit this parameter for nopass).
-  //   // H - Hidden Set to true if the wireless network is hidden.
-  //   // E - Enterprise Encryption EAP Method. Options: TTLS, PWD, etc.
-  //   // A - Enterprise Authentication Anonymous outer identity.
-  //   // I - Enterprise username Inner identity (username).
-  //   // PH2 - Enterprise Phase 2 authentication method. Options: MSCHAPV2, TLS, MD5, etc.
-
-  //   // example regular WPA wifi
-  //   // WIFI:T:WPA;S:myNetwork;P:mypass;;
-
-  //   // example enterprise PEAP wifi
-  //   // WIFI:S:myNetwork;T:WPA2-EAP;E:PEAP;PH2:MSCHAPV2;U:myUser;P:myPassword;;
-
-  //   String ssid = "mySSID";
-  //   String password = "myPassword";
-
-  //   String qrData = "WIFI:T:WPA;S:$ssid;P:$password;;";
-  //   // String qrData = "tmsapplicationscheme://connect?ip=192.168.178.116&port=8080";
-
-  //   return qrData;
-  // }
-
-  void _displayQrCode(
-      BuildContext context, String qrData, Color dataColor, Color eyeColor) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -48,74 +19,25 @@ class FloatingQrButton extends StatelessWidget {
           data: qrData,
           version: QrVersions.auto,
           size: 300.0,
-          eyeStyle: QrEyeStyle(
+          eyeStyle: const QrEyeStyle(
             eyeShape: QrEyeShape.square,
-            color: eyeColor, // Colors.green
+            color: Colors.red,
           ),
-          dataModuleStyle: QrDataModuleStyle(
+          dataModuleStyle: const QrDataModuleStyle(
             dataModuleShape: QrDataModuleShape.circle,
-            color: dataColor,
+            color: Colors.blue,
           ),
         ),
       ),
     );
   }
 
-  // void _displayWiFiQrCode(BuildContext context) {
-  //   _displayQrCode(context, _getQrWifiData(), Colors.blue, Colors.green);
-  // }
-
-  void _displayServerQrCode(BuildContext context) {
-    String addr = TmsLocalStorageProvider().serverAddress;
-    String qrData = "$addr/ui";
-    TmsLogger().i("Server QR data: $qrData");
-    _displayQrCode(context, qrData, Colors.blue, Colors.red);
-  }
-
-  // void _displayAppQrCode(BuildContext context) {
-  //   String serverIp = TmsLocalStorageProvider().serverExternalIp;
-  //   String serverPort = TmsLocalStorageProvider().serverPort.toString();
-  //   String qrData = "tmsapplicationscheme://connect?ip=$serverIp&port=$serverPort";
-  //   _displayQrCode(context, qrData, Colors.blue, Colors.purpleAccent);
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvokedWithResult: (v, obj) async {
-        if (v && _isDialOpen.value) {
-          _isDialOpen.value = false;
-        }
-      },
-      child: SpeedDial(
-        icon: Icons.qr_code_2_sharp,
-        activeIcon: Icons.close,
-        openCloseDial: _isDialOpen,
-        spaceBetweenChildren: 10,
-        // spaceBetweenChildren: 4,
-        buttonSize: const Size.fromRadius(45),
-        childrenButtonSize: const Size.fromRadius(45),
-        children: [
-          // SpeedDialChild(
-          //   child: const Icon(Icons.wifi),
-          //   label: 'WiFi',
-          //   backgroundColor: Colors.green,
-          //   onTap: () => _displayWiFiQrCode(context),
-          // ),
-          SpeedDialChild(
-            child: const Icon(Icons.link),
-            label: 'TMS Web',
-            backgroundColor: Colors.red,
-            onTap: () => _displayServerQrCode(context),
-          ),
-          // SpeedDialChild(
-          //   child: const Icon(Icons.app_registration),
-          //   label: 'App',
-          //   backgroundColor: Colors.purpleAccent,
-          //   onTap: () => _displayAppQrCode(context),
-          // ),
-        ],
-      ),
+    return FloatingActionButton.large(
+      tooltip: "TMS Web QR code",
+      onPressed: () => _displayServerQrCode(context),
+      child: const Icon(Icons.qr_code_2_sharp, size: 48),
     );
   }
 }

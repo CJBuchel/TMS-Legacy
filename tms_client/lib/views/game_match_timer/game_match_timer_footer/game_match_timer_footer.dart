@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/local_storage_provider.dart';
 import 'package:tms/providers/teams_provider.dart';
@@ -9,9 +9,9 @@ import 'package:tms/models/timer_match_data.dart';
 class GameMatchTimerFooter extends StatelessWidget {
   final TimerMatchData data;
   const GameMatchTimerFooter({
-    Key? key,
+    super.key,
     required this.data,
-  }) : super(key: key);
+  });
 
   Widget _buildTeamsOnTablesList(BuildContext context, {required List<TeamOnTableInfo> teamsInfo}) {
     List<TeamOnTableInfo> leftTeamsInfo = [];
@@ -27,14 +27,12 @@ class GameMatchTimerFooter extends StatelessWidget {
 
     return Center(
       child: IntrinsicWidth(
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TeamsOnTableList(teamsInfo: leftTeamsInfo, isLeft: true),
-              TeamsOnTableList(teamsInfo: rightTeamsInfo, isLeft: false),
-            ],
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TeamsOnTableList(teamsInfo: leftTeamsInfo, isLeft: true),
+            TeamsOnTableList(teamsInfo: rightTeamsInfo, isLeft: false),
+          ],
         ),
       ),
     );

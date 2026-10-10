@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/tournament_integrity_message.dart';
@@ -43,8 +43,8 @@ class MatchExpandableRow extends StatelessWidget {
   final Function(bool)? onSelect;
   final ExpansionController? controller;
 
-  MatchExpandableRow({
-    Key? key,
+  const MatchExpandableRow({
+    super.key,
     required this.match,
     required this.loadedMatches,
     required this.integrityMessages,
@@ -55,10 +55,10 @@ class MatchExpandableRow extends StatelessWidget {
     this.controller,
     this.onChangeExpand,
     this.onSelect,
-  }) : super(key: key);
+  });
 
   Widget _leading(MatchRowState state) {
-    Color? color = null;
+    Color? color;
     if (state == MatchRowState.STAGED) color = Colors.white;
     if (state == MatchRowState.LOADED) color = Colors.white;
 
@@ -84,7 +84,7 @@ class MatchExpandableRow extends StatelessWidget {
   }
 
   Widget _trailing(MatchRowState state) {
-    Color? color = null;
+    Color? color;
     if (state == MatchRowState.STAGED) color = Colors.white;
     if (state == MatchRowState.LOADED) color = Colors.white;
 

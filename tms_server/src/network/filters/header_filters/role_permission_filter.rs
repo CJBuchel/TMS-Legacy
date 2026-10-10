@@ -8,7 +8,7 @@ use crate::{
 };
 use warp::Filter;
 
-pub fn role_permission_filter(clients: ClientMap, db: SharedDatabase, roles: Vec<&str>) -> impl Filter<Extract = (), Error = warp::Rejection> + Clone {
+pub fn role_permission_filter(clients: ClientMap, db: SharedDatabase, roles: Vec<&str>) -> impl Filter<Extract = (), Error = warp::Rejection> + Clone + use<> {
   let roles: Vec<String> = roles.iter().map(|x| x.to_string()).collect();
 
   warp::any()
@@ -22,22 +22,22 @@ pub fn role_permission_filter(clients: ClientMap, db: SharedDatabase, roles: Vec
         Some(client) => match client.has_role_access(db, roles.clone()).await {
           ClientAccessResult::Success => {
             log::debug!("Client has role access: {}, required roles: {}", client_id, roles.join(", "));
-            return Ok(());
+            Ok(())
           }
 
           ClientAccessResult::Unauthorized => {
             log::warn!("Client role auth failed: {}, required roles: {}", client_id, roles.join(", "));
-            return Err(warp::reject::custom(UnauthorizedClient));
+            Err(warp::reject::custom(UnauthorizedClient))
           }
 
           ClientAccessResult::AuthenticationRequired => {
             log::warn!("Client auth required: {}", client_id);
-            return Err(warp::reject::custom(AuthenticationRequired));
+            Err(warp::reject::custom(AuthenticationRequired))
           }
         },
         None => {
           log::debug!("Client not found: {}", client_id);
-          return Err(warp::reject::custom(ClientNotFound));
+          Err(warp::reject::custom(ClientNotFound))
         }
       }
     })

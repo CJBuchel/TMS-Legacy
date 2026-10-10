@@ -1,6 +1,5 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::LazyLock};
 
-use lazy_static::lazy_static;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -40,9 +39,7 @@ impl QuestionRule {
   }
 
   fn parse_condition(condition: &str) -> Result<(String, String, String), String> {
-    lazy_static! {
-      static ref RE: Regex = Regex::new(r"(\w+)\s*(==|!=|>|<|>=|<=)\s*(\w+)").unwrap();
-    }
+    static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(\w+)\s*(==|!=|>|<|>=|<=)\s*(\w+)").unwrap());
 
     let caps = match RE.captures(condition) {
       Some(caps) => caps,
@@ -58,15 +55,14 @@ impl QuestionRule {
 
   fn split_expression(expression: &str, delimiter: &str) -> Option<(String, String)> {
     let mut depth = 0;
-    for (i, c) in expression.chars().enumerate() {
+    for (i, c) in expression.char_indices() {
       match c {
         '(' => depth += 1,
         ')' => depth -= 1,
-        _ if depth == 0 => {
-          if expression[i..].starts_with(delimiter) {
+        _ if depth == 0
+          && expression[i..].starts_with(delimiter) => {
             return Some((expression[..i].to_string(), expression[i + delimiter.len()..].to_string()));
           }
-        }
         _ => {}
       }
     }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/tms_time/tms_date_time.dart';
@@ -12,20 +12,20 @@ class QueueCard extends StatefulWidget {
   final bool isCompleted;
 
   const QueueCard({
-    Key? key,
+    super.key,
     required this.match,
     required this.isLoaded,
     required this.isCompleted,
-  }) : super(key: key);
+  });
 
   @override
-  _QueueCardState createState() => _QueueCardState();
+  State<QueueCard> createState() => _QueueCardState();
 }
 
 class _QueueCardState extends State<QueueCard>
     with SingleTickerProviderStateMixin {
   Ticker? _ticker;
-  ValueNotifier<Widget> _queueStatusWidget = ValueNotifier(Container());
+  final ValueNotifier<Widget> _queueStatusWidget = ValueNotifier(Container());
 
   Widget queueStatus() {
     DateTime matchTime = tmsDateTimeToDateTime(widget.match.startTime);

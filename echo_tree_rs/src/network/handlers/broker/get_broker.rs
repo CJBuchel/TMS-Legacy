@@ -76,6 +76,5 @@ pub async fn get_broker(uuid: String, msg: EchoTreeClientSocketMessage, clients:
       from_event: Some(EchoTreeClientSocketEvent::GetEvent),
       message: Some(format!("client does not have access to tree: {}", msg.tree_name)),
     });
-    return;
   }
 }

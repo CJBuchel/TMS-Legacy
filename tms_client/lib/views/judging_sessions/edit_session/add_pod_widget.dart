@@ -1,5 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
 
 class AddPodWidget extends StatelessWidget {
@@ -8,7 +8,7 @@ class AddPodWidget extends StatelessWidget {
   final ValueNotifier<String> selectedPod;
   final ValueNotifier<Team> selectedTeam;
 
-  AddPodWidget({
+  const AddPodWidget({super.key, 
     required this.availablePods,
     required this.availableTeams,
     required this.selectedPod,
@@ -27,17 +27,18 @@ class AddPodWidget extends StatelessWidget {
             popupProps: const PopupProps.menu(
               showSearchBox: true,
             ),
-            items: availableTeams,
+            compareFn: (a, b) => a == b,
+            items: (filter, loadProps) => availableTeams,
             itemAsString: (t) => "${t.teamNumber} - ${t.name}",
-            dropdownDecoratorProps: const DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
+            decoratorProps: const DropDownDecoratorProps(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.all(10),
                 labelText: "Team",
                 hintText: "Select Team",
               ),
             ),
-            onChanged: (v) {
+            onSelected: (v) {
               if (v != null) selectedTeam.value = v;
             },
             selectedItem: selectedTeam.value,
@@ -50,16 +51,16 @@ class AddPodWidget extends StatelessWidget {
             popupProps: const PopupProps.menu(
               showSearchBox: true,
             ),
-            items: availablePods,
-            dropdownDecoratorProps: const DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
+            items: (filter, loadProps) => availablePods,
+            decoratorProps: const DropDownDecoratorProps(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.all(10),
                 labelText: "Pod",
                 hintText: "Select Pod",
               ),
             ),
-            onChanged: (v) {
+            onSelected: (v) {
               if (v != null) selectedPod.value = v;
             },
             selectedItem: selectedPod.value,

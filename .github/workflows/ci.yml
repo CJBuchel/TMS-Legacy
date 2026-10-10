@@ -426,7 +426,7 @@ jobs:
         working-directory: tms_client
         run: |
           echo "::warning::iOS signing was not available or failed, so the IPA is unsigned and will not go to TestFlight."
-          flutter build ios --release --no-codesign \
+          flutter build ios --release --no-codesign -v \
             --build-name "${{ needs.setup.outputs.version }}" \
             --build-number "${{ needs.setup.outputs.build_number }}"
           rm -rf "$RUNNER_TEMP/ipa" "$RUNNER_TEMP/unsigned"

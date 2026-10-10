@@ -14,7 +14,7 @@ This page is for people working on TMS itself. It explains what the parts are an
 | `echo_tree_flutter` | Dart | EchoTree client for Flutter |
 | `tms_client` | Dart (Flutter) | The client application for web, iOS and Android |
 | `docs` | Markdown | This documentation |
-| `azure-pipelines` | YAML | Build and release pipeline |
+| `.github/workflows` | YAML | Build and release pipeline, and the documentation build |
 
 ## The big picture
 

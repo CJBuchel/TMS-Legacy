@@ -1,17 +1,21 @@
+import os
 import requests
 import argparse
 from datetime import datetime
 
 # Configuration
-repo_owner = 'CJBuchel'  # Replace with your GitHub username or organization
-repo_name = 'TMS'  # Replace with your repository name
+# GitHub Actions sets GITHUB_REPOSITORY (owner/name), the fallback is for running this by hand
+repo_owner, repo_name = os.environ.get('GITHUB_REPOSITORY', 'CJBuchel/TMS-Legacy').split('/', 1)
+# Shared CI runners hit the anonymous API rate limit quickly, so use the token when there is one
+github_token = os.environ.get('GITHUB_TOKEN')
+headers = {'Authorization': f'Bearer {github_token}'} if github_token else {}
 release_notes_file = 'RELEASE_NOTES.md'  # Output file for release notes
 
 def get_items(url, params=None):
     """Fetch items from GitHub API URL"""
     items = []
     while url:
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()
         items.extend(response.json())
         url = response.links.get('next', {}).get('url')  # Get next page if available
@@ -20,7 +24,7 @@ def get_items(url, params=None):
 def get_latest_release():
     """Get the latest full release data including tag name and publish date"""
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest"
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
     response.raise_for_status()
     latest_release = response.json()
     latest_release_date = datetime.strptime(latest_release['published_at'], '%Y-%m-%dT%H:%M:%SZ')

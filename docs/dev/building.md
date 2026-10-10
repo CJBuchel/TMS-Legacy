@@ -144,7 +144,9 @@ The season structs and the JSON schema functions are already marked this way.
 
 ## Continuous integration
 
-The Azure pipeline in `azure-pipelines.yml` generates the bindings, builds the wasm module, builds the client for each platform and the server for each operating system, and publishes release artefacts. The versions it installs are pinned in `azure-pipelines/templates/steps`. Keep them in step with the versions on this page.
+The GitHub Actions workflow in `.github/workflows/ci.yml` generates the bindings, builds the wasm module, builds the client for each platform and the server for each operating system, and publishes release artefacts. The Flutter and codegen versions it installs are pinned in the `env` block at the top of that file. Keep them in step with the versions on this page.
+
+Pushes to `master` and `ci-cd` also release: a **draft** GitHub release for the version in `vars.yml`, the Docker image, and the TestFlight build. The draft is published by hand. Once a version is published, later pushes build but do not release until `tms_version` is bumped.
 
 This documentation is built by `.github/workflows/gh-pages.yml` with `mkdocs build` and published to GitHub Pages on pushes to `master`.
 

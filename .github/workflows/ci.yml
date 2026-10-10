@@ -1,0 +1,558 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [master, ci-cd]
+  pull_request:
+  workflow_dispatch:
+
+# Queue runs on the same branch so two releases never overlap. Superseded pull request runs are cancelled.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  FLUTTER_VERSION: "3.47.7"
+  FRB_VERSION: "2.13.0"
+  DOCKER_REPOSITORY: cjbuchel/tms
+  IOS_BUNDLE_ID: a.loose.screw.tms
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Setup: version, build number, release notes
+  # ---------------------------------------------------------------------------
+  setup:
+    name: Setup & Environment
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.vars.outputs.version }}
+      build_number: ${{ steps.vars.outputs.build_number }}
+      deploy: ${{ steps.vars.outputs.deploy }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve version and build number
+        id: vars
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(sed -n '/name: tms_version/{n;s/.*value: *//p}' vars.yml | tr -d '[:space:]')
+          if [ -z "$version" ]; then
+            echo "::error file=vars.yml::Could not read tms_version"
+            exit 1
+          fi
+
+          # yyyyMMdd plus a two digit revision, so it keeps increasing past the old Azure build numbers (yyyyMMddr).
+          build_number="$(date -u +%Y%m%d)$(printf '%02d' $((GITHUB_RUN_NUMBER % 100)))"
+
+          # Release from pushes (and manual runs) on the release branches only.
+          deploy=false
+          if [ "$GITHUB_EVENT_NAME" != "pull_request" ] && { [ "$GITHUB_REF" = "refs/heads/master" ] || [ "$GITHUB_REF" = "refs/heads/ci-cd" ]; }; then
+            deploy=true
+            # Only published releases resolve by tag, drafts do not.
+            if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$version" > /dev/null 2>&1; then
+              echo "::warning file=vars.yml::Release $version is already published, so nothing will be released. Bump tms_version to release again."
+              deploy=false
+            fi
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "build_number=$build_number" >> "$GITHUB_OUTPUT"
+          echo "deploy=$deploy" >> "$GITHUB_OUTPUT"
+          echo "Version $version, build $build_number, deploy $deploy" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Generate release notes
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          pip install --quiet requests
+          python generate_release_notes.py "${{ steps.vars.outputs.version }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-notes
+          path: RELEASE_NOTES.md
+          if-no-files-found: error
+
+  # ---------------------------------------------------------------------------
+  # Infra: generate the Dart bindings and the wasm module once, for every build
+  # ---------------------------------------------------------------------------
+  infra:
+    name: Generate Wasm & Dart
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rust-src, rustfmt
+          targets: wasm32-unknown-unknown
+
+      - uses: Swatinem/rust-cache@v2
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Cache flutter_rust_bridge_codegen
+        id: frb-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/bin/flutter_rust_bridge_codegen
+          key: frb-codegen-${{ runner.os }}-${{ env.FRB_VERSION }}
+
+      - name: Install flutter_rust_bridge_codegen
+        if: steps.frb-cache.outputs.cache-hit != 'true'
+        run: cargo install flutter_rust_bridge_codegen --version "$FRB_VERSION" --locked
+
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: wasm-pack
+
+      - name: Install Flutter dependencies
+        working-directory: tms_client
+        run: flutter pub get
+
+      # this also runs build_runner for the freezed outputs
+      - name: Run Rust to Dart codegen
+        working-directory: tms_client
+        run: flutter_rust_bridge_codegen generate
+
+      # the bridge is fully synchronous, so a plain stable (non threaded) release build is all that's needed
+      - name: Build wasm
+        run: wasm-pack build tms_infra --target no-modules --out-dir "$GITHUB_WORKSPACE/tms_client/web/pkg" --no-typescript --out-name tms_infra --release
+
+      # Every build job starts from this tree instead of a checkout, so they all use the same generated code.
+      - name: Archive generated source tree
+        run: |
+          tar -czf "$RUNNER_TEMP/infra.tar.gz" \
+            --exclude=./.git \
+            --exclude=./target \
+            --exclude=./tms_client/build \
+            --exclude=.dart_tool \
+            .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: infra
+          path: ${{ runner.temp }}/infra.tar.gz
+          if-no-files-found: error
+          retention-days: 3
+
+  # ---------------------------------------------------------------------------
+  # Server builds (each bundles the web client)
+  # ---------------------------------------------------------------------------
+  server:
+    name: ${{ matrix.name }} Server
+    needs: [setup, infra]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            binary: tms_server
+            archive: tms.tar.gz
+            artifact: release-linux
+            rustflags: ""
+          - name: Windows
+            os: windows-latest
+            target: x86_64-pc-windows-gnu
+            binary: tms_server.exe
+            archive: tms.zip
+            artifact: release-windows
+            rustflags: "-C link-args=-static-libgcc"
+    env:
+      RUSTFLAGS: ${{ matrix.rustflags }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: infra
+
+      - name: Restore generated source tree
+        run: tar -xzf infra.tar.gz && rm infra.tar.gz
+
+      - name: Install musl tools
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -qq -y musl-tools musl-dev
+
+      - name: Install nasm
+        if: runner.os == 'Windows'
+        run: choco install nasm --no-progress -y
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Build server
+        run: cargo build --target ${{ matrix.target }} --release
+
+      - name: Install Flutter dependencies
+        working-directory: tms_client
+        run: flutter pub get
+
+      - name: Build Flutter web (no CDN)
+        working-directory: tms_client
+        run: >
+          flutter build web --release --no-web-resources-cdn
+          --build-name "${{ needs.setup.outputs.version }}"
+          --build-number "${{ needs.setup.outputs.build_number }}"
+
+      - name: Package server, log config and web client
+        run: |
+          mkdir -p staging/tms_client/build
+          cp "target/${{ matrix.target }}/release/${{ matrix.binary }}" staging/
+          cp -r log_config staging/
+          cp -r tms_client/build/web staging/tms_client/build/
+          cd staging
+          if [[ "${{ matrix.archive }}" == *.zip ]]; then
+            7z a -tzip "../${{ matrix.archive }}" .
+          else
+            tar -czf "../${{ matrix.archive }}" *
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.archive }}
+          if-no-files-found: error
+
+  # ---------------------------------------------------------------------------
+  # Docker image, built from the Linux server package
+  # ---------------------------------------------------------------------------
+  docker:
+    name: Docker Image
+    needs: [server]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-linux
+          path: ${{ runner.temp }}
+
+      - name: Build and save image
+        run: |
+          # lay the package out the way the Dockerfile expects a local build
+          tar -xzf "$RUNNER_TEMP/tms.tar.gz"
+          mkdir -p target/x86_64-unknown-linux-musl/release
+          mv tms_server target/x86_64-unknown-linux-musl/release/
+          docker build -t "$DOCKER_REPOSITORY:latest" .
+          docker save -o "$RUNNER_TEMP/docker-image.tar" "$DOCKER_REPOSITORY:latest"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: ${{ runner.temp }}/docker-image.tar
+          if-no-files-found: error
+          retention-days: 3
+
+  # ---------------------------------------------------------------------------
+  # Android client
+  # ---------------------------------------------------------------------------
+  android:
+    name: Android Client
+    needs: [setup, infra]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: infra
+
+      - name: Restore generated source tree
+        run: tar -xzf infra.tar.gz && rm infra.tar.gz
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install Flutter dependencies
+        working-directory: tms_client
+        run: flutter pub get
+
+      - name: Generate launcher icons
+        working-directory: tms_client
+        run: dart run flutter_launcher_icons
+
+      - name: Build APK
+        working-directory: tms_client
+        run: >
+          flutter build apk --release
+          --build-name "${{ needs.setup.outputs.version }}"
+          --build-number "${{ needs.setup.outputs.build_number }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-android
+          path: tms_client/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+
+  # ---------------------------------------------------------------------------
+  # iOS client: a signed IPA when the Apple secrets work, otherwise an unsigned one
+  # ---------------------------------------------------------------------------
+  ios:
+    name: iOS Client
+    needs: [setup, infra]
+    runs-on: macos-latest
+    outputs:
+      signed: ${{ steps.signed.outcome == 'success' }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: infra
+
+      - name: Restore generated source tree
+        run: tar -xzf infra.tar.gz && rm infra.tar.gz
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install Flutter dependencies
+        working-directory: tms_client
+        run: flutter pub get
+
+      - name: Generate launcher icons
+        working-directory: tms_client
+        run: dart run flutter_launcher_icons
+
+      - name: Check Apple signing secrets
+        id: secrets
+        env:
+          P12_BASE64: ${{ secrets.APPLE_CERTIFICATE_P12_BASE64 }}
+          PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          if [ -n "$P12_BASE64" ] && [ -n "$PROFILE_BASE64" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Apple certificate and provisioning profile
+        id: certs
+        if: steps.secrets.outputs.available == 'true'
+        continue-on-error: true
+        env:
+          P12_BASE64: ${{ secrets.APPLE_CERTIFICATE_P12_BASE64 }}
+          P12_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          keychain_password=$(openssl rand -hex 16)
+          echo -n "$P12_BASE64" | base64 --decode -o "$RUNNER_TEMP/certificate.p12"
+          echo -n "$PROFILE_BASE64" | base64 --decode -o "$RUNNER_TEMP/profile.mobileprovision"
+
+          security create-keychain -p "$keychain_password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$keychain_password" "$keychain"
+          security import "$RUNNER_TEMP/certificate.p12" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          security set-key-partition-list -S apple-tool:,apple: -k "$keychain_password" "$keychain" > /dev/null
+          security list-keychain -d user -s "$keychain"
+
+          # the profile describes itself, so its name, UUID and team never need to be configured separately
+          security cms -D -i "$RUNNER_TEMP/profile.mobileprovision" > "$RUNNER_TEMP/profile.plist"
+          uuid=$(/usr/libexec/PlistBuddy -c 'Print :UUID' "$RUNNER_TEMP/profile.plist")
+          name=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$RUNNER_TEMP/profile.plist")
+          team=$(/usr/libexec/PlistBuddy -c 'Print :TeamIdentifier:0' "$RUNNER_TEMP/profile.plist")
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          cp "$RUNNER_TEMP/profile.mobileprovision" "$HOME/Library/MobileDevice/Provisioning Profiles/$uuid.mobileprovision"
+
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store-connect</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>teamID</key>
+            <string>$team</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>$IOS_BUNDLE_ID</key>
+              <string>$name</string>
+            </dict>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Build signed IPA
+        id: signed
+        if: steps.certs.outcome == 'success'
+        continue-on-error: true
+        working-directory: tms_client
+        run: |
+          flutter build ipa --release \
+            --build-name "${{ needs.setup.outputs.version }}" \
+            --build-number "${{ needs.setup.outputs.build_number }}" \
+            --export-options-plist "$RUNNER_TEMP/ExportOptions.plist"
+          mkdir -p "$RUNNER_TEMP/ipa"
+          mv build/ios/ipa/*.ipa "$RUNNER_TEMP/ipa/tms.ipa"
+
+      # Without working signing (missing secrets, or an expired certificate) the release still gets an IPA, just unsigned.
+      - name: Build unsigned IPA
+        if: steps.signed.outcome != 'success'
+        working-directory: tms_client
+        run: |
+          echo "::warning::iOS signing was not available or failed, so the IPA is unsigned and will not go to TestFlight."
+          flutter build ios --release --no-codesign \
+            --build-name "${{ needs.setup.outputs.version }}" \
+            --build-number "${{ needs.setup.outputs.build_number }}"
+          rm -rf "$RUNNER_TEMP/ipa" "$RUNNER_TEMP/unsigned"
+          mkdir -p "$RUNNER_TEMP/ipa" "$RUNNER_TEMP/unsigned/Payload"
+          cp -R build/ios/iphoneos/Runner.app "$RUNNER_TEMP/unsigned/Payload/"
+          (cd "$RUNNER_TEMP/unsigned" && zip -qry "$RUNNER_TEMP/ipa/tms-unsigned.ipa" Payload)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-ios
+          path: ${{ runner.temp }}/ipa/*.ipa
+          if-no-files-found: error
+
+      - name: Remove signing keychain
+        if: always()
+        run: security delete-keychain "$RUNNER_TEMP/signing.keychain-db" 2> /dev/null || true
+
+  # ---------------------------------------------------------------------------
+  # Release (master and ci-cd only, after every build has passed)
+  # ---------------------------------------------------------------------------
+  release-github:
+    name: Deploy to GitHub
+    needs: [setup, server, docker, android, ios]
+    if: needs.setup.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    environment: tms-prod
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          path: release
+          merge-multiple: true
+
+      # Always a draft: it is published by hand once the artefacts have been checked.
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.setup.outputs.version }}
+        run: |
+          ls -l release
+          # replace the draft from an earlier run of the same version
+          drafts=$(gh api "repos/$GITHUB_REPOSITORY/releases" --paginate \
+            --jq ".[] | select(.draft and .tag_name == \"$VERSION\") | .id")
+          for id in $drafts; do
+            gh api -X DELETE "repos/$GITHUB_REPOSITORY/releases/$id"
+          done
+
+          gh release create "$VERSION" \
+            --repo "$GITHUB_REPOSITORY" \
+            --draft \
+            --target "$GITHUB_SHA" \
+            --title "$VERSION TMS Release" \
+            --notes-file release/RELEASE_NOTES.md \
+            release/*.tar.gz release/*.zip release/*.apk release/*.ipa
+
+  release-testflight:
+    name: Deploy to TestFlight
+    needs: [setup, server, docker, android, ios]
+    if: needs.setup.outputs.deploy == 'true' && needs.ios.outputs.signed == 'true'
+    runs-on: macos-latest
+    environment: tms-prod
+    env:
+      API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+      API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
+    steps:
+      - name: Check App Store Connect secrets
+        id: secrets
+        run: |
+          if [ -n "$API_KEY_ID" ] && [ -n "$API_ISSUER_ID" ] && [ -n "$API_KEY_BASE64" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::App Store Connect secrets are not set, skipping the TestFlight upload."
+          fi
+
+      - uses: actions/download-artifact@v4
+        if: steps.secrets.outputs.available == 'true'
+        with:
+          name: release-ios
+          path: ipa
+
+      - name: Upload to TestFlight
+        if: steps.secrets.outputs.available == 'true'
+        run: |
+          mkdir -p "$HOME/.appstoreconnect/private_keys"
+          echo -n "$API_KEY_BASE64" | base64 --decode -o "$HOME/.appstoreconnect/private_keys/AuthKey_$API_KEY_ID.p8"
+          xcrun altool --upload-app --type ios --file ipa/tms.ipa --apiKey "$API_KEY_ID" --apiIssuer "$API_ISSUER_ID"
+
+  release-docker:
+    name: Deploy to DockerHub
+    needs: [setup, server, docker, android, ios]
+    if: needs.setup.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    environment: tms-prod
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      VERSION: ${{ needs.setup.outputs.version }}
+    steps:
+      - name: Check DockerHub secrets
+        id: secrets
+        run: |
+          if [ -n "$DOCKERHUB_USERNAME" ] && [ -n "$DOCKERHUB_TOKEN" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::DockerHub secrets are not set, skipping the image push."
+          fi
+
+      - uses: actions/download-artifact@v4
+        if: steps.secrets.outputs.available == 'true'
+        with:
+          name: docker-image
+          path: ${{ runner.temp }}
+
+      - uses: docker/login-action@v3
+        if: steps.secrets.outputs.available == 'true'
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push image
+        if: steps.secrets.outputs.available == 'true'
+        run: |
+          docker load -i "$RUNNER_TEMP/docker-image.tar"
+          docker tag "$DOCKER_REPOSITORY:latest" "$DOCKER_REPOSITORY:$VERSION"
+          docker push "$DOCKER_REPOSITORY:$VERSION"
+          docker push "$DOCKER_REPOSITORY:latest"

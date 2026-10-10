@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/judging_session.dart';
 import 'package:tms/generated/infra/database_schemas/tms_time/tms_date_time.dart';
@@ -13,11 +13,11 @@ class JudgingScheduleTimer extends StatelessWidget {
   final TextStyle? negativeStyle;
 
   const JudgingScheduleTimer({
-    Key? key,
+    super.key,
     this.live = false,
     this.positiveStyle,
     this.negativeStyle,
-  }) : super(key: key);
+  });
 
   TmsDateTime getNextScheduledTime(List<JudgingSession> sessions) {
     // sort sessions by time

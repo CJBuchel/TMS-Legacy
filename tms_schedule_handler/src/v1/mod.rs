@@ -42,11 +42,10 @@ pub trait V1Block {
 
       // split
       let fields = line.split(",").collect::<Vec<&str>>();
-      if fields.get(0) == Some(&BLOCK_FORMAT) {
-        if fields.get(1) == Some(&block) {
+      if fields.first() == Some(&BLOCK_FORMAT)
+        && fields.get(1) == Some(&block) {
           return Some(line_number + 1); // start with line after block format
         }
-      }
     }
 
     None
@@ -74,7 +73,7 @@ pub trait V1Block {
 
       // split
       let fields = line.split(",").collect::<Vec<&str>>();
-      if fields.get(0) == Some(&BLOCK_FORMAT) {
+      if fields.first() == Some(&BLOCK_FORMAT) {
         break;
       }
 
@@ -150,11 +149,10 @@ impl CsvToTmsSchedule for V1 {
 
       // split
       let fields = line.split(",").collect::<Vec<&str>>();
-      if fields.get(0) == Some(&"Version Number") {
-        if fields.get(1) == Some(&"1") {
+      if fields.first() == Some(&"Version Number")
+        && fields.get(1) == Some(&"1") {
           return true;
         }
-      }
     }
 
     false
@@ -162,22 +160,10 @@ impl CsvToTmsSchedule for V1 {
 
   fn csv_to_tms_schedule(csv: &str) -> Result<TmsSchedule, String> {
     let v1 = V1 {
-      teams_block: match ScheduleTeamsBlock::from_csv(csv) {
-        Ok(block) => Some(block),
-        Err(_) => None,
-      },
-      matches_block: match ScheduleMatchesBlock::from_csv(csv) {
-        Ok(block) => Some(block),
-        Err(_) => None,
-      },
-      judging_block: match ScheduleJudgeBlock::from_csv(csv) {
-        Ok(block) => Some(block),
-        Err(_) => None,
-      },
-      practice_matches_block: match SchedulePracticeMatchesBlock::from_csv(csv) {
-        Ok(block) => Some(block),
-        Err(_) => None,
-      },
+      teams_block: ScheduleTeamsBlock::from_csv(csv).ok(),
+      matches_block: ScheduleMatchesBlock::from_csv(csv).ok(),
+      judging_block: ScheduleJudgeBlock::from_csv(csv).ok(),
+      practice_matches_block: SchedulePracticeMatchesBlock::from_csv(csv).ok(),
     };
 
     // v1 to tms schedule

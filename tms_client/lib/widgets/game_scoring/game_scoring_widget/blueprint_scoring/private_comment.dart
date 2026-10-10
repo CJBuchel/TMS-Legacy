@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tms/utils/color_modifiers.dart';
 
@@ -8,11 +8,11 @@ class PrivateCommentWidget extends StatelessWidget {
   final bool isCommentNeeded;
 
   PrivateCommentWidget({
-    Key? key,
+    super.key,
     this.comment,
     required this.onCommentChanged,
     required this.isCommentNeeded,
-  }) : super(key: key);
+  });
 
   final TextEditingController _commentController = TextEditingController();
 
@@ -66,7 +66,7 @@ class PrivateCommentWidget extends StatelessWidget {
             decoration: const BoxDecoration(
               // color: Color(0xFF4C779F),
               color: Colors.green,
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 bottomRight: Radius.circular(10),
               ),

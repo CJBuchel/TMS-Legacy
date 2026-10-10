@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_table.dart';
 import 'package:tms/providers/robot_game_providers/game_table_provider.dart';
@@ -12,6 +12,8 @@ import 'package:tms/widgets/tables/edit_row_table.dart';
 
 class GameTables extends StatelessWidget {
   final TextEditingController _tableController = TextEditingController();
+
+  GameTables({super.key});
   BaseTableCell _buildCell(Widget child) {
     return BaseTableCell(
       child: Padding(
@@ -96,7 +98,7 @@ class GameTables extends StatelessWidget {
       trees: [":robot_game:tables"],
       child: Selector<GameTableProvider, List<GameTable>>(
         selector: (_, provider) => provider.tables,
-        builder: (context, tables, __) {
+        builder: (context, tables, _) {
           return Column(
             children: [
               Expanded(

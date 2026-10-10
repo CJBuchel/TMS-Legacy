@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/robot_game_providers/game_scoring_provider.dart';
 import 'package:tms/widgets/dialogs/confirm_dialogs.dart';
@@ -8,11 +8,11 @@ class ClearAnswersButton extends StatelessWidget {
   final double buttonHeight;
   final ScrollController? scrollController;
 
-  ClearAnswersButton({
-    Key? key,
+  const ClearAnswersButton({
+    super.key,
     this.buttonHeight = 40,
     this.scrollController,
-  }) : super(key: key);
+  });
 
   void _onClearButton(BuildContext context) {
     ConfirmDialog(

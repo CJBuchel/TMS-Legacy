@@ -15,10 +15,7 @@ impl V1Block for ScheduleTeamsBlock {
   type Output = ScheduleTeamsBlock;
 
   fn from_csv(csv: &str) -> Result<Self::Output, String> {
-    let block_lines = match Self::get_block_lines(csv, BLOCK_TEAMS) {
-      Ok(lines) => lines,
-      Err(e) => return Err(e),
-    };
+    let block_lines = Self::get_block_lines(csv, BLOCK_TEAMS)?;
 
     let mut n_teams: usize = 0;
     let mut teams: Vec<ScheduleTeamT> = vec![];
@@ -41,7 +38,7 @@ impl V1Block for ScheduleTeamsBlock {
         }
         _ => {
           // Use .get() with defaults to handle missing commas/fields
-          let team_number = fields.get(0).unwrap_or(&"").to_string();
+          let team_number = fields.first().unwrap_or(&"").to_string();
           let name = fields.get(1).unwrap_or(&"").to_string();
           let affiliation = fields.get(2).unwrap_or(&"").to_string();
 

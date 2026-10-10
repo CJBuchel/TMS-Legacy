@@ -18,10 +18,7 @@ impl JudgingPodExtensions for Database {
     let tree = self.inner.read().await.get_tree(JUDGING_PODS.to_string()).await;
     let judging_pod = tree.get(&judging_pod_id).cloned();
 
-    match judging_pod {
-      Some(judging_pod) => Some(JudgingPod::from_json_string(&judging_pod).pod_name),
-      None => None,
-    }
+    judging_pod.map(|judging_pod| JudgingPod::from_json_string(&judging_pod).pod_name)
   }
 
   async fn get_judging_pod_by_name(&self, name: String) -> Option<(String, String)> {

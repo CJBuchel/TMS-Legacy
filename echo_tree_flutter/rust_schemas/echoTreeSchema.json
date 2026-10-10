@@ -2,25 +2,6 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "EchoTreeSchema",
   "type": "object",
-  "required": [
-    "_checksum_event",
-    "_delete_event",
-    "_echo_item_event",
-    "_echo_tree_client_socket_message",
-    "_echo_tree_event",
-    "_echo_tree_server_socket_message",
-    "_get_event",
-    "_get_tree_event",
-    "_register_request",
-    "_register_response",
-    "_response_event",
-    "_role",
-    "_role_authenticate_request",
-    "_set_event",
-    "_set_tree_event",
-    "_subscribe_event",
-    "_unsubscribe_event"
-  ],
   "properties": {
     "_checksum_event": {
       "$ref": "#/definitions/ChecksumEvent"
@@ -74,28 +55,44 @@
       "$ref": "#/definitions/UnsubscribeEvent"
     }
   },
+  "required": [
+    "_role",
+    "_register_request",
+    "_register_response",
+    "_role_authenticate_request",
+    "_echo_tree_client_socket_message",
+    "_echo_tree_server_socket_message",
+    "_echo_tree_event",
+    "_echo_item_event",
+    "_response_event",
+    "_checksum_event",
+    "_set_event",
+    "_get_event",
+    "_delete_event",
+    "_set_tree_event",
+    "_get_tree_event",
+    "_subscribe_event",
+    "_unsubscribe_event"
+  ],
   "definitions": {
     "ChecksumEvent": {
       "type": "object",
-      "required": [
-        "tree_checksums"
-      ],
       "properties": {
         "tree_checksums": {
           "type": "object",
           "additionalProperties": {
             "type": "integer",
             "format": "uint32",
-            "minimum": 0.0
+            "minimum": 0
           }
         }
-      }
+      },
+      "required": [
+        "tree_checksums"
+      ]
     },
     "DeleteEvent": {
       "type": "object",
-      "required": [
-        "tree_items"
-      ],
       "properties": {
         "tree_items": {
           "type": "object",
@@ -103,14 +100,13 @@
             "type": "string"
           }
         }
-      }
+      },
+      "required": [
+        "tree_items"
+      ]
     },
     "EchoItemEvent": {
       "type": "object",
-      "required": [
-        "key",
-        "tree_name"
-      ],
       "properties": {
         "data": {
           "type": [
@@ -124,10 +120,14 @@
         "tree_name": {
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "tree_name",
+        "key"
+      ]
     },
     "EchoTreeClientSocketEvent": {
-      "description": "Echo Tree Client Socket Event dictates the message structure, i.e: - PingEvent: (no message) - ChecksumEvent: tree names, checksums - SetEvent: tree, key, data - GetEvent: tree, key etc...",
+      "description": "* Echo Tree Client Socket Event\n * dictates the message structure, i.e:\n * - PingEvent: (no message)\n * - ChecksumEvent: tree names, checksums\n * - SetEvent: tree, key, data\n * - GetEvent: tree, key\n *   etc...",
       "type": "string",
       "enum": [
         "ChecksumEvent",
@@ -141,12 +141,8 @@
       ]
     },
     "EchoTreeClientSocketMessage": {
-      "description": "Echo Tree Client Socket Message message to be sent to the server (json data, represented by the event type)",
+      "description": "* Echo Tree Client Socket Message\n * message to be sent to the server (json data, represented by the event type)",
       "type": "object",
-      "required": [
-        "auth_token",
-        "message_event"
-      ],
       "properties": {
         "auth_token": {
           "type": "string"
@@ -160,13 +156,14 @@
         "message_event": {
           "$ref": "#/definitions/EchoTreeClientSocketEvent"
         }
-      }
+      },
+      "required": [
+        "auth_token",
+        "message_event"
+      ]
     },
     "EchoTreeEvent": {
       "type": "object",
-      "required": [
-        "trees"
-      ],
       "properties": {
         "trees": {
           "type": "array",
@@ -174,14 +171,13 @@
             "$ref": "#/definitions/EchoTreeEventTree"
           }
         }
-      }
+      },
+      "required": [
+        "trees"
+      ]
     },
     "EchoTreeEventTree": {
       "type": "object",
-      "required": [
-        "tree",
-        "tree_name"
-      ],
       "properties": {
         "tree": {
           "type": "object",
@@ -192,14 +188,14 @@
         "tree_name": {
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "tree_name",
+        "tree"
+      ]
     },
     "EchoTreeRegisterRequest": {
       "type": "object",
-      "required": [
-        "echo_trees",
-        "roles"
-      ],
       "properties": {
         "echo_trees": {
           "type": "array",
@@ -213,16 +209,14 @@
             "type": "string"
           }
         }
-      }
+      },
+      "required": [
+        "echo_trees",
+        "roles"
+      ]
     },
     "EchoTreeRegisterResponse": {
       "type": "object",
-      "required": [
-        "auth_token",
-        "hierarchy",
-        "protocol",
-        "uuid"
-      ],
       "properties": {
         "auth_token": {
           "type": "string"
@@ -239,17 +233,17 @@
         "uuid": {
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "auth_token",
+        "uuid",
+        "protocol",
+        "hierarchy"
+      ]
     },
     "EchoTreeRole": {
-      "description": "Role used for authentication to branches of the database",
+      "description": "* Role used for authentication to branches of the database",
       "type": "object",
-      "required": [
-        "password",
-        "read_echo_trees",
-        "read_write_echo_trees",
-        "role_id"
-      ],
       "properties": {
         "password": {
           "type": "string"
@@ -269,13 +263,16 @@
         "role_id": {
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "role_id",
+        "password",
+        "read_echo_trees",
+        "read_write_echo_trees"
+      ]
     },
     "EchoTreeRoleAuthenticateRequest": {
       "type": "object",
-      "required": [
-        "roles"
-      ],
       "properties": {
         "roles": {
           "type": "object",
@@ -283,10 +280,13 @@
             "type": "string"
           }
         }
-      }
+      },
+      "required": [
+        "roles"
+      ]
     },
     "EchoTreeServerSocketEvent": {
-      "description": "Echo Tree Event dictates the message structure, i.e: - PingEvent: (no message) - EchoTreeEvent: trees, data - EchoItemEvent: tree, key, data etc...",
+      "description": "* Echo Tree Event\n * dictates the message structure, i.e:\n * - PingEvent: (no message)\n * - EchoTreeEvent: trees, data\n * - EchoItemEvent: tree, key, data\n *   etc...",
       "type": "string",
       "enum": [
         "EchoTreeEvent",
@@ -295,12 +295,8 @@
       ]
     },
     "EchoTreeServerSocketMessage": {
-      "description": "Echo Tree Server Socket Message message to be sent to the client (json data, represented by the event type)",
+      "description": "* Echo Tree Server Socket Message\n * message to be sent to the client (json data, represented by the event type)",
       "type": "object",
-      "required": [
-        "auth_token",
-        "message_event"
-      ],
       "properties": {
         "auth_token": {
           "type": "string"
@@ -314,14 +310,14 @@
         "message_event": {
           "$ref": "#/definitions/EchoTreeServerSocketEvent"
         }
-      }
+      },
+      "required": [
+        "auth_token",
+        "message_event"
+      ]
     },
     "GetEvent": {
       "type": "object",
-      "required": [
-        "key",
-        "tree_name"
-      ],
       "properties": {
         "key": {
           "type": "string"
@@ -329,13 +325,14 @@
         "tree_name": {
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "tree_name",
+        "key"
+      ]
     },
     "GetTreeEvent": {
       "type": "object",
-      "required": [
-        "tree_names"
-      ],
       "properties": {
         "tree_names": {
           "type": "array",
@@ -343,15 +340,13 @@
             "type": "string"
           }
         }
-      }
+      },
+      "required": [
+        "tree_names"
+      ]
     },
     "InsertEvent": {
       "type": "object",
-      "required": [
-        "data",
-        "key",
-        "tree_name"
-      ],
       "properties": {
         "data": {
           "type": "string"
@@ -362,13 +357,15 @@
         "tree_name": {
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "tree_name",
+        "key",
+        "data"
+      ]
     },
     "SetTreeEvent": {
       "type": "object",
-      "required": [
-        "trees"
-      ],
       "properties": {
         "trees": {
           "type": "object",
@@ -379,13 +376,13 @@
             }
           }
         }
-      }
+      },
+      "required": [
+        "trees"
+      ]
     },
     "StatusResponseEvent": {
       "type": "object",
-      "required": [
-        "status_code"
-      ],
       "properties": {
         "from_event": {
           "anyOf": [
@@ -406,31 +403,32 @@
         "status_code": {
           "type": "integer",
           "format": "uint16",
-          "minimum": 0.0
+          "maximum": 65535,
+          "minimum": 0
         }
-      }
+      },
+      "required": [
+        "status_code"
+      ]
     },
     "SubscribeEvent": {
       "type": "object",
-      "required": [
-        "tree_names"
-      ],
       "properties": {
         "tree_names": {
           "type": "object",
           "additionalProperties": {
             "type": "integer",
             "format": "uint32",
-            "minimum": 0.0
+            "minimum": 0
           }
         }
-      }
+      },
+      "required": [
+        "tree_names"
+      ]
     },
     "UnsubscribeEvent": {
       "type": "object",
-      "required": [
-        "tree_names"
-      ],
       "properties": {
         "tree_names": {
           "type": "array",
@@ -438,7 +436,10 @@
             "type": "string"
           }
         }
-      }
+      },
+      "required": [
+        "tree_names"
+      ]
     }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/models/team_on_table_info.dart';
 
 class TeamOnTableRow extends StatelessWidget {
@@ -7,11 +7,11 @@ class TeamOnTableRow extends StatelessWidget {
   final TextStyle? textStyle;
 
   const TeamOnTableRow({
-    Key? key,
+    super.key,
     required this.info,
     required this.isLeft,
     this.textStyle,
-  }) : super(key: key);
+  });
 
   BorderSide _getBorderSide(BuildContext context) {
     if (Theme.of(context).brightness == Brightness.light) {

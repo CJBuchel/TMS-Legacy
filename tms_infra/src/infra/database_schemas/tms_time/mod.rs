@@ -4,6 +4,7 @@ pub use tms_duration::*;
 pub mod tms_date;
 pub use tms_date::*;
 
+#[allow(clippy::module_inception)]
 pub mod tms_time;
 pub use tms_time::*;
 

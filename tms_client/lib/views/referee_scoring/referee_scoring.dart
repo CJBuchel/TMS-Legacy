@@ -1,5 +1,5 @@
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tms/providers/robot_game_providers/game_scoring_provider.dart';
@@ -12,7 +12,7 @@ import 'package:tms/widgets/game_scoring/game_scoring_widget/game_scoring_widget
 import 'package:tms/widgets/game_scoring/with_next_game_scoring.dart';
 
 class RefereeScoring extends StatelessWidget {
-  RefereeScoring({Key? key}) : super(key: key);
+  RefereeScoring({super.key});
 
   final ScrollController _scrollController = ScrollController();
 
@@ -33,39 +33,37 @@ class RefereeScoring extends StatelessWidget {
       trees: [":robot_game:tables", ":robot_game:matches", ":teams"],
       child: Stack(
         children: [
-          Container(
-            child: Column(
-              children: [
-                // header
-                WithNextGameScoring(builder: (context, nextMatch, nextTeam, totalMatches, round) {
-                  return Selector<GameTableProvider, String>(
-                    selector: (context, provider) => provider.localGameTable,
-                    builder: (context, table, child) {
-                      return RefereeScoringHeader(
-                        headerHeight: headerHeight,
-                        nextMatch: nextMatch,
-                        nextTeam: nextTeam,
-                        totalMatches: totalMatches,
-                        round: round,
-                        table: table,
-                      );
-                    },
-                  );
-                }),
-                // expanded scrollable list
-                Expanded(
-                  child: Center(
-                    child: GameScoringWidget(scrollController: _scrollController),
-                  ),
+          Column(
+            children: [
+              // header
+              WithNextGameScoring(builder: (context, nextMatch, nextTeam, totalMatches, round) {
+                return Selector<GameTableProvider, String>(
+                  selector: (context, provider) => provider.localGameTable,
+                  builder: (context, table, child) {
+                    return RefereeScoringHeader(
+                      headerHeight: headerHeight,
+                      nextMatch: nextMatch,
+                      nextTeam: nextTeam,
+                      totalMatches: totalMatches,
+                      round: round,
+                      table: table,
+                    );
+                  },
+                );
+              }),
+              // expanded scrollable list
+              Expanded(
+                child: Center(
+                  child: GameScoringWidget(scrollController: _scrollController),
                 ),
+              ),
 
-                // footer
-                RefereeScoringFooter(
-                  footerHeight: footerHeight,
-                  scrollController: _scrollController,
-                ),
-              ],
-            ),
+              // footer
+              RefereeScoringFooter(
+                footerHeight: footerHeight,
+                scrollController: _scrollController,
+              ),
+            ],
           ),
           // floating timer
           FloatingTimer(

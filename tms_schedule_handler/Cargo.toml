@@ -1,12 +1,12 @@
 [package]
 name = "tms_schedule_handler"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
-chrono = "0.4.38"
-log = "0.4.21"
-regex = "1.10.4"
+chrono = "0.4.45"
+log = "0.4.34"
+regex = "1.13.1"
 
 [dependencies.tms_infra]
 path = "../tms_infra"

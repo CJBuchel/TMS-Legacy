@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/widgets/dialogs/confirm_dialogs.dart';
 import 'package:tms/widgets/dialogs/dialog_style.dart';
 
@@ -11,7 +11,7 @@ class InputSetter extends StatefulWidget {
   final String? info;
   final double height;
 
-  InputSetter({
+  const InputSetter({super.key, 
     required this.label,
     required this.input,
     required this.onSet,

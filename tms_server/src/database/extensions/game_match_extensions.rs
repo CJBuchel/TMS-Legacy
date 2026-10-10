@@ -22,27 +22,21 @@ impl GameMatchExtensions for Database {
     let tree = self.inner.read().await.get_tree(ROBOT_GAME_MATCHES.to_string()).await;
     let game_match = tree.get(&game_match_id).cloned();
 
-    match game_match {
-      Some(game_match) => Some(GameMatch::from_json_string(&game_match)),
-      None => None,
-    }
+    game_match.map(|game_match| GameMatch::from_json_string(&game_match))
   }
 
   async fn get_game_match_by_number(&self, number: String) -> Option<(String, GameMatch)> {
     let tree = self.inner.read().await.get_tree(ROBOT_GAME_MATCHES.to_string()).await;
-    let game_match = tree.iter().find_map(|(id, game_match)| {
+    
+
+    tree.iter().find_map(|(id, game_match)| {
       let game_match = GameMatch::from_json_string(game_match);
       if game_match.match_number == number {
         Some((id.clone(), game_match))
       } else {
         None
       }
-    });
-
-    match game_match {
-      Some((id, game_match)) => Some((id, game_match)),
-      None => None,
-    }
+    })
   }
 
   async fn get_game_matches_by_team_number(&self, team_number: String) -> HashMap<String, GameMatch> {

@@ -1,5 +1,5 @@
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/models/team_data_model.dart';
 import 'package:tms/providers/robot_game_providers/game_scores_provider.dart';
@@ -7,6 +7,8 @@ import 'package:tms/providers/teams_provider.dart';
 import 'package:tms/views/team_data/team_data_filter_table.dart';
 
 class TeamData extends StatelessWidget {
+  const TeamData({super.key});
+
   @override
   Widget build(BuildContext context) {
     return EchoTreeLifetime(

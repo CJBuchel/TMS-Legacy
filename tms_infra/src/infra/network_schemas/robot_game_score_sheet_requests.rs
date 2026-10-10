@@ -45,19 +45,12 @@ impl Default for RobotGameScoreSheetSubmitRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
+#[derive(Default)]
 pub struct RobotGameScoreSheetInsertRequest {
   pub score_sheet_id: Option<String>,
   pub score_sheet: GameScoreSheet,
 }
 
-impl Default for RobotGameScoreSheetInsertRequest {
-  fn default() -> Self {
-    Self {
-      score_sheet_id: None,
-      score_sheet: GameScoreSheet::default(),
-    }
-  }
-}
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
 pub struct RobotGameScoreSheetRemoveRequest {

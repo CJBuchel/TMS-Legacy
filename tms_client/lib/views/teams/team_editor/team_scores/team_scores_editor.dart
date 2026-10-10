@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/models/team_score_sheet.dart';
 import 'package:tms/providers/robot_game_providers/game_scoring_provider.dart';
@@ -17,14 +17,14 @@ class TeamScoresEditor extends StatefulWidget {
   final String teamId;
   final List<TeamScoreSheet> teamScores;
 
-  TeamScoresEditor({
-    Key? key,
+  const TeamScoresEditor({
+    super.key,
     required this.teamId,
     required this.teamScores,
-  }) : super(key: key);
+  });
 
   @override
-  _TeamScoresEditorState createState() => _TeamScoresEditorState();
+  State<TeamScoresEditor> createState() => _TeamScoresEditorState();
 }
 
 class _TeamScoresEditorState extends State<TeamScoresEditor> {
@@ -91,7 +91,7 @@ class _TeamScoresEditorState extends State<TeamScoresEditor> {
             children: [
               const Text(
                 "Team Scores",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                 ),
               ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/widgets/dialogs/base_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tms/widgets/dialogs/dialog_style.dart';
@@ -92,9 +92,11 @@ class ConfirmFutureDialog extends BaseDialog {
 
           if (onStatusConfirmFuture != null) {
             status = await onStatusConfirmFuture!.call();
+            if (!context.mounted) return;
             SnackBarDialog.fromStatus(message: style.title, status: status).show(context);
           } else {
             await onConfirmFuture?.call();
+            if (!context.mounted) return;
           }
 
           context.pop();
@@ -110,9 +112,9 @@ class ConfirmFutureDialog extends BaseDialog {
       return const Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const CircularProgressIndicator(),
-          const SizedBox(height: 10),
-          const Text("Loading..."),
+          CircularProgressIndicator(),
+          SizedBox(height: 10),
+          Text("Loading..."),
         ],
       );
     } else {

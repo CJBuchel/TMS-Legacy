@@ -20,7 +20,7 @@ impl TmsSchedule {
   pub fn from(csv: &str) -> Result<TmsSchedule, String> {
     if V1::valid_version(csv) {
       log::info!("Valid V1 version");
-      return Ok(V1::csv_to_tms_schedule(csv)?);
+      return V1::csv_to_tms_schedule(csv);
     }
 
     Err("Invalid version or unknown CSV type".to_string())

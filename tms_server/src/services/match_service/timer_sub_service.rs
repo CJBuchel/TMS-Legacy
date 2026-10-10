@@ -13,6 +13,7 @@ use crate::services::match_service::*;
 #[async_trait::async_trait]
 pub trait TimerSubService {
   // main timers
+  #[allow(clippy::too_many_arguments)]
   async fn timer(time: u32, endgame_time: u32, loaded_matches: Arc<RwLock<Vec<String>>>, timer_running: Arc<AtomicBool>, is_matches_loaded: Arc<AtomicBool>, is_matches_ready: Arc<AtomicBool>, clients: ClientMap, db: SharedDatabase);
   async fn start_timer(&mut self) -> Result<(), String>;
 
@@ -53,7 +54,7 @@ impl TimerSubService for MatchService {
       }
 
       // countdown finished, send end message
-      if i <= 0 {
+      if i == 0 {
         clients.read().await.publish_end_timer();
       }
 

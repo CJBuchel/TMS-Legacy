@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/schedule_provider.dart';
 import 'package:tms/views/setup/input_setter.dart';
@@ -6,6 +6,8 @@ import 'package:tms/widgets/dialogs/dialog_style.dart';
 import 'package:tms/widgets/dialogs/snackbar_dialog.dart';
 
 class ScheduleSetup extends StatelessWidget {
+  const ScheduleSetup({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ScheduleProvider>(
@@ -14,6 +16,7 @@ class ScheduleSetup extends StatelessWidget {
           label: "Upload schedule:",
           onSet: () async {
             await provider.uploadSchedule().then((res) {
+              if (!context.mounted) return;
               SnackBarDialog.fromStatus(message: "Upload CSV Schedule", status: res).show(context);
             });
           },
@@ -30,7 +33,7 @@ class ScheduleSetup extends StatelessWidget {
             onPressed: () async {
               await provider.selectCSV();
             },
-            child: Text(provider.result == null ? "Select Schedule (CSV)" : provider.result?.files.first.name ?? ""),
+            child: Text(provider.result == null ? "Select Schedule (CSV)" : provider.result?.name ?? ""),
           ),
         );
       },

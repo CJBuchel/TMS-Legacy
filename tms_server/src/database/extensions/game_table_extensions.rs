@@ -18,10 +18,7 @@ impl GameTableExtensions for Database {
     let tree = self.inner.read().await.get_tree(ROBOT_GAME_TABLES.to_string()).await;
     let game_table = tree.get(&game_table_id).cloned();
 
-    match game_table {
-      Some(game_table) => Some(GameTable::from_json_string(&game_table).table_name),
-      None => None,
-    }
+    game_table.map(|game_table| GameTable::from_json_string(&game_table).table_name)
   }
 
   async fn get_game_table_by_name(&self, name: String) -> Option<(String, String)> {

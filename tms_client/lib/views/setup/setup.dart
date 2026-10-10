@@ -1,5 +1,5 @@
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/views/setup/admin_password_setup.dart';
 import 'package:tms/views/setup/backup_interval_setup.dart';
 import 'package:tms/views/setup/endgame_timer_length_setup.dart';
@@ -11,6 +11,8 @@ import 'package:tms/views/setup/season_setup.dart';
 import 'package:tms/views/setup/timer_length_setup.dart';
 
 class Setup extends StatelessWidget {
+  const Setup({super.key});
+
   @override
   Widget build(BuildContext context) {
     return EchoTreeLifetime(
@@ -40,7 +42,7 @@ class Setup extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
-                ScheduleSetup(),
+                const ScheduleSetup(),
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: Text(
@@ -60,7 +62,7 @@ class Setup extends StatelessWidget {
                 EndgameTimerLengthSetup(),
 
                 // Purge Event
-                PurgeButton(),
+                const PurgeButton(),
               ],
             ),
           ),

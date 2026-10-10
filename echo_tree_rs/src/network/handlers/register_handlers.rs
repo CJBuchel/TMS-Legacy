@@ -1,7 +1,7 @@
 use crate::common::{client::Client, ClientMap, EchoDB, ResponseResult};
 use echo_tree_infra::{EchoTreeRegisterRequest, EchoTreeRegisterResponse};
 use log::{debug, error};
-use rand::Rng;
+use rand::RngExt;
 
 async fn register_client(uuid: String, auth_token: String, subscribed_trees: Vec<String>, role_read_trees: Vec<String>, role_read_write_trees: Vec<String>, clients: ClientMap) {
   debug!("registering client with uuid: {}", uuid);
@@ -9,7 +9,7 @@ async fn register_client(uuid: String, auth_token: String, subscribed_trees: Vec
 }
 
 fn generate_auth_token() -> String {
-  rand::thread_rng().sample_iter(&rand::distributions::Alphanumeric).take(30).map(char::from).collect()
+  rand::rng().sample_iter(rand::distr::Alphanumeric).take(30).map(char::from).collect()
 }
 
 pub async fn register_handler(body: EchoTreeRegisterRequest, clients: ClientMap, db: EchoDB, tls: bool) -> ResponseResult<impl warp::reply::Reply> {
@@ -24,7 +24,9 @@ pub async fn register_handler(body: EchoTreeRegisterRequest, clients: ClientMap,
     .roles
     .iter()
     .flat_map(|(role_id, password)| {
-      let read_trees = futures::executor::block_on(async {
+      
+
+      futures::executor::block_on(async {
         match db.get_role_manager().await.authenticate_role(role_id.clone(), password.clone()) {
           true => {
             let trees = db.get_role_manager().await.get_role_read_access(role_id.clone());
@@ -36,9 +38,7 @@ pub async fn register_handler(body: EchoTreeRegisterRequest, clients: ClientMap,
             [].to_vec()
           }
         }
-      });
-
-      read_trees
+      })
     })
     .collect();
 
@@ -46,7 +46,9 @@ pub async fn register_handler(body: EchoTreeRegisterRequest, clients: ClientMap,
     .roles
     .iter()
     .flat_map(|(role_id, password)| {
-      let read_write_trees = futures::executor::block_on(async {
+      
+
+      futures::executor::block_on(async {
         match db.get_role_manager().await.authenticate_role(role_id.clone(), password.clone()) {
           true => {
             let trees = db.get_role_manager().await.get_role_read_write_access(role_id.clone());
@@ -58,9 +60,7 @@ pub async fn register_handler(body: EchoTreeRegisterRequest, clients: ClientMap,
             [].to_vec()
           }
         }
-      });
-
-      read_write_trees
+      })
     })
     .collect();
 

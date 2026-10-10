@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/network_schemas/backup_requests.dart';
 import 'package:tms/services/backups_service.dart';
 import 'package:tms/widgets/dialogs/confirm_future_dialog.dart';
@@ -9,8 +9,10 @@ import 'package:tms/widgets/dialogs/snackbar_dialog.dart';
 import 'package:tms/widgets/tables/base_table.dart';
 
 class Backups extends StatefulWidget {
+  const Backups({super.key});
+
   @override
-  _BackupsState createState() => _BackupsState();
+  State<Backups> createState() => _BackupsState();
 }
 
 class _BackupsState extends State<Backups> {
@@ -78,7 +80,7 @@ class _BackupsState extends State<Backups> {
                         Text("Are you sure you want to restore this backup?"),
                         Text("This WILL overwrite the current state of the system."),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
+                          padding: EdgeInsets.only(top: 10.0),
                           child: Column(
                             children: [
                               Row(
@@ -111,6 +113,7 @@ class _BackupsState extends State<Backups> {
             IconButton(
               onPressed: () {
                 BackupsService().downloadBackup(backup.fileName).then((status) {
+                  if (!mounted) return;
                   if (status != HttpStatus.ok) {
                     SnackBarDialog.fromStatus(
                       message: "Download Backup",
@@ -133,7 +136,7 @@ class _BackupsState extends State<Backups> {
       children: [
         // warning text
         const Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: Text(
             "Notice: Backups are not stateful, reload to fetch updates",
             style: TextStyle(

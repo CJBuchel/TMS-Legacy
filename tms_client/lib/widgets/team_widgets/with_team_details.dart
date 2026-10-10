@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/judging_session.dart';
@@ -35,10 +35,10 @@ class WithTeamDetails extends StatelessWidget {
   ) builder;
 
   const WithTeamDetails({
-    Key? key,
+    super.key,
     required this.teamId,
     required this.builder,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

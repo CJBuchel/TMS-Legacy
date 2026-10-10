@@ -7,7 +7,9 @@ use crate::{
 
 use super::BaseSeason;
 
+#[flutter_rust_bridge::frb(ignore)]
 pub struct Unearthed {}
+#[flutter_rust_bridge::frb(ignore)]
 impl BaseSeason for Unearthed {
   fn validate(&self, answers: &HashMap<String, QuestionAnswer>) -> Vec<QuestionValidationError> {
     let mut errors: Vec<QuestionValidationError> = vec![];
@@ -125,7 +127,7 @@ impl BaseSeason for Unearthed {
         },
         Mission {
           id: "m11".to_string(),
-          label: "M11 - Angler Artefacts 🔴".to_string(),
+          label: "M11 - Angler Artifacts 🔴".to_string(),
           image_url: None,
         },
         Mission {
@@ -197,8 +199,8 @@ impl BaseSeason for Unearthed {
         },
         Question {
           id: "m02a".to_string(),
-          label: "".to_string(),
-          label_short: "".to_string(),
+          label: "Topsoil sections completely cleared?".to_string(),
+          label_short: "Topsoil cleared?".to_string(),
           input: QuestionInput::Categorical(CategoricalQuestion {
             options: vec![
               CategoricalOption { label: "0".to_string(), score: 0 },
@@ -362,7 +364,7 @@ impl BaseSeason for Unearthed {
             default_option: "No".to_string(),
           }),
           rules: vec![QuestionRule {
-            condition: "m11a == Yes".to_string(),
+            condition: "m11a == Yes && m11b == Yes".to_string(),
             output: 10,
           }],
         },
@@ -403,13 +405,13 @@ impl BaseSeason for Unearthed {
           input: QuestionInput::Categorical(CategoricalQuestion {
             options: vec![
               CategoricalOption { label: "0".to_string(), score: 0 },
-              CategoricalOption { label: "1".to_string(), score: 10 },
-              CategoricalOption { label: "2".to_string(), score: 20 },
-              CategoricalOption { label: "3".to_string(), score: 30 },
-              CategoricalOption { label: "4".to_string(), score: 40 },
-              CategoricalOption { label: "5".to_string(), score: 50 },
-              CategoricalOption { label: "6".to_string(), score: 60 },
-              CategoricalOption { label: "7".to_string(), score: 70 },
+              CategoricalOption { label: "1".to_string(), score: 5 },
+              CategoricalOption { label: "2".to_string(), score: 10 },
+              CategoricalOption { label: "3".to_string(), score: 15 },
+              CategoricalOption { label: "4".to_string(), score: 20 },
+              CategoricalOption { label: "5".to_string(), score: 25 },
+              CategoricalOption { label: "6".to_string(), score: 30 },
+              CategoricalOption { label: "7".to_string(), score: 35 },
             ],
             default_option: "0".to_string(),
           }),
@@ -432,8 +434,8 @@ impl BaseSeason for Unearthed {
         },
         Question {
           id: "m16a".to_string(),
-          label: "Precision?".to_string(),
-          label_short: "Number of precision tokens remaining?".to_string(),
+          label: "Number of precision tokens remaining?".to_string(),
+          label_short: "Precision?".to_string(),
           input: QuestionInput::Categorical(CategoricalQuestion {
             options: vec![
               CategoricalOption { label: "0".to_string(), score: 0 },

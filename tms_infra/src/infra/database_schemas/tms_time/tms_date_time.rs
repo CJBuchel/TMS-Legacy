@@ -6,6 +6,7 @@ use crate::infra::DataSchemeExtensions;
 use super::{TmsDate, TmsDuration, TmsTime, TmsTimeBased};
 
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[derive(Default)]
 pub struct TmsDateTime {
   pub date: Option<TmsDate>,
   pub time: Option<TmsTime>,
@@ -28,22 +29,20 @@ impl TmsTimeBased for TmsDateTime {
 
   
   fn compare_to(&self, other: Self) -> i32 {
-    if let Some(date) = &self.date {
-      if let Some(other_date) = &other.date {
+    if let Some(date) = &self.date
+      && let Some(other_date) = &other.date {
         let date_compare = date.compare_to(other_date.clone());
         if date_compare != 0 {
           return date_compare;
         }
       }
-    }
 
-    if let Some(time) = &self.time {
-      if let Some(other_time) = &other.time {
+    if let Some(time) = &self.time
+      && let Some(other_time) = &other.time {
         return time.compare_to(other_time.clone());
       }
-    }
 
-    return 0;
+    0
   }
 
   
@@ -105,24 +104,13 @@ impl TmsTimeBased for TmsDateTime {
 
   
   fn add_duration(&self, duration: TmsDuration) -> Self {
-    let date: Option<TmsDate> = match &self.date {
-      Some(date) => Some(date.add_duration(duration.clone())),
-      None => None,
-    };
+    let date: Option<TmsDate> = self.date.as_ref().map(|date| date.add_duration(duration.clone()));
 
-    let time: Option<TmsTime> = match &self.time {
-      Some(time) => Some(time.add_duration(duration.clone())),
-      None => None,
-    };
+    let time: Option<TmsTime> = self.time.as_ref().map(|time| time.add_duration(duration.clone()));
 
     Self { date, time }
   }
 }
 
-impl Default for TmsDateTime {
-  fn default() -> Self {
-    Self { date: None, time: None }
-  }
-}
 
 impl DataSchemeExtensions for TmsDateTime {}

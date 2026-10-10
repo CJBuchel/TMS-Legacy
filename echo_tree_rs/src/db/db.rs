@@ -24,7 +24,7 @@ pub struct Database {
 impl Database {
   pub fn new(config: DatabaseConfig) -> Database {
     let db: sled::Db =
-      sled::open(config.db_path.clone()).expect(format!("open failed for {}", config.db_path).as_str());
+      sled::open(config.db_path.clone()).unwrap_or_else(|_| panic!("open failed for {}", config.db_path));
       let hierarchy = Hierarchy::open(&db, config.metadata_path.clone());
       let role_manager = RoleManager::open(&db, config.metadata_path.clone());
       

@@ -1,11 +1,11 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
-  strong-mode:
-    implicit-casts: true
-    implicit-dynamic: true
+  exclude:
+    - build/**
 
 linter:
   rules:
-    line_length: 120
     prefer_const_constructors: true
+    # constants and generated schema enums use SCREAMING_SNAKE_CASE in this project
+    constant_identifier_names: false

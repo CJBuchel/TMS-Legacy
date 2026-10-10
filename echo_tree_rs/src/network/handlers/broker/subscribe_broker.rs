@@ -43,7 +43,7 @@ pub async fn subscribe_broker(uuid: String, msg: EchoTreeClientSocketMessage, cl
       if client.has_read_access_and_subscribed_to_tree(tree_name) {
         if tree.get_checksum() != *checksum {
           let tree_name = tree.get_name();
-          if let Some(tree_hashmap) = tree.get_as_hashmap().ok() {
+          if let Ok(tree_hashmap) = tree.get_as_hashmap() {
             new_client_trees.push(EchoTreeEventTree {
               tree_name: tree_name.clone(),
               tree: tree_hashmap,

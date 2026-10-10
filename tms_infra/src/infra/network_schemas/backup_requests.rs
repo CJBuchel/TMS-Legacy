@@ -21,17 +21,11 @@ impl Default for BackupGetNamesInfo {
 
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
+#[derive(Default)]
 pub struct BackupGetNamesResponse {
   pub backups: Vec<BackupGetNamesInfo>,
 }
 
-impl Default for BackupGetNamesResponse {
-  fn default() -> Self {
-    Self {
-      backups: vec![],
-    }
-  }
-}
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
 pub struct BackupRestoreRequest {

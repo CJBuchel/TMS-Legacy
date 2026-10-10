@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tms/generated/infra.dart';
 
@@ -83,7 +83,7 @@ class TmsLocalStorageProvider extends _TmsLocalStorageBase {
   String get wsProtocol => getString("wsProtocol") ?? "ws";
 
   String get wsConnectionString =>
-      "$wsProtocol://$serverIp:$serverPort/ws/${uuid}";
+      "$wsProtocol://$serverIp:$serverPort/ws/$uuid";
 
   set authToken(String value) => setString("authToken", value);
   String get authToken => getString("authToken") ?? "";

@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class LiveCheckbox extends StatefulWidget {
   final bool? defaultValue;
   final Color? color;
   final Function(bool)? onChanged;
 
-  LiveCheckbox({
+  const LiveCheckbox({super.key, 
     this.defaultValue,
     this.color = Colors.orange,
     this.onChanged,
   });
 
   @override
-  _LiveCheckboxState createState() => _LiveCheckboxState();
+  State<LiveCheckbox> createState() => _LiveCheckboxState();
 }
 
 class _LiveCheckboxState extends State<LiveCheckbox> {

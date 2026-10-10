@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/models/team_on_table_info.dart';
@@ -15,12 +15,11 @@ class _TeamsOnTableList extends StatelessWidget {
   final bool isLeft;
 
   const _TeamsOnTableList({
-    Key? key,
     required this.teamsInfo,
     required this.evenColor,
     required this.oddColor,
     required this.isLeft,
-  }) : super(key: key);
+  });
 
   Color? _getBackgroundColor(BuildContext context, int index, {bool isLeft = true}) {
     Color? evenLightBackground = Theme.of(context).scaffoldBackgroundColor;
@@ -100,6 +99,7 @@ class _TeamsOnTableList extends StatelessWidget {
           ),
           Expanded(
             child: AnimatedInfiniteVerticalList(
+              childHeight: childHeight,
               children: List<Widget>.generate(teamsInfo.length, (index) {
                 return Container(
                   height: childHeight,
@@ -113,7 +113,6 @@ class _TeamsOnTableList extends StatelessWidget {
                   ),
                 );
               }),
-              childHeight: childHeight,
             ),
           ),
         ],
@@ -126,9 +125,9 @@ class LoadedMatchTimer extends StatelessWidget {
   final List<GameMatch> loadedMatches;
 
   const LoadedMatchTimer({
-    Key? key,
+    super.key,
     required this.loadedMatches,
-  }) : super(key: key);
+  });
 
   Widget _buildTeamsOnTablesList(BuildContext context, {required List<TeamOnTableInfo> teamsInfo}) {
     Color? evenDarkBackground = const Color(0xFF1B6A92);
@@ -229,7 +228,7 @@ class LoadedMatchTimer extends StatelessWidget {
         }).toList();
       },
       builder: (context, teamsInfo, _) {
-        return Container(
+        return SizedBox(
           height: 160, // 3*40, then + 40 for header
           child: _buildTeamsOnTablesList(context, teamsInfo: teamsInfo),
         );

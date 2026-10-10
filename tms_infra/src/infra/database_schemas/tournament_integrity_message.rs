@@ -60,25 +60,18 @@ impl TournamentIntegrityMessage {
     message_segments.push(format!("[{}]:", integrity_code.get_stringified_code()));
     
     // add the team
-    match team_number.to_owned() {
-      Some(team_number) => message_segments.push(format!(" Team: {},", team_number)),
-      None => {},
-    }
+    if let Some(team_number) = team_number.to_owned() { message_segments.push(format!(" Team: {},", team_number)) }
 
     // add the match
-    match match_number.to_owned() {
-      Some(match_number) => message_segments.push(format!(" Match: {},", match_number)),
-      None => {},
-    }
+    if let Some(match_number) = match_number.to_owned() { message_segments.push(format!(" Match: {},", match_number)) }
     
     // add the session
-    match session_number.to_owned() {
-      Some(session_number) => message_segments.push(format!(" Session: {},", session_number)),
-      None => {},
-    }
+    if let Some(session_number) = session_number.to_owned() { message_segments.push(format!(" Session: {},", session_number)) }
 
     // remove trailing comma
-    message_segments.last_mut().map(|s| *s = s.trim_end_matches(',').to_string());
+    if let Some(s) = message_segments.last_mut() {
+      *s = s.trim_end_matches(',').to_string();
+    }
 
     // add the message
     message_segments.push(format!(" - {}", integrity_code.get_message()));

@@ -1,4 +1,3 @@
-use tms_infra::*;
 
 use crate::{database::*, network::*};
 
@@ -19,7 +18,7 @@ pub async fn tournament_config_get_name_handler(db: SharedDatabase) -> Result<im
 
 pub async fn tournament_config_set_admin_password(request: TournamentConfigSetAdminPasswordRequest, db: SharedDatabase) -> Result<impl warp::Reply, warp::Rejection> {
   let read_db = db.read().await;
-  log::info!("Setting admin password to: {}", request.admin_password);
+  log::info!("Setting admin password");
 
   let admin_user = User {
     username: "admin".to_string(),
@@ -104,12 +103,9 @@ pub async fn tournament_config_set_season(request: TournamentConfigSetSeasonRequ
 
   write_db.set_tournament_blueprint_type(request.blueprint_type).await;
 
-  match request.season {
-    Some(season) => {
-      log::info!("Setting tournament season to: {}", season);
-      write_db.set_tournament_season(season).await;
-    }
-    _ => {}
+  if let Some(season) = request.season {
+    log::info!("Setting tournament season to: {}", season);
+    write_db.set_tournament_season(season).await;
   }
   Ok(warp::http::StatusCode::OK)
 }

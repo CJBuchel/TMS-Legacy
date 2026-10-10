@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/robot_game_providers/game_scores_provider.dart';
 import 'package:tms/providers/teams_provider.dart';
@@ -9,6 +9,8 @@ import 'package:tms/views/scoreboard/teams_ranking_list/teams_ranking_row.dart';
 import 'package:tms/widgets/animated/infinite_vertical_list.dart';
 
 class TeamsRankingList extends StatelessWidget {
+  const TeamsRankingList({super.key});
+
   @override
   Widget build(BuildContext context) {
     double childHeight = 40;
@@ -49,7 +51,7 @@ class TeamsRankingList extends StatelessWidget {
 
         return Column(
           children: [
-            Container(
+            SizedBox(
               height: childHeight,
               child: TeamsRankingHeader(numRounds: numRounds),
             ),

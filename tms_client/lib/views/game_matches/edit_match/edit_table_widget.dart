@@ -1,5 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
 import 'package:tms/widgets/buttons/live_checkbox.dart';
 
@@ -10,7 +10,7 @@ class EditTableWidget extends StatelessWidget {
   final ValueNotifier<Team> selectedTeam;
   final ValueNotifier<bool> scoreSubmitted;
 
-  EditTableWidget({
+  const EditTableWidget({super.key, 
     required this.availableTables,
     required this.availableTeams,
     required this.selectedTable,
@@ -30,17 +30,18 @@ class EditTableWidget extends StatelessWidget {
             popupProps: const PopupProps.menu(
               showSearchBox: true,
             ),
-            items: availableTeams,
+            compareFn: (a, b) => a == b,
+            items: (filter, loadProps) => availableTeams,
             itemAsString: (t) => "${t.teamNumber} - ${t.name}",
-            dropdownDecoratorProps: const DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
+            decoratorProps: const DropDownDecoratorProps(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.all(10),
                 labelText: "Team",
                 hintText: "Select Team",
               ),
             ),
-            onChanged: (v) {
+            onSelected: (v) {
               if (v != null) selectedTeam.value = v;
             },
             selectedItem: selectedTeam.value,
@@ -53,16 +54,16 @@ class EditTableWidget extends StatelessWidget {
             popupProps: const PopupProps.menu(
               showSearchBox: true,
             ),
-            items: availableTables,
-            dropdownDecoratorProps: const DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
+            items: (filter, loadProps) => availableTables,
+            decoratorProps: const DropDownDecoratorProps(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.all(10),
                 labelText: "Table",
                 hintText: "Select Table",
               ),
             ),
-            onChanged: (v) {
+            onSelected: (v) {
               if (v != null) selectedTable.value = v;
             },
             selectedItem: selectedTable.value,

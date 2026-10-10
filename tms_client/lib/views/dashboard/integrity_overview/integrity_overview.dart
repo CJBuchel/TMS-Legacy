@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/tournament_integrity_message.dart';
 import 'package:tms/providers/tournament_integrity_provider.dart';
@@ -6,7 +6,7 @@ import 'package:tms/utils/color_modifiers.dart';
 import 'package:tms/views/dashboard/integrity_overview/integrity_message_tile.dart';
 
 class IntegrityOverview extends StatelessWidget {
-  const IntegrityOverview({Key? key}) : super(key: key);
+  const IntegrityOverview({super.key});
 
   List<List<TournamentIntegrityMessage>> _splitMessagesByCode(List<TournamentIntegrityMessage> messages) {
     Map<String, List<TournamentIntegrityMessage>> groupedMessages = {};

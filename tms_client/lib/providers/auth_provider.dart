@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:echo_tree_flutter/echo_tree_flutter.dart';
 import 'package:echo_tree_flutter/widgets/echo_tree_provider.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra.dart';
 import 'package:tms/generated/infra/database_schemas/user.dart';
 import 'package:tms/generated/infra/network_schemas/login_requests.dart';

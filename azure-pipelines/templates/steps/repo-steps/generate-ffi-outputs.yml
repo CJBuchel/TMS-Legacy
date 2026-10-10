@@ -11,22 +11,16 @@ parameters:
 # This file contains the steps to generate the Dart code from the Rust code.
 #
 steps:
-  # run the codegen
+  # run the codegen (this also runs build_runner for the freezed outputs)
   # - script: flutter_rust_bridge_codegen generate --dart-entrypoint-class-name TmsRustLib --rust-input crate::infra --rust-root $(Build.SourcesDirectory)/tms_infra --dart-output $(Build.SourcesDirectory)/tms_client/lib/generated
   - script: |
       cd tms_client
       flutter_rust_bridge_codegen generate
     displayName: "Run Rust to Dart Codegen"
 
-  # run flutter code gen (freezed)
-  - script: |
-      cd tms_client
-      flutter pub run build_runner build --delete-conflicting-outputs
-    displayName: "Run Flutter (Freezed) Codegen"
-
-  # run the wasm codegen
+  # build the wasm for the web client
+  # the bridge is fully synchronous, so a plain stable (non threaded) release build is all that's needed
   - ${{ if eq(parameters.target, 'web') }}:
       - script: |
-          cd tms_client
-          dart run flutter_rust_bridge build-web --dart-root $(Build.SourcesDirectory)/tms_client --rust-root $(Build.SourcesDirectory)/tms_infra
-        displayName: "Run Wasm Codegen"
+          wasm-pack build $(Build.SourcesDirectory)/tms_infra --target no-modules --out-dir $(Build.SourcesDirectory)/tms_client/web/pkg --no-typescript --out-name tms_infra --release
+        displayName: "Build Wasm"

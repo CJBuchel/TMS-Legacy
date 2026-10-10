@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/tournament_config_provider.dart';
 import 'package:tms/views/setup/input_setter.dart';
@@ -6,6 +6,8 @@ import 'package:tms/widgets/dialogs/snackbar_dialog.dart';
 
 class TimerLengthSetup extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();
+
+  TimerLengthSetup({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +18,7 @@ class TimerLengthSetup extends StatelessWidget {
           label: "Set timer length:",
           onSet: () async {
             await provider.setTimerLength(int.parse(_controller.text)).then((res) {
+              if (!context.mounted) return;
               SnackBarDialog.fromStatus(message: "Set Backup Interval", status: res).show(context);
             });
           },

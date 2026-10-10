@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ValueListenableBuilder2<A, B> extends StatelessWidget {
   final ValueListenable<A> first;
@@ -14,12 +14,12 @@ class ValueListenableBuilder2<A, B> extends StatelessWidget {
   ) builder;
 
   const ValueListenableBuilder2({
-    Key? key,
+    super.key,
     required this.first,
     required this.second,
     required this.builder,
     this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +54,13 @@ class ValueListenableBuilder3<A, B, C> extends StatelessWidget {
   ) builder;
 
   const ValueListenableBuilder3({
-    Key? key,
+    super.key,
     required this.first,
     required this.second,
     required this.third,
     required this.builder,
     this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

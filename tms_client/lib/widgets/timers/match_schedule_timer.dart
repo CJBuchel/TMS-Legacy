@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/tms_time/tms_date_time.dart';
@@ -14,11 +14,11 @@ class MatchScheduleTimer extends StatelessWidget {
   final TextStyle? negativeStyle;
 
   const MatchScheduleTimer({
-    Key? key,
+    super.key,
     this.live = true,
     this.positiveStyle,
     this.negativeStyle,
-  }) : super(key: key);
+  });
 
   TmsDateTime getNextScheduledTime(List<GameMatch> matches) {
     // sort matches by time

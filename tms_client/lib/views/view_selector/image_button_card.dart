@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tms/utils/color_modifiers.dart';
 
@@ -11,14 +11,14 @@ class ImageButtonCard extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const ImageButtonCard({
-    Key? key,
+    super.key,
     this.title,
     this.subTitle,
     this.color,
     this.textColor,
     this.image,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

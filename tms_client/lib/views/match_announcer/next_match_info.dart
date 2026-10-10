@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/providers/teams_provider.dart';
@@ -21,7 +21,7 @@ class _TeamOnTableInformation {
 class NextMatchInfo extends StatelessWidget {
   final List<GameMatch> nextMatches;
 
-  const NextMatchInfo({
+  const NextMatchInfo({super.key, 
     required this.nextMatches,
   });
 
@@ -43,13 +43,11 @@ class NextMatchInfo extends StatelessWidget {
   Widget _headerTextCell(String text, {int flex = 1}) {
     return Expanded(
       flex: flex,
-      child: Container(
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-          ),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: Colors.white,
         ),
       ),
     );

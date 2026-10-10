@@ -7,7 +7,7 @@ import 'package:tms/services/game_match_service.dart';
 import 'package:tms/utils/sorter_util.dart';
 
 class GameMatchProvider extends EchoTreeProvider<String, GameMatch> {
-  GameMatchService _service = GameMatchService();
+  final GameMatchService _service = GameMatchService();
 
   GameMatchProvider()
       : super(
@@ -18,13 +18,13 @@ class GameMatchProvider extends EchoTreeProvider<String, GameMatch> {
 
   List<GameMatch> get matchesByNumber {
     // order matches by match number
-    List<GameMatch> matches = this.items.values.toList();
+    List<GameMatch> matches = items.values.toList();
     return sortMatchesByMatchNumber(matches);
   }
 
   List<GameMatch> get matchesByTime {
     // order matches by start time
-    List<GameMatch> matches = this.items.values.toList();
+    List<GameMatch> matches = items.values.toList();
     return sortMatchesByTime(matches);
   }
 
@@ -48,10 +48,9 @@ class GameMatchProvider extends EchoTreeProvider<String, GameMatch> {
   }
 
   String? getIdFromMatchNumber(String matchNumber) {
-    return this
-        .items
+    return items
         .keys
-        .firstWhereOrNull((key) => this.items[key]?.matchNumber == matchNumber);
+        .firstWhereOrNull((key) => items[key]?.matchNumber == matchNumber);
   }
 
   GameMatch? get nextMatch =>
@@ -65,8 +64,7 @@ class GameMatchProvider extends EchoTreeProvider<String, GameMatch> {
   }
 
   GameMatch? getMatchByMatchNumber(String matchNumber) {
-    return this
-        .items
+    return items
         .values
         .firstWhereOrNull((match) => match.matchNumber == matchNumber);
   }
@@ -89,8 +87,7 @@ class GameMatchProvider extends EchoTreeProvider<String, GameMatch> {
   }
 
   Future<int> removeTableFromMatch(String table, String matchNumber) async {
-    GameMatch? match = this
-        .items
+    GameMatch? match = items
         .values
         .firstWhereOrNull((match) => match.matchNumber == matchNumber);
     String? matchId = getIdFromMatchNumber(matchNumber);
@@ -106,8 +103,7 @@ class GameMatchProvider extends EchoTreeProvider<String, GameMatch> {
 
   Future<int> addTableToMatch(
       String table, String teamNumberOnTable, String matchNumber) async {
-    GameMatch? match = this
-        .items
+    GameMatch? match = items
         .values
         .firstWhereOrNull((match) => match.matchNumber == matchNumber);
     String? matchId = getIdFromMatchNumber(matchNumber);
@@ -135,12 +131,10 @@ class GameMatchProvider extends EchoTreeProvider<String, GameMatch> {
   }) async {
     if (updatedMatchNumber != null && updatedMatchNumber != originMatchNumber) {
       // handle table switch
-      GameMatch? originMatch = this
-          .items
+      GameMatch? originMatch = items
           .values
           .firstWhereOrNull((match) => match.matchNumber == originMatchNumber);
-      GameMatch? updatedMatch = this
-          .items
+      GameMatch? updatedMatch = items
           .values
           .firstWhereOrNull((match) => match.matchNumber == updatedMatchNumber);
 
@@ -169,8 +163,7 @@ class GameMatchProvider extends EchoTreeProvider<String, GameMatch> {
       }
     } else {
       // handle table update
-      GameMatch? originMatch = this
-          .items
+      GameMatch? originMatch = items
           .values
           .firstWhereOrNull((match) => match.matchNumber == originMatchNumber);
       String? originMatchId = getIdFromMatchNumber(originMatchNumber);

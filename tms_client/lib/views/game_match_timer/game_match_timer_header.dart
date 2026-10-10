@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
@@ -10,9 +9,9 @@ import 'package:tms/models/timer_match_data.dart';
 class GameMatchTimerHeader extends StatelessWidget {
   final TimerMatchData data;
   const GameMatchTimerHeader({
-    Key? key,
+    super.key,
     required this.data,
-  }) : super(key: key);
+  });
 
   String _getMatchSummary(List<GameMatch> loadedMatches, GameMatch? nextMatch) {
     if (loadedMatches.isEmpty) {
@@ -26,7 +25,7 @@ class GameMatchTimerHeader extends StatelessWidget {
       // get the first match for cat/sub cat
       GameMatch? first = loadedMatches.first;
       String matchNumbers = loadedMatches.map((m) => m.matchNumber).join(", ");
-      return "${first.category.category}: ${matchNumbers}";
+      return "${first.category.category}: $matchNumbers";
     }
   }
 
@@ -39,21 +38,7 @@ class GameMatchTimerHeader extends StatelessWidget {
           return tables.contains(t);
         }).toList();
 
-        return MultiSelectDialogField(
-          initialValue: initialTables,
-          decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          buttonText: const Text("Assign Timer to Table/s"),
-          buttonIcon: const Icon(Icons.table_bar),
-          title: const Text("Assign Timer to Table/s"),
-          listType: MultiSelectListType.CHIP,
-          items: tables.map((t) => MultiSelectItem(t, t)).toList(),
-          onConfirm: (List<String> tables) {
-            TmsLocalStorageProvider().timerAssignedTables = tables;
-          },
-        );
+        return _TableAssignButton(tables: tables, initialTables: initialTables);
       },
     );
   }
@@ -118,6 +103,93 @@ class GameMatchTimerHeader extends StatelessWidget {
           ),
         ),
         _tableSector(context),
+      ],
+    );
+  }
+}
+
+// Button showing the tables this timer is assigned to, opens a dialog to change them
+class _TableAssignButton extends StatefulWidget {
+  final List<String> tables;
+  final List<String> initialTables;
+
+  const _TableAssignButton({required this.tables, required this.initialTables});
+
+  @override
+  State<_TableAssignButton> createState() => _TableAssignButtonState();
+}
+
+class _TableAssignButtonState extends State<_TableAssignButton> {
+  late List<String> _selected = [...widget.initialTables];
+
+  Future<void> _showDialog() async {
+    final picked = [..._selected];
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text("Assign Timer to Table/s"),
+          content: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: widget.tables.map((table) {
+              return FilterChip(
+                label: Text(table),
+                selected: picked.contains(table),
+                onSelected: (selected) {
+                  setDialogState(() => selected ? picked.add(table) : picked.remove(table));
+                },
+              );
+            }).toList(),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text("Cancel")),
+            TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text("OK")),
+          ],
+        ),
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      setState(() => _selected = picked);
+      TmsLocalStorageProvider().timerAssignedTables = picked;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Material(
+          color: Colors.blue.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(10),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: _showDialog,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Assign Timer to Table/s"),
+                  Icon(Icons.table_bar),
+                ],
+              ),
+            ),
+          ),
+        ),
+        if (_selected.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: _selected.map((table) => Chip(label: Text(table))).toList(),
+            ),
+          ),
       ],
     );
   }

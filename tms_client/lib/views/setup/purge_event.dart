@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/tournament_config_provider.dart';
 import 'package:tms/widgets/dialogs/confirm_dialogs.dart';
@@ -6,6 +6,8 @@ import 'package:tms/widgets/dialogs/dialog_style.dart';
 import 'package:tms/widgets/dialogs/snackbar_dialog.dart';
 
 class PurgeButton extends StatelessWidget {
+  const PurgeButton({super.key});
+
   void _confirmDialog(BuildContext context, TournamentConfigProvider provider) {
     ConfirmDialog(
       style: DialogStyle.error(
@@ -19,6 +21,7 @@ class PurgeButton extends StatelessWidget {
       ),
       onConfirm: () async {
         await provider.purgeEvent().then((res) {
+          if (!context.mounted) return;
           SnackBarDialog.fromStatus(message: "Purge Event", status: res).show(context);
         });
       },

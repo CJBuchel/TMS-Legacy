@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/network_schemas/socket_protocol/match_state_event.dart';
 import 'package:tms/generated/infra/network_schemas/socket_protocol/server_socket_protocol.dart';
@@ -10,7 +10,7 @@ import 'package:tms/services/game_match_service.dart';
 import 'package:tms/utils/logger.dart';
 
 abstract class _BaseGameMatchStatusProvider extends ChangeNotifier {
-  GameMatchService _service = GameMatchService();
+  final GameMatchService _service = GameMatchService();
   bool _isMatchesReady = false;
   bool _isMatchesRunning = false;
   List<String> _stagedMatchNumbers = [];

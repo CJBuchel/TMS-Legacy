@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:tms/generated/infra/database_schemas/tms_time/tms_date_time.dart';
 import 'package:tms/utils/tms_time_utils.dart';
@@ -11,13 +11,13 @@ class TimeUntil extends StatefulWidget {
   final TmsDateTime time;
 
   const TimeUntil({
-    Key? key,
+    super.key,
     required this.time,
     this.positiveStyle,
     this.positiveSign = '+',
     this.negativeStyle,
     this.negativeSign = '-',
-  }) : super(key: key);
+  });
 
   @override
   State<TimeUntil> createState() => _TimeUntilState();
@@ -25,7 +25,7 @@ class TimeUntil extends StatefulWidget {
 
 class _TimeUntilState extends State<TimeUntil> with TickerProviderStateMixin {
   Ticker? _ticker;
-  ValueNotifier<int> _difference = ValueNotifier(0);
+  final ValueNotifier<int> _difference = ValueNotifier(0);
 
   @override
   void initState() {

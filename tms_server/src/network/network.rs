@@ -17,13 +17,14 @@ impl Network {
     Self { db, clients, services, tls }
   }
 
-  pub fn get_network_routes(&self) -> impl warp::Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+  pub fn get_network_routes(&self) -> impl warp::Filter<Extract = impl warp::Reply + use<>, Error = warp::Rejection> + Clone + use<> {
     let cors = warp::cors()
       .allow_any_origin()
       .allow_headers(vec!["Content-Type", "X-Client-Id", "X-Auth-Token"])
       .allow_methods(vec!["GET", "POST", "DELETE", "OPTIONS"]);
 
-    let routes = pulse_filter()
+    
+    pulse_filter()
       // config
       .or(tournament_schedule_filter(self.clients.clone(), self.db.clone()))
       .or(tournament_config_filter(self.clients.clone(), self.db.clone()))
@@ -48,7 +49,6 @@ impl Network {
       // box and recover
       .boxed()
       .recover(handle_rejection)
-      .with(cors);
-    routes
+      .with(cors)
   }
 }

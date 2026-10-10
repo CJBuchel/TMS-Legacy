@@ -10,7 +10,7 @@ class TournamentIntegrityProvider extends EchoTreeProvider<String, TournamentInt
         );
 
   List<TournamentIntegrityMessage> get messagesSortedByCode {
-    List<TournamentIntegrityMessage> sortedMessages = this.items.values.toList();
+    List<TournamentIntegrityMessage> sortedMessages = items.values.toList();
     sortedMessages.sort((a, b) {
       // Prioritize errors over warnings
       bool aIsError = a.integrityCode.when(error: (e) => true, warning: (w) => false);
@@ -33,26 +33,26 @@ class TournamentIntegrityProvider extends EchoTreeProvider<String, TournamentInt
   List<TournamentIntegrityMessage> get messages => messagesSortedByCode;
 
   List<TournamentIntegrityMessage> get teamMessages {
-    return this.messages.where((element) => element.teamNumber != null).toList();
+    return messages.where((element) => element.teamNumber != null).toList();
   }
 
   List<TournamentIntegrityMessage> get matchMessages {
-    return this.messages.where((element) => element.matchNumber != null).toList();
+    return messages.where((element) => element.matchNumber != null).toList();
   }
 
   List<TournamentIntegrityMessage> get sessionMessages {
-    return this.messages.where((element) => element.sessionNumber != null).toList();
+    return messages.where((element) => element.sessionNumber != null).toList();
   }
 
   List<TournamentIntegrityMessage> getTeamMessages(String teamNumber) {
-    return this.teamMessages.where((element) => element.teamNumber == teamNumber).toList();
+    return teamMessages.where((element) => element.teamNumber == teamNumber).toList();
   }
 
   List<TournamentIntegrityMessage> getMatchMessages(String matchNumber) {
-    return this.matchMessages.where((element) => element.matchNumber == matchNumber).toList();
+    return matchMessages.where((element) => element.matchNumber == matchNumber).toList();
   }
 
   List<TournamentIntegrityMessage> getSessionMessages(String sessionNumber) {
-    return this.sessionMessages.where((element) => element.sessionNumber == sessionNumber).toList();
+    return sessionMessages.where((element) => element.sessionNumber == sessionNumber).toList();
   }
 }

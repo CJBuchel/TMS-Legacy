@@ -6,9 +6,10 @@ pub mod fll_infra;
 pub mod network_schemas;
 
 pub trait DataSchemeExtensions: Default + Serialize + JsonSchema + DeserializeOwned {
-  
+  // server side only, not bridged to dart
+  #[flutter_rust_bridge::frb(ignore)]
   fn to_schema() -> String {
-    let schema = schemars::schema_for!(Self);
+    let schema = schemars::generate::SchemaSettings::draft07().into_generator().into_root_schema_for::<Self>();
     serde_json::to_string_pretty(&schema).unwrap_or_default()
   }
 

@@ -16,12 +16,12 @@ enum TimerRunState {
 
 class GameTimerProvider extends TournamentConfigProvider
     with ServerEventSubscribeNotifierMixin {
-  GameTimerService _gameTimerService = GameTimerService();
+  final GameTimerService _gameTimerService = GameTimerService();
   TimerRunState _timerState = TimerRunState.idle;
   int _timer = 150; // in seconds (default)
 
   // list of callbacks
-  List<Function(TimerRunState state)> _callbacks = [];
+  final List<Function(TimerRunState state)> _callbacks = [];
 
   void addTimerStateChangeListener(Function(TimerRunState state) callback) {
     TmsLogger().i("Adding callback to GameTimerProvider");
@@ -35,9 +35,9 @@ class GameTimerProvider extends TournamentConfigProvider
   }
 
   void _triggerCallbacks(TimerRunState state) {
-    _callbacks.forEach((callback) {
+    for (var callback in _callbacks) {
       callback(state);
-    });
+    }
   }
 
   void _setTimer(int? time) {

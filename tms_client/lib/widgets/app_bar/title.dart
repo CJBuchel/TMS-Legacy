@@ -1,12 +1,12 @@
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/network/connectivity.dart';
 import 'package:tms/providers/connection_provider.dart';
 import 'package:tms/providers/tournament_config_provider.dart';
 
 class TmsAppBarTitle extends StatelessWidget {
-  TmsAppBarTitle({super.key});
+  const TmsAppBarTitle({super.key});
 
   Text _state2Text(NetworkConnectionState state) {
     switch (state) {
@@ -25,17 +25,17 @@ class TmsAppBarTitle extends StatelessWidget {
         const Text("["),
         Selector<ConnectionProvider, NetworkConnectionState>(
           selector: (_, connectionProvider) => connectionProvider.httpState,
-          builder: (_, state, __) => _state2Text(state),
+          builder: (_, state, _) => _state2Text(state),
         ),
         const Text("|"),
         Selector<ConnectionProvider, NetworkConnectionState>(
           selector: (_, connectionProvider) => connectionProvider.wsState,
-          builder: (_, state, __) => _state2Text(state),
+          builder: (_, state, _) => _state2Text(state),
         ),
         const Text("|"),
         Selector<ConnectionProvider, NetworkConnectionState>(
           selector: (_, connectionProvider) => connectionProvider.dbState,
-          builder: (_, state, __) => _state2Text(state),
+          builder: (_, state, _) => _state2Text(state),
         ),
         const Text("]"),
       ],
@@ -45,7 +45,7 @@ class TmsAppBarTitle extends StatelessWidget {
   Widget _eventTitle() {
     return Selector<TournamentConfigProvider, String>(
       selector: (_, configProvider) => configProvider.eventName,
-      builder: (_, eventName, __) {
+      builder: (_, eventName, _) {
         return Text(eventName, overflow: TextOverflow.ellipsis);
       },
     );
@@ -55,7 +55,7 @@ class TmsAppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Selector<ConnectionProvider, bool>(
       selector: (_, connectionProvider) => connectionProvider.isConnected,
-      builder: (_, isConnected, __) {
+      builder: (_, isConnected, _) {
         if (isConnected) {
           return EchoTreeLifetime(
               trees: [":tournament:config"], child: _eventTitle());

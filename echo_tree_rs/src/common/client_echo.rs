@@ -11,8 +11,7 @@ impl ClientEcho for Client {
   fn echo_tree(&self, msg: Vec<EchoTreeEventTree>) {
     let filtered_subscribed_trees: Vec<EchoTreeEventTree> = msg
       .iter()
-      .filter(|t| self.has_read_access_and_subscribed_to_tree(&t.tree_name))
-      .map(|t| t.clone())
+      .filter(|t| self.has_read_access_and_subscribed_to_tree(&t.tree_name)).cloned()
       .collect();
 
     if !filtered_subscribed_trees.is_empty() {
@@ -49,13 +48,13 @@ impl ClientEcho for Client {
 
 impl ClientEcho for ClientHashMap {
   fn echo_tree(&self, msg: Vec<EchoTreeEventTree>) {
-    for (_, client) in self.iter() {
+    for client in self.values() {
       client.echo_tree(msg.clone());
     }
   }
 
   fn echo_item(&self, msg: EchoItemEvent) {
-    for (_, client) in self.iter() {
+    for client in self.values() {
       client.echo_item(msg.clone());
     }
   }

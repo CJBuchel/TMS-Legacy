@@ -15,48 +15,32 @@ impl Default for TournamentConfigSetNameRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
+#[derive(Default)]
 pub struct TournamentConfigSetTimerLengthRequest {
   pub timer_length: u32,
 }
 
-impl Default for TournamentConfigSetTimerLengthRequest {
-  fn default() -> Self {
-    Self { timer_length: 0 }
-  }
-}
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
+#[derive(Default)]
 pub struct TournamentConfigSetEndgameTimerLengthRequest {
   pub timer_length: u32,
 }
 
-impl Default for TournamentConfigSetEndgameTimerLengthRequest {
-  fn default() -> Self {
-    Self { timer_length: 0 }
-  }
-}
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
+#[derive(Default)]
 pub struct TournamentConfigSetBackupIntervalRequest {
   pub interval: u32,
 }
 
-impl Default for TournamentConfigSetBackupIntervalRequest {
-  fn default() -> Self {
-    Self { interval: 0 }
-  }
-}
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
+#[derive(Default)]
 pub struct TournamentConfigSetRetainBackupsRequest {
   pub retain_backups: u32,
 }
 
-impl Default for TournamentConfigSetRetainBackupsRequest {
-  fn default() -> Self {
-    Self { retain_backups: 0 }
-  }
-}
 
 #[derive(Serialize, Deserialize, Debug, JsonSchema)]
 pub enum BlueprintType {

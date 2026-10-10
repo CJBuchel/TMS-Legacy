@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
@@ -29,7 +29,7 @@ class WithNextGameScoring extends StatelessWidget {
     int round,
   ) builder;
 
-  const WithNextGameScoring({Key? key, required this.builder}) : super(key: key);
+  const WithNextGameScoring({super.key, required this.builder});
 
   int getRound(String teamNumber, String currentMatchNumber, List<GameMatch> matches) {
     int round = 0;

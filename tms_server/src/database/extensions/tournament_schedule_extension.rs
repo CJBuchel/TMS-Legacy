@@ -43,7 +43,7 @@ impl TournamentScheduleExtensions for Database {
     }
 
     // set matches
-    for game_match in schedule.game_matches.to_owned() {
+    for game_match in schedule.game_matches.iter() {
       match self.insert_game_match(game_match.clone(), None).await {
         Ok(_) => {
           log::info!("Inserted game match: {}", game_match.match_number);
@@ -61,7 +61,7 @@ impl TournamentScheduleExtensions for Database {
       let cat_name = game_match.category.category;
       let sub_categories = game_match.category.sub_categories;
       // Check if the category already exists in the map
-      let entry = game_categories_map.entry(cat_name).or_insert_with(Vec::new);
+      let entry = game_categories_map.entry(cat_name).or_default();
       // Add the subcategories to the existing category
       for sub_cat in sub_categories {
         if !entry.contains(&sub_cat) {
@@ -98,7 +98,7 @@ impl TournamentScheduleExtensions for Database {
     }
 
     // set sessions
-    for session in schedule.judging_sessions.to_owned() {
+    for session in schedule.judging_sessions.iter() {
       match self.insert_judging_session(session.clone(), None).await {
         Ok(_) => {
           log::info!("Inserted judging session: {}", session.session_number);
@@ -116,7 +116,7 @@ impl TournamentScheduleExtensions for Database {
       let cat_name = session.category.category;
       let sub_categories = session.category.sub_categories;
       // Check if the category already exists in the map
-      let entry = judging_categories_map.entry(cat_name).or_insert_with(Vec::new);
+      let entry = judging_categories_map.entry(cat_name).or_default();
       // Add the subcategories to the existing category
       for sub_cat in sub_categories {
         if !entry.contains(&sub_cat) {

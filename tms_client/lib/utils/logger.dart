@@ -24,7 +24,7 @@ class TmsLogger {
       lineLength: 100,
       colors: true,
       printEmojis: false,
-      printTime: true,
+      dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
     ),
   );
 

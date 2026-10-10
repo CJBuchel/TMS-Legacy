@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
@@ -20,21 +20,21 @@ class RefereeScoringHeader extends StatefulWidget {
   final String? table;
 
   const RefereeScoringHeader({
-    Key? key,
+    super.key,
     this.headerHeight = 45,
     required this.nextMatch,
     required this.nextTeam,
     required this.totalMatches,
     required this.round,
     required this.table,
-  }) : super(key: key);
+  });
 
   @override
   State<RefereeScoringHeader> createState() => _RefereeScoringHeaderState();
 }
 
 class _RefereeScoringHeaderState extends State<RefereeScoringHeader> {
-  GameScoringService _gameScoringService = GameScoringService();
+  final GameScoringService _gameScoringService = GameScoringService();
   Timer? _timer;
 
   void _sendNotReadySignal() async {

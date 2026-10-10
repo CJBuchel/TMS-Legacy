@@ -7,8 +7,10 @@ use crate::{
 
 use super::BaseSeason;
 
+#[flutter_rust_bridge::frb(ignore)]
 pub struct Submerged {}
 
+#[flutter_rust_bridge::frb(ignore)]
 impl BaseSeason for Submerged {
   fn validate(&self, answers: &HashMap<String, QuestionAnswer>) -> Vec<QuestionValidationError> {
     let mut errors: Vec<QuestionValidationError> = vec![];
@@ -79,16 +81,10 @@ impl BaseSeason for Submerged {
     let m14a = if answers.get("m14a").map_or("".to_string(), |r| r.answer.clone()) == "Yes" { 1 } else { 0 };
     let m14b = if answers.get("m14b").map_or("".to_string(), |r| r.answer.clone()) == "Yes" { 1 } else { 0 };
     let m14c = if answers.get("m14c").map_or("".to_string(), |r| r.answer.clone()) == "Yes" { 1 } else { 0 };
-    let m14d: i32 = match answers.get("m14d").map_or("".to_string(), |r| r.answer.clone()).parse() {
-      Ok(v) => v,
-      Err(_) => 0,
-    };
+    let m14d: i32 = answers.get("m14d").map_or("".to_string(), |r| r.answer.clone()).parse().unwrap_or_default();
 
     let m15_max_possible = m07a + m14a + m14b + m14c + m14d;
-    let m15a: i32 = match answers.get("m15a").map_or("".to_string(), |r| r.answer.clone()).parse() {
-      Ok(v) => v,
-      Err(_) => 0,
-    };
+    let m15a: i32 = answers.get("m15a").map_or("".to_string(), |r| r.answer.clone()).parse().unwrap_or_default();
 
     if m15a > m15_max_possible {
       errors.push(QuestionValidationError {

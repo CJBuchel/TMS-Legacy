@@ -21,27 +21,21 @@ impl JudgingSessionExtensions for Database {
     let tree = self.inner.read().await.get_tree(JUDGING_SESSIONS.to_string()).await;
     let judging_session = tree.get(&judging_session_id).cloned();
 
-    match judging_session {
-      Some(judging_session) => Some(JudgingSession::from_json_string(&judging_session)),
-      None => None,
-    }
+    judging_session.map(|judging_session| JudgingSession::from_json_string(&judging_session))
   }
 
   async fn get_judging_session_by_number(&self, number: String) -> Option<(String, JudgingSession)> {
     let tree = self.inner.read().await.get_tree(JUDGING_SESSIONS.to_string()).await;
-    let judging_session = tree.iter().find_map(|(id, judging_session)| {
+    
+
+    tree.iter().find_map(|(id, judging_session)| {
       let judging_session = JudgingSession::from_json_string(judging_session);
       if judging_session.session_number == number {
         Some((id.clone(), judging_session))
       } else {
         None
       }
-    });
-
-    match judging_session {
-      Some((id, judging_session)) => Some((id, judging_session)),
-      None => None,
-    }
+    })
   }
 
   async fn get_judging_sessions_by_team_number(&self, team_number: String) -> HashMap<String, JudgingSession> {

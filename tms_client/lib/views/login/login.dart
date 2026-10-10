@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tms/providers/auth_provider.dart';
 import 'package:tms/widgets/dialogs/popup_dialog.dart';
@@ -10,8 +10,11 @@ class Login extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final AuthProvider _authProvider = AuthProvider();
 
+  Login({super.key});
+
   void _loginController(BuildContext context) async {
     int status = await _authProvider.login(_usernameController.text, _passwordController.text);
+    if (!context.mounted) return;
 
     if (status == HttpStatus.ok) {
       context.canPop() ? context.pop() : GoRouter.of(context).go('/');

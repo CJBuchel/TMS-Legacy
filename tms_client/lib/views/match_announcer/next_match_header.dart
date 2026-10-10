@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/tms_time/tms_date_time.dart';
 import 'package:tms/widgets/timers/time_until.dart';
@@ -7,9 +7,9 @@ class NextMatchHeader extends StatelessWidget {
   final List<GameMatch> nextMatches;
 
   const NextMatchHeader({
-    Key? key,
+    super.key,
     required this.nextMatches,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +159,7 @@ class NextMatchHeader extends StatelessWidget {
                       const Text(
                         ")",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
                         ),

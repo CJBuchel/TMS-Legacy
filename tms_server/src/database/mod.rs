@@ -1,7 +1,7 @@
 use echo_tree_infra::EchoTreeRole;
 pub use echo_tree_rs::core::*;
-use rand::distributions::Alphanumeric;
-use rand::Rng;
+use rand::distr::Alphanumeric;
+use rand::RngExt;
 
 mod backup_service;
 pub use backup_service::*;
@@ -69,7 +69,7 @@ impl Database {
   }
 
   fn generate_password(&self) -> String {
-    rand::thread_rng().sample_iter(&Alphanumeric).take(30).map(char::from).collect()
+    rand::rng().sample_iter(Alphanumeric).take(30).map(char::from).collect()
   }
 
   pub async fn create_trees(&mut self) {
@@ -92,7 +92,6 @@ impl Database {
     match self.inner.read().await.get_role_manager().await.get_role(role.to_string()) {
       Some(_) => {
         log::warn!("Role already exist: {}", role);
-        return;
       }
       None => {
         let role = EchoTreeRole {
@@ -150,7 +149,6 @@ impl Database {
     match self.get_user_by_username(admin_user.username.clone()).await {
       Some((_, user)) => {
         log::warn!("User already exists: {}, skipping insert...", user.username);
-        return;
       }
       None => match self.insert_user(admin_user, None).await {
         Ok(_) => log::info!("Admin user created"),
@@ -165,7 +163,7 @@ impl Database {
     self.check_integrity().await;
   }
 
-  pub async fn get_echo_tree_routes(&self, tls: bool) -> impl warp::Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+  pub async fn get_echo_tree_routes(&self, tls: bool) -> impl warp::Filter<Extract = impl warp::Reply + use<>, Error = warp::Rejection> + Clone + use<> {
     self.inner.read().await.get_internal_routes(tls)
   }
 

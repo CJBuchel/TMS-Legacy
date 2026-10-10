@@ -66,7 +66,7 @@ impl TreeManager for EchoTreeServer {
       return;
     }
 
-    if let Ok(map) = tree.get_as_hashmap() {
+    match tree.get_as_hashmap() { Ok(map) => {
       // Echo the event
       let echo_event = EchoTreeEventTree {
         tree_name,
@@ -74,15 +74,15 @@ impl TreeManager for EchoTreeServer {
       };
 
       self.clients.read().await.echo_tree(vec![echo_event]);
-    } else {
+    } _ => {
       log::error!("Failed to get tree as hashmap: {}", tree_name);
-    }
+    }}
   }
 
   async fn get_entry(&self, tree_name: String, key: String) -> Option<String> {
     let read_db = self.database.read().await;
     if let Some(tree) = read_db.get_tree_map().await.get_tree(tree_name.clone()) {
-      if let Ok(data) = tree.get(key.as_bytes()) {
+      match tree.get(key.as_bytes()) { Ok(data) => {
         if let Some(data) = data {
           if let Ok(data) = String::from_utf8(data.to_vec()) {
             return Some(data);
@@ -92,9 +92,9 @@ impl TreeManager for EchoTreeServer {
         } else {
           log::warn!("Key does not exist: {}", key);
         }
-      } else {
+      } _ => {
         log::warn!("Failed to get entry: {}", key);
-      }
+      }}
     } else {
       log::warn!("Tree does not exist: {}", tree_name);
     }
@@ -105,7 +105,7 @@ impl TreeManager for EchoTreeServer {
   async fn remove_entry(&self, tree_name: String, key: String) -> Option<String> {
     let mut write_db = self.database.write().await;
     if let Some(tree) = write_db.get_tree_map_mut().await.get_tree_mut(tree_name.clone()) {
-      if let Ok(data) = tree.remove(key.as_bytes()) {
+      match tree.remove(key.as_bytes()) { Ok(data) => {
         if let Some(data) = data {
           if let Ok(data) = String::from_utf8(data.to_vec()) {
             // echo the event
@@ -123,9 +123,9 @@ impl TreeManager for EchoTreeServer {
         } else {
           log::warn!("Key does not exist: {}", key);
         }
-      } else {
+      } _ => {
         log::warn!("Failed to remove entry: {}", key);
-      }
+      }}
     } else {
       log::warn!("Tree does not exist: {}", tree_name);
     }
@@ -135,11 +135,11 @@ impl TreeManager for EchoTreeServer {
   async fn get_tree(&self, tree_name: String) -> HashMap<String, String> {
     let read_db = self.database.read().await;
     if let Some(tree) = read_db.get_tree_map().await.get_tree(tree_name.clone()) {
-      if let Ok(map) = tree.get_as_hashmap() {
+      match tree.get_as_hashmap() { Ok(map) => {
         return map;
-      } else {
+      } _ => {
         log::error!("Failed to get tree as hashmap: {}", tree_name);
-      }
+      }}
     } else {
       log::warn!("Tree does not exist: {}", tree_name);
     }

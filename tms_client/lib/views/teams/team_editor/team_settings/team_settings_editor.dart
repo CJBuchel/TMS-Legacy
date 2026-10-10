@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
 import 'package:tms/utils/color_modifiers.dart';
 import 'package:tms/views/teams/team_editor/team_settings/update_team_button.dart';
@@ -9,14 +9,14 @@ class TeamSettingsEditor extends StatefulWidget {
   final String teamId;
   final Team team;
 
-  TeamSettingsEditor({
-    Key? key,
+  const TeamSettingsEditor({
+    super.key,
     required this.teamId,
     required this.team,
-  }) : super(key: key);
+  });
 
   @override
-  _TeamSettingsEditorState createState() => _TeamSettingsEditorState();
+  State<TeamSettingsEditor> createState() => _TeamSettingsEditorState();
 }
 
 class _TeamSettingsEditorState extends State<TeamSettingsEditor> {
@@ -45,7 +45,7 @@ class _TeamSettingsEditorState extends State<TeamSettingsEditor> {
             children: [
               const Text(
                 "Team Settings",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                 ),
               ),

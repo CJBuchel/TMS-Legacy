@@ -36,9 +36,9 @@ struct EchoTreeSchema {
 
 fn get_workspace_path() -> std::io::Result<PathBuf> {
   let path = std::env::current_dir()?;
-  let mut path_ancestors = path.ancestors();
+  let path_ancestors = path.ancestors();
 
-  while let Some(p) = path_ancestors.next() {
+  for p in path_ancestors {
     let cargo_toml_path = p.join("Cargo.toml");
     if cargo_toml_path.exists() {
       let contents = fs::read_to_string(&cargo_toml_path)?;
@@ -56,7 +56,8 @@ fn get_workspace_path() -> std::io::Result<PathBuf> {
 
 fn generate_schema<T: JsonSchema>(schema_name: &str) {
   let workspace_path = get_workspace_path().expect("Unable to get workspace path");
-  let schema = schemars::schema_for!(T);
+  // keep draft-07 output (quicktype input for the flutter client)
+  let schema = schemars::generate::SchemaSettings::draft07().into_generator().into_root_schema_for::<T>();
   let schema_file = std::path::Path::new(&workspace_path).join(format!("echo_tree_flutter/rust_schemas/{}.json", schema_name));
   let json = serde_json::to_string_pretty(&schema).unwrap_or_default();
   fs::write(schema_file, json).expect("Unable to write schema file");

@@ -7,6 +7,7 @@ use crate::DataSchemeExtensions;
 use super::{TmsDuration, TmsTimeBased};
 
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[derive(Default)]
 pub struct TmsTime {
   pub hour: u32,   // 24-hour format
   pub minute: u32, // 0-59
@@ -51,7 +52,7 @@ impl TmsTimeBased for TmsTime {
       return 1;
     }
 
-    return 0;
+    0
   }
 
   
@@ -99,14 +100,5 @@ impl TmsTimeBased for TmsTime {
   }
 }
 
-impl Default for TmsTime {
-  fn default() -> Self {
-    Self {
-      hour: 0,
-      minute: 0,
-      second: 0,
-    }
-  }
-}
 
 impl DataSchemeExtensions for TmsTime {}

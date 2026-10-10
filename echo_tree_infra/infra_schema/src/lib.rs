@@ -6,7 +6,7 @@ pub use echo_tree_schemas::*;
 
 pub trait DataSchemeExtensions: Default + JsonSchema + Serialize + DeserializeOwned {
   fn to_schema() -> String {
-    let schema = schemars::schema_for!(Self);
+    let schema = schemars::generate::SchemaSettings::draft07().into_generator().into_root_schema_for::<Self>();
     serde_json::to_string_pretty(&schema).unwrap_or_default()
   }
 

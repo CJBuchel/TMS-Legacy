@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_score_sheet.dart';
 import 'package:tms/generated/infra/fll_infra/question.dart';
@@ -33,7 +33,7 @@ class EditGameAnswersDialog {
       },
       style: DialogStyle.warn(
         title: 'Edit Answers',
-        message: Container(
+        message: SizedBox(
           width: dialogWidth,
           height: dialogHeight,
           child: GameScoringWidget(

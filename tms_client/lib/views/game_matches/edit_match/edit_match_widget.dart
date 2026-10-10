@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
@@ -33,7 +33,7 @@ class EditMatchWidget extends StatelessWidget {
   final ValueNotifier<TmsDateTime> startTime;
   final ValueNotifier<bool> completed;
 
-  EditMatchWidget({
+  EditMatchWidget({super.key, 
     required this.gameMatch,
     required this.matchNumberController,
     required this.startTime,
@@ -156,11 +156,11 @@ class EditMatchWidget extends StatelessWidget {
               },
               headers: [
                 _paddedCell(const Text("Table",
-                    style: const TextStyle(fontWeight: FontWeight.bold))),
+                    style: TextStyle(fontWeight: FontWeight.bold))),
                 _paddedCell(const Text("Team",
-                    style: const TextStyle(fontWeight: FontWeight.bold))),
+                    style: TextStyle(fontWeight: FontWeight.bold))),
                 _paddedCell(const Text("Score",
-                    style: const TextStyle(fontWeight: FontWeight.bold))),
+                    style: TextStyle(fontWeight: FontWeight.bold))),
               ],
               rows: gameMatch.gameMatchTables.map((gmt) {
                 return EditTableRow(

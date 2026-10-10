@@ -38,7 +38,7 @@ impl TournamentWarningChecks {
 
     // W004, W005, W006, W007, W008, W009
     {
-      for (_, game_match) in game_matches.iter() {
+      for game_match in game_matches.values() {
         // check for no tables or teams found in match W004
         if game_match.game_match_tables.is_empty() {
           messages.push(TournamentIntegrityMessage::new(
@@ -126,7 +126,7 @@ impl TournamentWarningChecks {
 
     // W010
     {
-      for (_, judging_session) in judging_sessions.iter() {
+      for judging_session in judging_sessions.values() {
         // check for no teams/pods found in sessions W010
         if judging_session.judging_session_pods.is_empty() {
           messages.push(TournamentIntegrityMessage::new(
@@ -227,6 +227,6 @@ impl TournamentWarningChecks {
         log::debug!("{}", message.message);
       }
     }
-    return messages;
+    messages
   }
 }

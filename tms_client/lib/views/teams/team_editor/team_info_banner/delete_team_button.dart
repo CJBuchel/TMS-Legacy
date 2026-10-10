@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/services/team_service.dart';
 import 'package:tms/widgets/dialogs/confirm_future_dialog.dart';
 import 'package:tms/widgets/dialogs/dialog_style.dart';
@@ -7,9 +7,9 @@ class DeleteTeamButton extends StatelessWidget {
   final String teamId;
 
   const DeleteTeamButton({
-    Key? key,
+    super.key,
     required this.teamId,
-  }) : super(key: key);
+  });
 
   void _confirmDeleteTeam(BuildContext context) {
     ConfirmFutureDialog(
@@ -21,8 +21,8 @@ class DeleteTeamButton extends StatelessWidget {
         message: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text("Are you sure you want to delete this team?\n"),
-            const Text(
+            Text("Are you sure you want to delete this team?\n"),
+            Text(
               "Deleting this team WILL remove them from all matches and judging sessions. Along with existing scores.\n",
               softWrap: true,
               style: TextStyle(
@@ -30,7 +30,7 @@ class DeleteTeamButton extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const Text(
+            Text(
               "This action cannot be undone.",
               style: TextStyle(
                 fontWeight: FontWeight.bold,

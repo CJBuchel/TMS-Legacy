@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/providers/robot_game_providers/game_match_status_provider.dart';
@@ -32,7 +32,7 @@ class LoadMatchButton extends StatelessWidget {
 
   final List<GameMatch> matches;
 
-  const LoadMatchButton({Key? key, required this.matches}) : super(key: key);
+  const LoadMatchButton({super.key, required this.matches});
 
   Widget _loadButton(BuildContext context, {bool active = true}) {
     return ElevatedButton(
@@ -44,6 +44,7 @@ class LoadMatchButton extends StatelessWidget {
       onPressed: () {
         if (active) {
           Provider.of<GameMatchStatusProvider>(context, listen: false).loadMatches().then((status) {
+            if (!context.mounted) return;
             if (status != HttpStatus.ok) {
               SnackBarDialog.fromStatus(message: "Load Match", status: status).show(context);
             }
@@ -69,6 +70,7 @@ class LoadMatchButton extends StatelessWidget {
       onPressed: () {
         if (active) {
           Provider.of<GameMatchStatusProvider>(context, listen: false).unloadMatches().then((status) {
+            if (!context.mounted) return;
             if (status != HttpStatus.ok) {
               SnackBarDialog.fromStatus(message: "Unload Match", status: status).show(context);
             }

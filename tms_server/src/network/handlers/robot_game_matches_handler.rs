@@ -1,4 +1,3 @@
-use tms_infra::*;
 
 use crate::{database::*, services::*};
 
@@ -87,7 +86,7 @@ pub async fn robot_game_toggle_team_check_in_handler(request: RobotGameToggleTea
   match read_db.insert_game_match(m.1, Some(m.0)).await {
     Ok(_) => Ok(warp::http::StatusCode::OK),
     Err(e) => {
-      return Err(warp::reject::custom(crate::network::BadRequestWithMessage { message: e }));
+      Err(warp::reject::custom(crate::network::BadRequestWithMessage { message: e }))
     }
   }
 }

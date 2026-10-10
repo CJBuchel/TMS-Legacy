@@ -9,6 +9,6 @@ class GameCategoryProvider extends EchoTreeProvider<String, TmsCategory> {
         );
 
   List<TmsCategory> get categories {
-    return this.items.values.toList()..sort((a, b) => a.category.compareTo(b.category));
+    return items.values.toList()..sort((a, b) => a.category.compareTo(b.category));
   }
 }

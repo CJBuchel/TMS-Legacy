@@ -27,10 +27,7 @@ impl V1Block for ScheduleMatchesBlock {
   type Output = ScheduleMatchesBlock;
 
   fn from_csv(csv: &str) -> Result<Self::Output, String> {
-    let block_lines = match Self::get_block_lines(csv, BLOCK_MATCHES) {
-      Ok(lines) => lines,
-      Err(e) => return Err(e),
-    };
+    let block_lines = Self::get_block_lines(csv, BLOCK_MATCHES)?;
 
     let mut n_ranking_matches: usize = 0;
     let mut n_tables: usize = 0;
@@ -84,18 +81,17 @@ impl V1Block for ScheduleMatchesBlock {
         "Table Names" => {
           // from 1 to n_tables
           for i in 1..=n_tables {
-            if let Some(table_name) = fields.get(i) {
-              if !table_name.trim().is_empty() {
+            if let Some(table_name) = fields.get(i)
+              && !table_name.trim().is_empty() {
                 table_names.push(table_name.to_string());
               }
-            }
           }
         }
 
         // match number, start time, end time, table 1, team 1, table 2, team 2, ...
         _ => {
           let mut on_tables: Vec<ScheduleOnTableT> = vec![];
-          let match_number = fields.get(0).unwrap_or(&"").to_string();
+          let match_number = fields.first().unwrap_or(&"").to_string();
           let start_time = fields.get(1).unwrap_or(&"").to_string();
           let end_time = fields.get(2).unwrap_or(&"").to_string();
 
@@ -109,14 +105,13 @@ impl V1Block for ScheduleMatchesBlock {
                 let team_number = team_number_field.to_string();
 
                 // Only add if we have a valid table name at this index
-                if let Some(on_table_name) = table_names.get(i) {
-                  if !team_number.trim().is_empty() {
+                if let Some(on_table_name) = table_names.get(i)
+                  && !team_number.trim().is_empty() {
                     on_tables.push(ScheduleOnTableT {
                       on_table_name: on_table_name.clone(),
                       team_number,
                     });
                   }
-                }
               }
             }
 

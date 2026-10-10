@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 
 // Auto unsubscribe from trees when the widget is disposed
 mixin EchoTreeSubscriberMixin<T extends StatefulWidget> on State<T> {
-  List<String> _subscriptions = [];
+  final List<String> _subscriptions = [];
 
   Future<void> subscribeToTrees(List<String> trees) async {
     _subscriptions.addAll(trees);
@@ -15,7 +15,7 @@ mixin EchoTreeSubscriberMixin<T extends StatefulWidget> on State<T> {
     }
   }
 
-  Future<void> subscribeToTree(tree) async {
+  Future<void> subscribeToTree(String tree) async {
     subscribeToTrees([tree]);
   }
 

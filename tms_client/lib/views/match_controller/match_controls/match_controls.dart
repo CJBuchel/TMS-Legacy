@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/providers/robot_game_providers/game_match_provider.dart';
@@ -7,7 +7,7 @@ import 'package:tms/views/match_controller/match_controls/ready_match_button.dar
 import 'package:tms/widgets/timers/match_schedule_timer.dart';
 
 class MatchControls extends StatelessWidget {
-  const MatchControls({Key? key}) : super(key: key);
+  const MatchControls({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class MatchControls extends StatelessWidget {
                   ),
                 ),
               ),
-              child: ReadyMatchButton(),
+              child: const ReadyMatchButton(),
             ),
           ],
         );

@@ -14,19 +14,15 @@ class GameScoringProvider extends ChangeNotifier {
   final GameScoringService _service = GameScoringService();
 
   int _score = 0;
-  String _privateComment = "";
+  String privateComment = "";
   List<QuestionValidationError> _errors = [];
   List<QuestionAnswer> _defaultAnswers = [];
-  List<QuestionAnswer> _answers = [];
+  List<QuestionAnswer> answers = [];
   List<Question> _gameQuestions = [];
 
   BlueprintType _blueprintType = BlueprintType.agnostic;
   String _season = "";
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   // private methods
 
@@ -88,9 +84,7 @@ class GameScoringProvider extends ChangeNotifier {
 
   // getters
   int get score => _score;
-  String get privateComment => _privateComment;
   List<QuestionValidationError> get errors => _errors;
-  List<QuestionAnswer> get answers => _answers;
   List<Question> get gameQuestions => _gameQuestions;
   bool get isCommentRequired {
     // comment required when GP is not "3 - Accomplished"
@@ -106,8 +100,6 @@ class GameScoringProvider extends ChangeNotifier {
   // manual setter for score
   set score(int score) => _updateScore(score);
   set rawScore(int score) => _score = score;
-  set privateComment(String comment) => _privateComment = comment;
-  set answers(List<QuestionAnswer> answers) => _answers = answers;
 
   GameScoringProvider updateConfig(TournamentConfigProvider config) {
     _blueprintType = config.blueprintType;
@@ -120,16 +112,16 @@ class GameScoringProvider extends ChangeNotifier {
     if (_blueprintType == BlueprintType.agnostic) {
       score = 0;
     } else {
-      _answers = [
+      answers = [
         ..._defaultAnswers
       ]; // copy default answers (don't want the origin modified)
-      onAnswers(_answers);
+      onAnswers(answers);
     }
     privateComment = "";
   }
 
   String? getAnswer(String questionId) {
-    return _answers.firstWhereOrNull((a) => a.questionId == questionId)?.answer;
+    return answers.firstWhereOrNull((a) => a.questionId == questionId)?.answer;
   }
 
   String? getValidationErrorMessage(String questionId) {
@@ -140,7 +132,7 @@ class GameScoringProvider extends ChangeNotifier {
 
   Future<(int, List<QuestionValidationError>?)> onAnswers(
       List<QuestionAnswer> answers) async {
-    _answers = answers;
+    this.answers = answers;
     int score = await _calculateScore(answers);
     List<QuestionValidationError>? errors = await _validateAnswers(answers);
     return (score, errors);
@@ -149,13 +141,13 @@ class GameScoringProvider extends ChangeNotifier {
   Future<(int, List<QuestionValidationError>?)> onAnswer(
       QuestionAnswer answer) async {
     // check if answer exists and change it. Otherwise add it.
-    int index = _answers.indexWhere((a) => a.questionId == answer.questionId);
+    int index = answers.indexWhere((a) => a.questionId == answer.questionId);
     if (index != -1) {
-      _answers[index] = answer;
+      answers[index] = answer;
     } else {
-      _answers.add(answer);
+      answers.add(answer);
     }
-    return await onAnswers(_answers);
+    return await onAnswers(answers);
   }
 
   //
@@ -179,7 +171,7 @@ class GameScoringProvider extends ChangeNotifier {
     if (isValid()) {
       // get gp out of answers
       String? gp =
-          _answers.firstWhereOrNull((a) => a.questionId == "gp")?.answer;
+          answers.firstWhereOrNull((a) => a.questionId == "gp")?.answer;
 
       // create the score sheet
       var scoreSheet = RobotGameScoreSheetSubmitRequest(
@@ -193,7 +185,7 @@ class GameScoringProvider extends ChangeNotifier {
         score: score,
         round: round,
         isAgnostic: _blueprintType == BlueprintType.agnostic,
-        scoreSheetAnswers: _answers,
+        scoreSheetAnswers: answers,
         privateComment: privateComment,
       );
 

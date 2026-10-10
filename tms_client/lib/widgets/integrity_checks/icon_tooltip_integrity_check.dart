@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/tournament_integrity_message.dart';
 
 class IconTooltipIntegrityCheck extends StatelessWidget {
   final List<TournamentIntegrityMessage> messages;
 
   const IconTooltipIntegrityCheck({
-    Key? key,
+    super.key,
     required this.messages,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

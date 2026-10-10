@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
@@ -15,7 +15,7 @@ import 'package:tms/widgets/dialogs/dialog_style.dart';
 class RescheduleButton extends StatelessWidget {
   final GameMatch match;
 
-  RescheduleButton({
+  RescheduleButton({super.key, 
     required this.match,
   });
 
@@ -43,20 +43,21 @@ class RescheduleButton extends StatelessWidget {
               popupProps: const PopupProps.menu(
                 showSearchBox: true,
               ),
-              items: match.gameMatchTables
+              compareFn: (a, b) => a == b,
+              items: (filter, loadProps) => match.gameMatchTables
                   .map((table) => data.teams.firstWhereOrNull(
                       (t) => t.teamNumber == table.teamNumber))
                   .toList(),
               itemAsString: (team) => "${team?.teamNumber} | ${team?.name}",
-              dropdownDecoratorProps: const DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
+              decoratorProps: const DropDownDecoratorProps(
+                decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.all(10),
                   labelText: "Team",
                   hintText: "Select Team",
                 ),
               ),
-              onChanged: (value) =>
+              onSelected: (value) =>
                   _selectedTeamNumber.value = value?.teamNumber,
             ),
 
@@ -73,18 +74,19 @@ class RescheduleButton extends StatelessWidget {
               popupProps: const PopupProps.menu(
                 showSearchBox: true,
               ),
-              items: data.matches,
+              compareFn: (a, b) => a == b,
+              items: (filter, loadProps) => data.matches,
               itemAsString: (match) =>
                   "${match.matchNumber} - ${match.startTime.toString()}",
-              dropdownDecoratorProps: const DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
+              decoratorProps: const DropDownDecoratorProps(
+                decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.all(10),
                   labelText: "Match",
                   hintText: "Select Match",
                 ),
               ),
-              onChanged: (value) => _selectedMatch.value = value,
+              onSelected: (value) => _selectedMatch.value = value,
             ),
 
             // divider
@@ -98,23 +100,24 @@ class RescheduleButton extends StatelessWidget {
                   popupProps: const PopupProps.menu(
                     showSearchBox: true,
                   ),
-                  items: data.tables.where((t) {
+                  compareFn: (a, b) => a == b,
+                  items: (filter, loadProps) => data.tables.where((t) {
                     List<String> smTables = sm?.gameMatchTables
                             .map((table) => table.table)
                             .toList() ??
                         [];
                     return !smTables.contains(t);
                   }).toList(),
-                  itemAsString: (table) => "${table}",
-                  dropdownDecoratorProps: const DropDownDecoratorProps(
-                    dropdownSearchDecoration: InputDecoration(
+                  itemAsString: (table) => "$table",
+                  decoratorProps: const DropDownDecoratorProps(
+                    decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(10),
                       labelText: "Table",
                       hintText: "Select Table",
                     ),
                   ),
-                  onChanged: (value) => _selectedTable.value = value,
+                  onSelected: (value) => _selectedTable.value = value,
                 );
               },
             ),

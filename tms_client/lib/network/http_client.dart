@@ -31,7 +31,7 @@ class TmsHttpClient extends http.BaseClient {
       TmsLogger().w("Using custom HttpClient for non-web platform");
       var ioClient = HttpClient();
       ioClient.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-      return TmsHttpClient(new IOClient(ioClient));
+      return TmsHttpClient(IOClient(ioClient));
     }
   }
 }

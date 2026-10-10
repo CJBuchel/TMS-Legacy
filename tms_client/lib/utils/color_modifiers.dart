@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 Color darken(Color color, [double amount = 0.1]) {
   assert(amount >= 0 && amount <= 1);

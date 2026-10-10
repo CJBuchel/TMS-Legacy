@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/providers/local_storage_provider.dart';
@@ -8,6 +8,8 @@ import 'package:tms/views/scoreboard/matches_info/loaded_match_timer.dart';
 import 'package:tms/views/scoreboard/matches_info/matches_schedule.dart';
 
 class MatchesInfo extends StatelessWidget {
+  const MatchesInfo({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Selector<TmsLocalStorageProvider, bool>(

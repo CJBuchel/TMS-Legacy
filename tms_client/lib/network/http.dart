@@ -137,7 +137,7 @@ class HttpController {
         TmsLogger().e(
             "Failed to post to $route: Network Authentication Required (511) - retrying");
         await connect();
-        return httpPost(route, body, retry: false);
+        return await httpPost(route, body, retry: false);
       } else {
         String message = HttpStatusToMessage().getMessage(response.statusCode);
         TmsLogger().e("Failed to post to $route: $message");
@@ -168,7 +168,7 @@ class HttpController {
         TmsLogger().e(
             "Failed to get from $route: Network Authentication Required (511) - retrying");
         await connect();
-        return httpGet(route, retry: false);
+        return await httpGet(route, retry: false);
       } else {
         String message = HttpStatusToMessage().getMessage(response.statusCode);
         TmsLogger().e("Failed to get from $route: $message");
@@ -201,7 +201,7 @@ class HttpController {
         TmsLogger().e(
             "Failed to delete from $route: Network Authentication Required (511) - retrying");
         await connect();
-        return httpDelete(route, body, retry: false);
+        return await httpDelete(route, body, retry: false);
       } else {
         String message = HttpStatusToMessage().getMessage(response.statusCode);
         TmsLogger().e("Failed to delete from $route: $message");

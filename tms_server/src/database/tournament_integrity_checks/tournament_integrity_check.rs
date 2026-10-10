@@ -40,6 +40,6 @@ impl TournamentIntegrityCheck {
     // add warnings to messages
     messages.extend(warnings);
 
-    return messages;
+    messages
   }
 }

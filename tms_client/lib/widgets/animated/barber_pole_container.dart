@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class _BarberPolePainter extends CustomPainter {
   final Color color;
@@ -20,7 +20,6 @@ class _BarberPolePainter extends CustomPainter {
     final paint = Paint()
       ..color = color
       ..strokeWidth = strokeWidth;
-    ;
     final diagonalLength = sqrt(size.width * size.width + size.height * size.height);
 
     for (double x = -diagonalLength; x < diagonalLength; x += spacing) {
@@ -62,7 +61,7 @@ class BarberPoleContainer extends StatefulWidget {
   final BorderRadiusGeometry? borderRadius;
 
   const BarberPoleContainer({
-    Key? key,
+    super.key,
 
     // barber pole
     this.duration = 2,
@@ -78,7 +77,7 @@ class BarberPoleContainer extends StatefulWidget {
     this.height,
     this.border,
     this.borderRadius,
-  }) : super(key: key);
+  });
 
   @override
   State<BarberPoleContainer> createState() => _BarberPoleContainerState();

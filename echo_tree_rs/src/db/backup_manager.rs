@@ -13,15 +13,11 @@ struct SerializableData {
 }
 
 #[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Default)]
 struct SerializableBackup {
   data: Vec<SerializableData>,
 }
 
-impl Default for SerializableBackup {
-  fn default() -> Self {
-    SerializableBackup { data: Vec::new() }
-  }
-}
 
 impl SerializableBackup {
   fn new(data: Vec<(Vec<u8>, Vec<u8>, impl Iterator<Item = Vec<Vec<u8>>> + Send)>) -> Self {
@@ -38,10 +34,11 @@ impl SerializableBackup {
   }
 
   fn from_serialized_bincode(serialized_data: Vec<u8>) -> Self {
-    bincode::deserialize(&serialized_data).unwrap_or_default()
+    bincode::serde::decode_from_slice(&serialized_data, bincode::config::standard()).map(|(backup, _)| backup).unwrap_or_default()
   }
 
-  fn get(&self) -> Vec<(Vec<u8>, Vec<u8>, impl Iterator<Item = Vec<Vec<u8>>> + Send)> {
+  #[allow(clippy::type_complexity)]
+  fn get(&self) -> Vec<(Vec<u8>, Vec<u8>, impl Iterator<Item = Vec<Vec<u8>>> + Send + use<>)> {
     self
       .data
       .iter()
@@ -55,7 +52,7 @@ impl SerializableBackup {
   }
 
   fn get_serialized_bincode(&self) -> Vec<u8> {
-    bincode::serialize(&self).unwrap_or_default()
+    bincode::serde::encode_to_vec(self, bincode::config::standard()).unwrap_or_default()
   }
 }
 
@@ -74,11 +71,10 @@ impl BackupManager for Database {
       entries.sort_unstable_by_key(|entry| entry.file_name());
 
       for entry in entries {
-        if let Some(file_name) = entry.file_name().to_str() {
-          if file_name.ends_with(".zip") || file_name.ends_with(".gz") {
+        if let Some(file_name) = entry.file_name().to_str()
+          && (file_name.ends_with(".zip") || file_name.ends_with(".gz")) {
             backups.push(file_name.to_string());
           }
-        }
       }
     }
 
@@ -147,5 +143,39 @@ impl BackupManager for Database {
 
     log::info!("EchoTree restore complete");
     Ok(())
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  fn sample() -> SerializableBackup {
+    SerializableBackup {
+      data: vec![
+        SerializableData {
+          collection_type: b"tree".to_vec(),
+          collection_name: b":teams".to_vec(),
+          collection_iter: vec![vec![b"key".to_vec(), b"{\"name\":\"Test\"}".to_vec()], vec![vec![], vec![0, 255, 7]]],
+        },
+        SerializableData {
+          collection_type: vec![],
+          collection_name: b"empty".to_vec(),
+          collection_iter: vec![],
+        },
+      ],
+    }
+  }
+
+  #[test]
+  fn backup_round_trips() {
+    let backup = sample();
+    let restored = SerializableBackup::from_serialized_bincode(backup.get_serialized_bincode());
+
+    assert_eq!(restored.data.len(), 2);
+    assert_eq!(restored.data[0].collection_type, backup.data[0].collection_type);
+    assert_eq!(restored.data[0].collection_name, backup.data[0].collection_name);
+    assert_eq!(restored.data[0].collection_iter, backup.data[0].collection_iter);
+    assert_eq!(restored.data[1].collection_iter.len(), 0);
   }
 }

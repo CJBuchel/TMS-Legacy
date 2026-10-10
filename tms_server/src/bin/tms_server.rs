@@ -1,5 +1,3 @@
-use std::env;
-
 use local_ip_address::local_ip;
 use tms_server::database::*;
 use tms_server::network::ClientMap;
@@ -17,11 +15,8 @@ const DEFAULT_DB_PATH: &str = "tms.kvdb";
 
 #[tokio::main]
 async fn main() {
-  // initialize log env
-  #[cfg(debug_assertions)]
-  env::set_var("RUST_LOG", "debug");
-  #[cfg(not(debug_assertions))]
-  env::set_var("RUST_LOG", "info");
+  // parse arguments up front, so --help and argument errors exit before anything starts
+  let _ = <ServerArgs as clap::Parser>::parse();
 
   // initialize logger
   #[cfg(debug_assertions)]
@@ -29,6 +24,9 @@ async fn main() {
   #[cfg(not(debug_assertions))]
   log4rs::init_file("log_config/release_log4rs.yaml", Default::default()).unwrap();
   log::info!("TMS Start...");
+
+  // one crypto provider for everything using rustls (web server TLS and outgoing https)
+  let _ = rustls::crypto::ring::default_provider().install_default();
 
   //
   // -- Start --
@@ -82,15 +80,15 @@ async fn main() {
   // check arguments for certificates
   let cert_path = ServerArgs::get_cert_path();
   let key_path = ServerArgs::get_key_path();
-  let certs: CertificateKeys;
 
-  if cert_path.is_none() && key_path.is_none() {
-    certs = CertificateKeys::new(Some("cert.pem".to_string()), Some("key.rsa".to_string()), Some(ip.clone()));
+  let certs: CertificateKeys = if cert_path.is_none() && key_path.is_none() {
+    let certs = CertificateKeys::new(Some("cert.pem".to_string()), Some("key.rsa".to_string()), Some(ip.clone()));
     #[cfg(not(debug_assertions))]
     certs.write_to_location("cert.pem", "key.rsa");
+    certs
   } else {
-    certs = CertificateKeys::new(cert_path, key_path, Some(ip.clone()));
-  }
+    CertificateKeys::new(cert_path, key_path, Some(ip.clone()))
+  };
 
   // create web server
   let web_config = WebConfig {
@@ -108,7 +106,7 @@ async fn main() {
   let routes = echo_tree_routes.or(network_routes);
 
   // start main web server, including the routes
-  log::info!("Hosting on {}://{}:{}", if ServerArgs::get_tls() { "https" } else { "http" }, ip.to_string(), ServerArgs::get_port());
+  log::info!("Hosting on {}://{}:{}", if ServerArgs::get_tls() { "https" } else { "http" }, ip, ServerArgs::get_port());
   let web_server = WebServer::new(web_config, certs);
   web_server.start(routes).await;
 

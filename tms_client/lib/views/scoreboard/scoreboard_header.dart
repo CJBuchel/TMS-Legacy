@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/providers/local_storage_provider.dart';
 import 'package:tms/widgets/buttons/live_checkbox.dart';
 
 class ScoreboardHeader extends StatelessWidget {
+  const ScoreboardHeader({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

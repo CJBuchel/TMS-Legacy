@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/widgets/animated/barber_pole_container.dart';
 
 class BarberPoleButton extends StatelessWidget {
@@ -10,7 +10,7 @@ class BarberPoleButton extends StatelessWidget {
   final Color? stripeColor;
   final BorderRadius? borderRadius;
 
-  const BarberPoleButton({
+  const BarberPoleButton({super.key, 
     required this.child,
     this.onPressed,
     this.elevation,

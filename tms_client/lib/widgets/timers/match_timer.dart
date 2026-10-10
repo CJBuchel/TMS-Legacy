@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/game_timer_provider.dart';
@@ -12,13 +12,13 @@ class MatchTimer extends StatefulWidget {
   final bool soundEnabled;
 
   const MatchTimer({
-    Key? key,
+    super.key,
     required this.idleStyle,
     required this.activeStyle,
     required this.endgameStyle,
     required this.stoppedStyle,
     required this.soundEnabled,
-  }) : super(key: key);
+  });
 
   factory MatchTimer.withStyle(TextStyle style, {bool soundEnabled = false}) {
     return MatchTimer(
@@ -57,7 +57,7 @@ class MatchTimer extends StatefulWidget {
   }
 
   @override
-  _MatchTimer createState() => _MatchTimer();
+  State<MatchTimer> createState() => _MatchTimer();
 }
 
 class _MatchTimer extends State<MatchTimer> {

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:file_saver/file_saver.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/widgets/dialogs/confirm_dialogs.dart';
 import 'package:tms/widgets/dialogs/dialog_style.dart';
 
@@ -9,9 +9,9 @@ class ExportButton extends StatelessWidget {
   final List<List<String>> data;
 
   const ExportButton({
-    Key? key,
+    super.key,
     required this.data,
-  }) : super(key: key);
+  });
 
   void _onConfirmExport() {
     // create csv data
@@ -30,7 +30,7 @@ class ExportButton extends StatelessWidget {
     FileSaver.instance.saveFile(
       name: "team_data",
       bytes: csvBytes,
-      ext: "csv",
+      fileExtension: "csv",
       mimeType: MimeType.csv,
     );
   }

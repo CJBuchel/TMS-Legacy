@@ -1,4 +1,3 @@
-use tms_infra::*;
 
 use crate::{database::*, network::*};
 
@@ -12,7 +11,7 @@ pub async fn robot_game_score_sheet_remove_handler(request: RobotGameScoreSheetR
     },
     Err(e) => {
       log::error!("Failed to delete GameScoreSheet: {}", e);
-      return Err(warp::reject::custom(BadRequestWithMessage { message: e }));
+      Err(warp::reject::custom(BadRequestWithMessage { message: e }))
     }
   }
 }
@@ -24,7 +23,7 @@ pub async fn robot_game_score_sheet_insert_handler(request: RobotGameScoreSheetI
     ,
     Err(e) => {
       log::error!("Failed to update GameScoreSheet: {}", e);
-      return Err(warp::reject::custom(BadRequestWithMessage { message: e }));
+      Err(warp::reject::custom(BadRequestWithMessage { message: e }))
     }
   }
 }

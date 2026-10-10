@@ -11,15 +11,15 @@ class TournamentConfigProvider extends EchoTreeProvider<String, TournamentConfig
           fromJsonString: (json) => TournamentConfig.fromJsonString(json: json),
         );
 
-  EventConfigService _service = EventConfigService();
+  final EventConfigService _service = EventConfigService();
 
-  String get eventName => this.items["config"]?.name ?? "";
-  int get timerLength => this.items["config"]?.timerLength ?? 150;
-  int get endGameTimerLength => this.items["config"]?.endGameTimerLength ?? 30;
-  int get backupInterval => this.items["config"]?.backupInterval ?? 5;
-  int get retainBackups => this.items["config"]?.retainBackups ?? 5;
-  String get season => this.items["config"]?.season ?? "";
-  BlueprintType get blueprintType => this.items["config"]?.blueprintType ?? BlueprintType.agnostic;
+  String get eventName => items["config"]?.name ?? "";
+  int get timerLength => items["config"]?.timerLength ?? 150;
+  int get endGameTimerLength => items["config"]?.endGameTimerLength ?? 30;
+  int get backupInterval => items["config"]?.backupInterval ?? 5;
+  int get retainBackups => items["config"]?.retainBackups ?? 5;
+  String get season => items["config"]?.season ?? "";
+  BlueprintType get blueprintType => items["config"]?.blueprintType ?? BlueprintType.agnostic;
 
   Future<int> setEventName(String name) async {
     TmsLogger().d("Setting event name to $name");

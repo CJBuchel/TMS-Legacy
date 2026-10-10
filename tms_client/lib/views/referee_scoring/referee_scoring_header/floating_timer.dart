@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/robot_game_providers/game_match_status_provider.dart';
 import 'package:tms/widgets/timers/match_timer.dart';
@@ -9,13 +9,13 @@ class FloatingTimer extends StatelessWidget {
   final double? left;
   final double? top;
 
-  FloatingTimer({
-    Key? key,
+  const FloatingTimer({
+    super.key,
     this.bottom,
     this.right,
     this.left,
     this.top,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

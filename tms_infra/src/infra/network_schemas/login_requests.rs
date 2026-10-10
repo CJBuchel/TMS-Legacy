@@ -19,15 +19,11 @@ impl Default for LoginRequest {
 }
 
 #[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Default)]
 pub struct LoginResponse {
   pub roles: Vec<TmsTreeRole>, // role id, password
 }
 
-impl Default for LoginResponse {
-  fn default() -> Self {
-    Self { roles: Vec::new() }
-  }
-}
 
 impl DataSchemeExtensions for LoginRequest {}
 impl DataSchemeExtensions for LoginResponse {}

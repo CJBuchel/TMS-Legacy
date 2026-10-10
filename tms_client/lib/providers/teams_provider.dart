@@ -10,7 +10,7 @@ class TeamsProvider extends EchoTreeProvider<String, Team> {
   final TeamService _teamService = TeamService();
 
   List<Team> get teams {
-    return sortTeamsByNumber(this.items.values.toList());
+    return sortTeamsByNumber(items.values.toList());
   }
 
   Team getTeam(String teamNumber) {
@@ -29,10 +29,10 @@ class TeamsProvider extends EchoTreeProvider<String, Team> {
     }
   }
 
-  Map<String, Team> get teamsMap => this.items;
+  Map<String, Team> get teamsMap => items;
 
   Team getTeamById(String teamId) {
-    Team? team = this.items[teamId];
+    Team? team = items[teamId];
 
     if (team != null) {
       return team;

@@ -25,36 +25,31 @@ impl TmsDuration {
 
   
   fn normalize(&mut self) {
-    if let Some(seconds) = self.seconds {
-      if seconds >= 60 {
+    if let Some(seconds) = self.seconds
+      && seconds >= 60 {
         self.minutes = Some(self.minutes.unwrap_or(0).saturating_add(seconds / 60));
         self.seconds = Some(seconds % 60);
       }
-    }
-    if let Some(minutes) = self.minutes {
-      if minutes >= 60 {
+    if let Some(minutes) = self.minutes
+      && minutes >= 60 {
         self.hours = Some(self.hours.unwrap_or(0).saturating_add(minutes / 60));
         self.minutes = Some(minutes % 60);
       }
-    }
-    if let Some(hours) = self.hours {
-      if hours >= 24 {
+    if let Some(hours) = self.hours
+      && hours >= 24 {
         self.days = Some(self.days.unwrap_or(0).saturating_add(hours / 24));
         self.hours = Some(hours % 24);
       }
-    }
-    if let Some(days) = self.days {
-      if days >= 30 {
+    if let Some(days) = self.days
+      && days >= 30 {
         self.months = Some(self.months.unwrap_or(0).saturating_add(days / 30));
         self.days = Some(days % 30);
       }
-    }
-    if let Some(months) = self.months {
-      if months >= 12 {
+    if let Some(months) = self.months
+      && months >= 12 {
         self.years = Some(self.years.unwrap_or(0).saturating_add(months / 12));
         self.months = Some(months % 12);
       }
-    }
   }
 
   

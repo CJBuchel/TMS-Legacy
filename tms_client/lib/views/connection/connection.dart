@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ class Connection extends StatelessWidget {
   final TextEditingController _ipTextController = TextEditingController();
   final TextEditingController _portTextController = TextEditingController();
 
-  Connection({required this.state}) {
+  Connection({super.key, required this.state}) {
     _ipTextController.text = TmsLocalStorageProvider().serverIp;
     _portTextController.text = TmsLocalStorageProvider().serverPort.toString();
   }
@@ -45,7 +45,7 @@ class Connection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  ip.isNotEmpty ? '${ip}:${port}' : 'N/A',
+                  ip.isNotEmpty ? '$ip:$port' : 'N/A',
                   style: TextStyle(
                     color: isConnected ? null : Colors.red,
                     overflow: TextOverflow.ellipsis,
@@ -72,7 +72,7 @@ class Connection extends StatelessWidget {
                 children: [
                   const Text(
                     'Version: ',
-                    style: const TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey),
                   ),
                   Text(
                     snapshot.data?.version ?? 'N/A',
@@ -86,7 +86,7 @@ class Connection extends StatelessWidget {
                 children: [
                   const Text(
                     'Build: ',
-                    style: const TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey),
                   ),
                   Text(
                     snapshot.data?.buildNumber ?? 'N/A',
@@ -156,7 +156,7 @@ class Connection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TmsAppBar(state: state),
-      floatingActionButton: FloatingQrButton(),
+      floatingActionButton: const FloatingQrButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Center(
         child: SingleChildScrollView(

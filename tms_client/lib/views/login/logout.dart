@@ -1,14 +1,17 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tms/providers/auth_provider.dart';
 
 class Logout extends StatelessWidget {
   final AuthProvider _authProvider = AuthProvider();
 
+  Logout({super.key});
+
   void _logoutController(BuildContext context) async {
     int status = await _authProvider.logout();
+    if (!context.mounted) return;
     if (status == HttpStatus.ok) {
       context.canPop() ? context.pop() : GoRouter.of(context).go('/');
     } else {

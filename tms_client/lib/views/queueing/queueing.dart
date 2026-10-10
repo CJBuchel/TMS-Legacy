@@ -1,5 +1,5 @@
 import 'package:echo_tree_flutter/widgets/echo_tree_lifetime_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/game_match.dart';
 import 'package:tms/providers/robot_game_providers/game_match_provider.dart';
@@ -17,7 +17,7 @@ class _QueueItemData {
 }
 
 class Queueing extends StatelessWidget {
-  const Queueing({Key? key}) : super(key: key);
+  const Queueing({super.key});
 
   Widget _matchItem(GameMatch match) {
     return Selector2<GameMatchProvider, GameMatchStatusProvider,

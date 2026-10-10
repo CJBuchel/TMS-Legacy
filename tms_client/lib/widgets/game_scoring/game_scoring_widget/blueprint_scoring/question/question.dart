@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/fll_infra/question.dart';
 import 'package:tms/providers/robot_game_providers/game_scoring_provider.dart';
 import 'package:tms/widgets/game_scoring/game_scoring_widget/blueprint_scoring/question/categorical_question.dart';
 
 class QuestionWidget extends StatelessWidget {
+  // questions are scrolled to by key, so the key must be a GlobalKey
+  @override
+  // ignore: overridden_fields
   final GlobalKey key;
   final Question question;
   final Function(String) onAnswer;

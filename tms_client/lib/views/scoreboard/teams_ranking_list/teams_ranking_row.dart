@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/game_score_sheet.dart';
 import 'package:tms/views/scoreboard/team_scoring_data.dart';
 
@@ -8,11 +8,11 @@ class TeamsRankingRow extends StatelessWidget {
   final Color? bestScoreColor;
 
   const TeamsRankingRow({
-    Key? key,
+    super.key,
     required this.numRounds,
     required this.teamData,
     this.bestScoreColor,
-  }) : super(key: key);
+  });
 
   Widget _getRankIcon(int rank) {
     if (rank == 1) {
@@ -101,7 +101,7 @@ class TeamsRankingRow extends StatelessWidget {
         } else {
           return const Expanded(
             flex: 1,
-            child: const SizedBox.shrink(),
+            child: SizedBox.shrink(),
           );
         }
       }),

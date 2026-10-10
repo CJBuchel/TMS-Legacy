@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/robot_game_providers/game_match_status_provider.dart';
 import 'package:tms/widgets/buttons/barber_pole_button.dart';
@@ -15,6 +15,8 @@ class ReadyMatchButton extends StatelessWidget {
   final WidgetStateProperty<Color?> _backgroundColorState = const WidgetStatePropertyAll(_backgroundColor);
   final WidgetStateProperty<Color?> _overlayColorState = const WidgetStatePropertyAll(_overlayColor);
 
+  const ReadyMatchButton({super.key});
+
   Widget _readyButton(BuildContext context, {bool active = true}) {
     return ElevatedButton(
       style: ButtonStyle(
@@ -25,6 +27,7 @@ class ReadyMatchButton extends StatelessWidget {
       onPressed: () {
         if (active) {
           Provider.of<GameMatchStatusProvider>(context, listen: false).readyMatches().then((status) {
+            if (!context.mounted) return;
             if (status != HttpStatus.ok) {
               SnackBarDialog.fromStatus(message: "Ready Match", status: status).show(context);
             }
@@ -50,6 +53,7 @@ class ReadyMatchButton extends StatelessWidget {
       onPressed: () {
         if (active) {
           Provider.of<GameMatchStatusProvider>(context, listen: false).unreadyMatches().then((status) {
+            if (!context.mounted) return;
             if (status != HttpStatus.ok) {
               SnackBarDialog.fromStatus(message: "Unready Match", status: status).show(context);
             }

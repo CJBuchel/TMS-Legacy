@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tms/providers/robot_game_providers/game_table_provider.dart';
@@ -11,11 +11,11 @@ class RefereeScoringFooter extends StatelessWidget {
   final double footerHeight;
   final ScrollController? scrollController;
 
-  RefereeScoringFooter({
-    Key? key,
+  const RefereeScoringFooter({
+    super.key,
     this.footerHeight = 120,
     this.scrollController,
-  }) : super(key: key);
+  });
 
   Widget _buttons(BuildContext context, String table, String referee) {
     double buttonHeight = 40;
@@ -95,7 +95,7 @@ class RefereeScoringFooter extends StatelessWidget {
         return (table: provider.localGameTable, referee: provider.localReferee);
       },
       builder: (context, data, _) {
-        return Container(
+        return SizedBox(
           height: footerHeight,
           child: Stack(
             children: [

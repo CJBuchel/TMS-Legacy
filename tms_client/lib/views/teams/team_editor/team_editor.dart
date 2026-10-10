@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/views/teams/team_editor/team_info_banner/team_info_banner.dart';
 import 'package:tms/views/teams/team_editor/team_scores/team_scores_editor.dart';
 import 'package:tms/views/teams/team_editor/team_settings/team_settings_editor.dart';
@@ -8,9 +8,9 @@ class TeamEditor extends StatelessWidget {
   final String teamId;
 
   TeamEditor({
-    Key? key,
+    super.key,
     required this.teamId,
-  }) : super(key: key);
+  });
 
   final TextEditingController _teamNumberController = TextEditingController();
 

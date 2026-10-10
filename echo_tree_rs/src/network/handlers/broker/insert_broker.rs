@@ -85,6 +85,5 @@ pub async fn insert_broker(uuid: String, msg: EchoTreeClientSocketMessage, clien
       from_event: Some(EchoTreeClientSocketEvent::InsertEvent),
       message: Some(format!("client does not have access to tree: {}", msg.tree_name)),
     });
-    return;
   }
 }

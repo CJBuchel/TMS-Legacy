@@ -35,7 +35,7 @@ class JudgingSessionProvider extends EchoTreeProvider<String, JudgingSession> {
   }
 
   JudgingSession? getSessionById(String id) {
-    return items[id] ?? null;
+    return items[id];
   }
 
   String? getIdFromSessionNumber(String sessionNumber) {
@@ -118,7 +118,7 @@ class JudgingSessionProvider extends EchoTreeProvider<String, JudgingSession> {
       }
     } else {
       // handle table update
-      JudgingSession? originSession = this.items.values.firstWhereOrNull((session) {
+      JudgingSession? originSession = items.values.firstWhereOrNull((session) {
         return session.sessionNumber == originSessionNumber;
       });
       String? originSessionId = getIdFromSessionNumber(originSessionNumber);

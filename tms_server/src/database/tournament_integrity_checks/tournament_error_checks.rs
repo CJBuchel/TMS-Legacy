@@ -17,7 +17,7 @@ impl TournamentErrorChecks {
 
     // Check for missing team numbers E001
     {
-      for (_, team) in teams.iter() {
+      for team in teams.values() {
         if team.team_number.is_empty() {
           messages.push(TournamentIntegrityMessage::new(
             TournamentIntegrityCode::Error(TournamentErrorCode::E001),
@@ -32,7 +32,7 @@ impl TournamentErrorChecks {
     // check for duplicate team numbers E002
     {
       let mut team_numbers = HashMap::new();
-      for (_, team) in teams.iter() {
+      for team in teams.values() {
         if team_numbers.contains_key(&team.team_number) {
           messages.push(TournamentIntegrityMessage::new(
             TournamentIntegrityCode::Error(TournamentErrorCode::E002),
@@ -58,15 +58,15 @@ impl TournamentErrorChecks {
         // check that the rounds are unique
         let mut rounds = HashMap::new();
         for (_, score) in team_scores.iter() {
-          if rounds.contains_key(&score.round) {
+          if let std::collections::hash_map::Entry::Vacant(e) = rounds.entry(score.round) {
+            e.insert(true);
+          } else {
             messages.push(TournamentIntegrityMessage::new(
               TournamentIntegrityCode::Error(TournamentErrorCode::E003),
               Some(team.team_number.clone()),
               None,
               None,
             ));
-          } else {
-            rounds.insert(score.round, true);
           }
         }
       }
@@ -75,7 +75,7 @@ impl TournamentErrorChecks {
     // E004, E005, E006
     {
       let mut match_numbers = HashMap::new();
-      for (_, game_match) in game_matches.iter() {
+      for game_match in game_matches.values() {
         
         // check for tables that don't exist in matches E004
         for on_table in game_match.game_match_tables.iter() {
@@ -118,9 +118,9 @@ impl TournamentErrorChecks {
     // count the number of matches for each team (get maximum number of rounds)
     {
       let mut max_rounds = 0;
-      for (_, team) in teams.iter() {
+      for team in teams.values() {
         let mut team_matches = 0;
-        for (_, game_match) in game_matches.iter() {
+        for game_match in game_matches.values() {
           for on_table in game_match.game_match_tables.iter() {
             if on_table.team_number == team.team_number {
               team_matches += 1;
@@ -133,9 +133,9 @@ impl TournamentErrorChecks {
       }
 
       // check for teams with fewer matches than the maximum number of rounds E007
-      for (_, team) in teams.iter() {
+      for team in teams.values() {
         let mut team_matches = 0;
-        for (_, game_match) in game_matches.iter() {
+        for game_match in game_matches.values() {
           for on_table in game_match.game_match_tables.iter() {
             if on_table.team_number == team.team_number {
               team_matches += 1;
@@ -155,7 +155,7 @@ impl TournamentErrorChecks {
 
     // E008, E009
     {
-      for (_, judging_session) in judging_sessions.iter() {
+      for judging_session in judging_sessions.values() {
         for pod in judging_session.judging_session_pods.iter() {
           // check for pods that don't exist in judging sessions E008
           if !judging_session_pods.iter().any(|(_, session_pod)| session_pod.pod_name == pod.pod_name) {
@@ -184,7 +184,7 @@ impl TournamentErrorChecks {
 
     // E010, E011
     {
-      for (_, team) in teams.iter() {
+      for team in teams.values() {
         // let mut team_sessions = 0;
         let team_sessions = judging_sessions.iter().filter(|(_, session)| {
           session.judging_session_pods.iter().any(|pod| pod.team_number == team.team_number)
@@ -213,7 +213,7 @@ impl TournamentErrorChecks {
     // check for duplicate session numbers E012
     {
       let mut session_numbers = HashMap::new();
-      for (_, judging_session) in judging_sessions.iter() {
+      for judging_session in judging_sessions.values() {
         if session_numbers.contains_key(&judging_session.session_number) {
           messages.push(TournamentIntegrityMessage::new(
             TournamentIntegrityCode::Error(TournamentErrorCode::E012),
@@ -229,7 +229,7 @@ impl TournamentErrorChecks {
 
     // check for match overlapping with judging session E013
     {
-      for (_, game_match) in game_matches.iter() {
+      for game_match in game_matches.values() {
         for on_table in game_match.game_match_tables.iter() {
           let match_start_time = game_match.start_time.clone();
           let match_end_time = game_match.end_time.clone();
@@ -276,6 +276,6 @@ impl TournamentErrorChecks {
       }
     }
 
-    return messages;
+    messages
   }
 }

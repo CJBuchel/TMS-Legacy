@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/generated/infra/database_schemas/judging_session.dart';
 import 'package:tms/generated/infra/database_schemas/team.dart';
@@ -10,16 +10,16 @@ class NextJudgingSessionRow extends StatelessWidget {
   final int index;
 
   const NextJudgingSessionRow({
-    Key? key,
+    super.key,
     required this.nextSession,
     required this.index,
-  }) : super(key: key);
+  });
 
   Widget _teamInPod(JudgingSessionPod jsPod, double childWidth) {
     return Selector<TeamsProvider, Team>(
       selector: (_, provider) => provider.getTeam(jsPod.teamNumber),
       builder: (context, team, _) {
-        return Container(
+        return SizedBox(
           width: childWidth,
           child: Center(
             child: Text("${jsPod.teamNumber} | ${team.name} | ${jsPod.podName}"),
@@ -66,8 +66,8 @@ class NextJudgingSessionRow extends StatelessWidget {
         Expanded(
           child: AnimatedInfiniteHorizontalList(
             scrollSpeed: 25,
-            children: _teamsOnTables(nextSession.judgingSessionPods, childWidth),
             childWidth: childWidth,
+            children: _teamsOnTables(nextSession.judgingSessionPods, childWidth),
           ),
         ),
       ],

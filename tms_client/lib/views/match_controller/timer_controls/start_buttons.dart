@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:tms/providers/game_timer_provider.dart';
 import 'package:tms/widgets/dialogs/snackbar_dialog.dart';
@@ -13,9 +13,9 @@ class StartButtons extends StatelessWidget {
   final bool active;
 
   const StartButtons({
-    Key? key,
+    super.key,
     required this.active,
-  }) : super(key: key);
+  });
 
   final WidgetStateProperty<Color?> _inactiveColorState = const WidgetStatePropertyAll(_inactiveColor);
   final WidgetStateProperty<Color?> _backgroundColorState = const WidgetStatePropertyAll(_backgroundColor);
@@ -32,6 +32,7 @@ class StartButtons extends StatelessWidget {
       onPressed: () {
         if (active) {
           Provider.of<GameTimerProvider>(context, listen: false).startTimerWithCountdown().then((status) {
+            if (!context.mounted) return;
             if (status != HttpStatus.ok) {
               SnackBarDialog.fromStatus(message: "Countdown", status: status).show(context);
             }
@@ -54,6 +55,7 @@ class StartButtons extends StatelessWidget {
       onPressed: () {
         if (active) {
           Provider.of<GameTimerProvider>(context, listen: false).startTimer().then((status) {
+            if (!context.mounted) return;
             if (status != HttpStatus.ok) {
               SnackBarDialog.fromStatus(message: "Start", status: status).show(context);
             }

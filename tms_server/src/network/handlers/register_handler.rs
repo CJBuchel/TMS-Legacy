@@ -1,11 +1,10 @@
-use tms_infra::*;
 
 use crate::{database::*, network::*};
 
-use rand::Rng;
+use rand::RngExt;
 
 fn generate_auth_token() -> String {
-  rand::thread_rng().sample_iter(&rand::distributions::Alphanumeric).take(32).map(char::from).collect()
+  rand::rng().sample_iter(rand::distr::Alphanumeric).take(32).map(char::from).collect()
 }
 
 async fn register_client(uuid: String, auth_token: String, user_id: String, clients: ClientMap) {
@@ -25,8 +24,8 @@ pub async fn register_handler(body: RegisterRequest, clients: ClientMap, db: Sha
   if let (Some(username), Some(password)) = (body.username, body.password) {
     let result = read_db.get_user_by_username(username.clone()).await;
 
-    if let Some((id, user)) = result {
-      if user.password == password {
+    if let Some((id, user)) = result
+      && user.password == password {
         log::debug!("User `{}` logged in", username);
         // create client
         register_client(uuid.clone(), auth_token.clone(), id.clone(), clients).await;
@@ -37,7 +36,6 @@ pub async fn register_handler(body: RegisterRequest, clients: ClientMap, db: Sha
           roles: read_db.get_user_roles(id).await,
         }));
       }
-    }
   }
 
   // no username/password or invalid username/password (use public user)
@@ -62,12 +60,12 @@ pub async fn register_handler(body: RegisterRequest, clients: ClientMap, db: Sha
   // register client normally without username/password
   log::warn!("No default users found, registering blank client");
   register_client(uuid.clone(), auth_token.clone(), "".to_string(), clients).await;
-  return Ok(warp::reply::json(&RegisterResponse {
+  Ok(warp::reply::json(&RegisterResponse {
     auth_token,
     uuid,
     protocol: if tls { "wss".to_string() } else { "ws".to_string() },
     roles: Vec::new(),
-  }));
+  }))
 }
 
 pub async fn unregister_handler(uuid: String, clients: ClientMap) -> ResponseResult<impl warp::reply::Reply> {

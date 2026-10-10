@@ -6,10 +6,8 @@ pub struct CertificateKeys {
 impl CertificateKeys {
   pub fn new(cert_path: Option<String>, key_path: Option<String>, local_ip: Option<String>) -> Self {
     // check if the user provided a certificate and key
-    if cert_path.is_some() && key_path.is_some() {
+    if let (Some(cert_path), Some(key_path)) = (cert_path, key_path) {
       // check if the files exist
-      let cert_path = cert_path.unwrap();
-      let key_path = key_path.unwrap();
 
       log::info!("Using provided certificate and key, {}, {}", cert_path, key_path);
 
@@ -40,10 +38,10 @@ impl CertificateKeys {
 
     let certificate = rcgen::generate_simple_self_signed(subject_alt_names).unwrap();
 
-    return CertificateKeys {
+    CertificateKeys {
       cert: certificate.cert.pem(),
-      key: certificate.key_pair.serialize_pem(),
-    };
+      key: certificate.signing_key.serialize_pem(),
+    }
   }
 
   pub fn write_to_location(&self, cert_path: &str, key_path: &str) {

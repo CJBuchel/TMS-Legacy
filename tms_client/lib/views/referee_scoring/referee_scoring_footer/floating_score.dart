@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class FloatingScore extends StatelessWidget {
   final int score;
@@ -7,14 +7,14 @@ class FloatingScore extends StatelessWidget {
   final double? left;
   final double? top;
 
-  FloatingScore({
-    Key? key,
+  const FloatingScore({
+    super.key,
     required this.score,
     this.bottom,
     this.right,
     this.left,
     this.top,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

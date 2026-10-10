@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tms/generated/infra/database_schemas/game_score_sheet.dart';
 
 class TeamScoreSheetTags extends StatelessWidget {
   final GameScoreSheet gameScoreSheet;
   final double? fontSize;
 
-  TeamScoreSheetTags({
+  const TeamScoreSheetTags({super.key, 
     required this.gameScoreSheet,
     this.fontSize,
   });

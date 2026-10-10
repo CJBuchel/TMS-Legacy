@@ -26,7 +26,7 @@ pub async fn delete_broker(uuid: String, msg: EchoTreeClientSocketMessage, clien
   };
 
   // create list of un accessible tree names the client is trying to access
-  let unauthorized_tree_names: Vec<String> = client.filter_unauthorized_read_write_trees(msg.tree_items.iter().map(|(t, _)| t.clone()).collect());
+  let unauthorized_tree_names: Vec<String> = client.filter_unauthorized_read_write_trees(msg.tree_items.keys().cloned().collect());
   let mut changed_items: Vec<EchoItemEvent> = Vec::new();
   
   let mut write_db = db.write().await;

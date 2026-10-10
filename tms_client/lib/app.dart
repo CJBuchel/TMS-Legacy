@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tms/providers/local_storage_provider.dart';
 import 'package:tms/router.dart';
@@ -8,15 +8,15 @@ class TMSApp extends StatefulWidget {
   const TMSApp({super.key});
 
   @override
-  State<TMSApp> createState() => _TMSAppState();
+  State<TMSApp> createState() => TMSAppState();
 
   // static accessor
-  static _TMSAppState of(BuildContext context) {
-    return context.findAncestorStateOfType<_TMSAppState>()!;
+  static TMSAppState of(BuildContext context) {
+    return context.findAncestorStateOfType<TMSAppState>()!;
   }
 }
 
-class _TMSAppState extends State<TMSApp> {
+class TMSAppState extends State<TMSApp> {
   ThemeMode _themeMode = TmsLocalStorageProvider().themeMode; // default for now
   ThemeMode get themeMode => _themeMode;
 

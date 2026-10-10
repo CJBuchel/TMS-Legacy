@@ -51,7 +51,7 @@ impl RankingUtilities for GameScoreSheet {
     let mut team_score_sheets: HashMap<String, Vec<GameScoreSheet>> = HashMap::new();
     for game_score_sheet in score_sheets {
       team_score_sheets.entry(game_score_sheet.team_ref_id.clone())
-        .or_insert_with(Vec::new)
+        .or_default()
         .push(game_score_sheet);
     }
 
@@ -70,11 +70,10 @@ impl RankingUtilities for GameScoreSheet {
     let mut prev_team: Option<&(String, Vec<GameScoreSheet>)> = None;
 
     for team in &team_score_sheets_vec {
-      if let Some(prev) = prev_team {
-        if GameScoreSheet::compare_list(&team.1, &prev.1) == std::cmp::Ordering::Less {
+      if let Some(prev) = prev_team
+        && GameScoreSheet::compare_list(&team.1, &prev.1) == std::cmp::Ordering::Less {
           rank += 1;
         }
-      }
       ranked_teams.insert(team.0.clone(), rank);
       prev_team = Some(team);
     }
@@ -99,27 +98,21 @@ impl TeamExtensions for Database {
     let tree = self.inner.read().await.get_tree(TEAMS.to_string()).await;
     let team = tree.get(&team_id).cloned();
 
-    match team {
-      Some(team) => Some(Team::from_json_string(&team)),
-      None => None,
-    }
+    team.map(|team| Team::from_json_string(&team))
   }
 
   async fn get_team_by_number(&self, number: String) -> Option<(String, Team)> {
     let tree = self.inner.read().await.get_tree(TEAMS.to_string()).await;
-    let team = tree.iter().find_map(|(id, team)| {
+    
+
+    tree.iter().find_map(|(id, team)| {
       let team = Team::from_json_string(team);
       if team.team_number == number {
         Some((id.clone(), team))
       } else {
         None
       }
-    });
-
-    match team {
-      Some((id, team)) => Some((id, team)),
-      None => None,
-    }
+    })
   }
 
   async fn insert_team(&self, team: Team, team_id: Option<String>) -> Result<(), String> {
@@ -204,7 +197,7 @@ impl TeamExtensions for Database {
     let next_rank = team_rankings.values().max().unwrap_or(&0) + 1;
 
     let tree = self.inner.read().await.get_tree(TEAMS.to_string()).await;
-    let team_ids = tree.iter().map(|(id, _)| id.clone()).collect::<Vec<String>>();
+    let team_ids = tree.keys().cloned().collect::<Vec<String>>();
 
     for team_id in team_ids {
       let rank = team_rankings.get(&team_id).unwrap_or(&next_rank);

@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class NextRoundToScore extends StatelessWidget {
   final int round;
   final double fontSize;
 
   const NextRoundToScore({
-    Key? key,
+    super.key,
     this.round = 0,
     this.fontSize = 16,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -15,7 +15,7 @@ steps:
   - script: |
       if ! command -v flutter_rust_bridge_codegen &> /dev/null; then
         echo "Installing FRB"
-        cargo install flutter_rust_bridge_codegen --version 2.11.1
+        cargo install flutter_rust_bridge_codegen --version 2.13.0
       else
         echo "FRB already installed"
       fi
@@ -25,7 +25,7 @@ steps:
   - powershell: |
       if (-not (Get-Command flutter_rust_bridge_codegen -ErrorAction SilentlyContinue)) {
         Write-Output "Installing FRB"
-        cargo install flutter_rust_bridge_codegen --version 2.11.1
+        cargo install flutter_rust_bridge_codegen --version 2.13.0
       } else {
         Write-Output "FRB already installed"
       }
@@ -37,8 +37,8 @@ steps:
       - task: Rustup@1
         displayName: "Add wasm target for web codegen"
         inputs:
-          rustupCommand: "+nightly"
-          rustupCommandArguments: "target add wasm32-unknown-unknown"
+          rustupCommand: "target"
+          rustupCommandArguments: "add wasm32-unknown-unknown"
           verbose: false
 
   # Install android targets for codegen

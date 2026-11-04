@@ -1,0 +1,57 @@
+Version Number,1
+Block Format,1
+Number of Teams,12
+3220,Material Girls,Denmark Senior High   School,
+4013,Mount Barker Dream Team,Mount Barker Community College,
+4100,The Oreo Munchkins,Albany Primary School,
+4225,Clean Green Denmark Machines,Denmark Primary School,
+4226,Eco Engineers,Denmark Primary School,
+4228,Quantum Quokkas,Great Southern Grammar,
+4274,Borden Magpies,Borden Primary   School,
+4278,Prancing Pony Popcorn Poppers,Albany Primary School,
+4468,There is one among us,Denmark Senior High   School,
+4469,Leaf,Denmark Senior High School,
+4470,Rizbots,Albany Senior High School,
+4491,Team Name,Denmark Senior High School,
+Block Format,2
+Number of Ranking Matches,18
+Number of Tables,4
+Number of Teams per Table,1
+Number of Simultaneous Tables,2
+Table Names,Table-1,Table-2,Table-3,Table-4
+1,9:40 AM,9:44 AM,4468,4469,,
+2,9:51 AM,9:55 AM,,,4100,4470
+3,10:02 AM,10:06 AM,4491,4225,,
+4,10:13 AM,10:17 AM,,,4274,4013
+5,10:24 AM,10:28 AM,3220,4228,,
+6,10:35 AM,10:39 AM,,,4226,4278
+7,10:56 AM,11:00 AM,4470,4491,,
+8,11:07 AM,11:11 AM,,,4228,3220
+9,11:18 AM,11:22 AM,4226,4278,,
+10,11:29 AM,11:33 AM,,,4100,4468
+11,11:40 AM,11:44 AM,4469,4013,,
+12,11:51 AM,11:55 AM,,,4274,4225
+13,12:40 PM,12:44 PM,4228,4226,,
+14,12:48 PM,12:52 PM,,,4278,4468
+15,12:56 PM,1:00 PM,4100,4469,,
+16,1:04 PM,1:08 PM,,,4013,4274
+17,1:12 PM,1:16 PM,4225,4470,,
+18,1:20 PM,1:24 PM,,,3220,4491
+Block Format,3
+Number of Judged Events,1
+Number of Event Time Slots,12
+Number of Judging Teams,3
+Event Name,Judging
+Room Names,Room 1: TC9,Room 2: TC10,Room 3: WB4
+1,9:30 AM,10:00 AM,4228
+2,9:30 AM,10:00 AM,,4278
+3,9:30 AM,10:00 AM,,,4226
+4,10:15 AM,10:45 AM,,4469
+5,10:15 AM,10:45 AM,,,4468
+6,10:15 AM,10:45 AM,4100
+7,11:00 AM,11:30 AM,,,4013
+8,11:00 AM,11:30 AM,4225
+9,11:00 AM,11:30 AM,,4274
+10,11:45 AM,12:15 PM,4470
+11,11:45 AM,12:15 PM,,4491
+12,11:45 AM,12:15 PM,,,3220

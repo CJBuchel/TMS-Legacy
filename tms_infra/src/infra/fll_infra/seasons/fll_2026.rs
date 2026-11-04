@@ -52,50 +52,33 @@ impl BaseSeason for BioglowFounders {
 
     // Game specific validation rules
 
-    // m01: the LiDAR bonus is only available once the drone has been flown
-    if is_yes(answers, "m01b") && !is_yes(answers, "m01a") {
-      errors.push(QuestionValidationError {
-        question_ids: "m01b".to_string(),
-        message: "LiDAR map flipped but the drone is still touching the mat".to_string(),
-      });
+    if is_yes(answers, "m04e") {
+      if !is_yes(answers, "m04d") {
+        errors.push(QuestionValidationError {
+          question_ids: "m04d".to_string(),
+          message: "Katydid is completely outside the leaf habitat now, so it was completely outside it during the match".to_string(),
+        });
+      }
+      if is_yes(answers, "m04b") {
+        errors.push(QuestionValidationError {
+          question_ids: "m04b".to_string(),
+          message: "Katydid is completely outside the leaf habitat, so it cannot be in its original starting position".to_string(),
+        });
+      }
     }
 
-    // m03: the rock bonus requires the research flag to be down
-    if is_yes(answers, "m03b") && !is_yes(answers, "m03a") {
-      errors.push(QuestionValidationError {
-        question_ids: "m03b".to_string(),
-        message: "Rock returned to its starting position but the research flag is not down".to_string(),
-      });
-    }
-
-    // m04: the second leaf needs the katydid in its starting position, and a katydid outside the habitat zeroes the mission
-    let leaves = number(answers, "m04a");
-    if leaves == 2 && !is_yes(answers, "m04b") {
-      errors.push(QuestionValidationError {
-        question_ids: "m04b".to_string(),
-        message: "Second leaf removed but the katydid is not in its original starting position".to_string(),
-      });
-    }
-    if !is_yes(answers, "m04c") && leaves > 0 {
-      errors.push(QuestionValidationError {
-        question_ids: "m04c".to_string(),
-        message: "Katydid is outside the leaf habitat, M04 scores zero regardless of leaves removed".to_string(),
-      });
-    }
-
-    // m06: fragments only count once the ant is touching the nest
-    if number(answers, "m06b") > 0 && !is_yes(answers, "m06a") {
-      errors.push(QuestionValidationError {
-        question_ids: "m06b".to_string(),
-        message: "Leaf fragments contained but the ant is not touching the nest".to_string(),
-      });
-    }
-
-    // m07: the connection bonuses require your own mycelium completely extended
-    if number(answers, "m07b") > 0 && !is_yes(answers, "m07a") {
+    let connections = number(answers, "m07b");
+    let mycelium = is_yes(answers, "m07a");
+    let root = answers.get("m05a").map(|r| r.answer.as_str()) == Some("Completely extended");
+    if connections >= 2 && !(mycelium && root) {
       errors.push(QuestionValidationError {
         question_ids: "m07b".to_string(),
-        message: "Connections recorded but the mycelium is not completely extended".to_string(),
+        message: "Two connections need both your mycelium completely extended (M07) and your plant root completely extended (M05)".to_string(),
+      });
+    } else if connections >= 1 && !(mycelium || root) {
+      errors.push(QuestionValidationError {
+        question_ids: "m07b".to_string(),
+        message: "A connection needs either your mycelium completely extended (M07) or your plant root completely extended (M05)".to_string(),
       });
     }
 
@@ -287,8 +270,6 @@ impl BaseSeason for BioglowFounders {
             output: 10,
           }],
         },
-        // A katydid outside the leaf habitat scores zero for the mission,
-        // the second leaf only scores with the katydid in its starting position
         Question {
           id: "m04a".to_string(),
           label: "Leaves completely removed, no longer touching the nest?".to_string(),
@@ -303,18 +284,18 @@ impl BaseSeason for BioglowFounders {
           }),
           rules: vec![
             QuestionRule {
-              condition: "m04c != Yes".to_string(),
+              condition: "m04e == Yes".to_string(),
               output: 0,
             },
             QuestionRule {
-              condition: "m04a == 2 && m04b == Yes".to_string(),
+              condition: "m04a == 2 && m04b == Yes && m04d != Yes".to_string(),
               output: 30,
             },
           ],
         },
         Question {
           id: "m04b".to_string(),
-          label: "Is the katydid in its original starting position, having never been completely removed from the nest during the match?".to_string(),
+          label: "Is the katydid in its original starting position?".to_string(),
           label_short: "Katydid in place?".to_string(),
           input: QuestionInput::Categorical(CategoricalQuestion {
             options: vec![CategoricalOption { label: "No".to_string(), score: 0 }, CategoricalOption { label: "Yes".to_string(), score: 0 }],
@@ -323,12 +304,22 @@ impl BaseSeason for BioglowFounders {
           rules: vec![],
         },
         Question {
-          id: "m04c".to_string(),
-          label: "Is the katydid inside the leaf habitat, not even partly outside it? (the leaf habitat is the nest and the marked area on the mat around it)".to_string(),
-          label_short: "Katydid in habitat?".to_string(),
+          id: "m04d".to_string(),
+          label: "Was the katydid ever completely outside the leaf habitat during the match? (the leaf habitat is the nest and the marked area on the mat around it)".to_string(),
+          label_short: "Katydid ever out?".to_string(),
           input: QuestionInput::Categorical(CategoricalQuestion {
             options: vec![CategoricalOption { label: "No".to_string(), score: 0 }, CategoricalOption { label: "Yes".to_string(), score: 0 }],
-            default_option: "Yes".to_string(),
+            default_option: "No".to_string(),
+          }),
+          rules: vec![],
+        },
+        Question {
+          id: "m04e".to_string(),
+          label: "Is the katydid completely outside the leaf habitat?".to_string(),
+          label_short: "Katydid out now?".to_string(),
+          input: QuestionInput::Categorical(CategoricalQuestion {
+            options: vec![CategoricalOption { label: "No".to_string(), score: 0 }, CategoricalOption { label: "Yes".to_string(), score: 0 }],
+            default_option: "No".to_string(),
           }),
           rules: vec![],
         },
@@ -387,7 +378,7 @@ impl BaseSeason for BioglowFounders {
         },
         Question {
           id: "m07b".to_string(),
-          label: "Connections formed between an extended mycelium and the opposing team's fully extended plant root? (not possible in remote competitions or with no opposing team)".to_string(),
+          label: "Connections formed between an extended mycelium and the opposing team's fully extended plant root? (count both directions: your mycelium to their root, and their mycelium to your root; not possible in remote competitions or with no opposing team)".to_string(),
           label_short: "Connections?".to_string(),
           input: QuestionInput::Categorical(CategoricalQuestion {
             options: numeric_options(2, 10),

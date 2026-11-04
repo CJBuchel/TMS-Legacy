@@ -95,21 +95,31 @@ pub struct V1 {
 
 impl V1 {
   pub fn extract_time(input: &str) -> Result<TmsDateTime, String> {
-    let re = match regex::Regex::new(r"(\d{2}:\d{2}:\d{2})\s?(AM|PM)?") {
-      Ok(re) => re,
-      Err(_) => return Err("Error creating regex".to_string()),
+    let words: Vec<&str> = input.split_whitespace().collect();
+    let Some(at) = words.iter().position(|w| w.contains(':')) else {
+      return Err(format!("Error capturing time from: {}", input));
     };
 
-    let captures = match re.captures(input) {
-      Some(caps) => caps,
-      None => return Err(format!("Error capturing time from: {}", input)),
+    let mut parts = words[at].split(':').map(str::parse::<u32>);
+    let (Some(Ok(mut hour)), Some(Ok(minute))) = (parts.next(), parts.next()) else {
+      return Err(format!("Error capturing time from: {}", input));
+    };
+    let second = match parts.next() {
+      Some(Ok(second)) => second,
+      None => 0,
+      Some(Err(_)) => return Err(format!("Error capturing time from: {}", input)),
     };
 
-    let time_str = captures.get(1).unwrap().as_str();
+    // a 24-hour hour with a PM suffix ("13:01:00 PM") is left as is
+    match words.get(at + 1).map(|w| w.to_ascii_uppercase()).as_deref() {
+      Some("PM") if (1..12).contains(&hour) => hour += 12,
+      Some("AM") if hour == 12 => hour = 0,
+      Some("AM" | "PM") | None => {}
+      Some(other) => return Err(format!("Unexpected '{}' after time in: {}", other, input)),
+    }
 
-    let start_time_native = match chrono::NaiveTime::parse_from_str(time_str, "%H:%M:%S") {
-      Ok(time) => time,
-      Err(_) => return Err(format!("Error parsing time: {}", time_str)),
+    let Some(start_time_native) = chrono::NaiveTime::from_hms_opt(hour, minute, second) else {
+      return Err(format!("Error parsing time: {}", input));
     };
 
     // TMS Date Time
@@ -125,16 +135,13 @@ impl V1 {
     Ok(start_time)
   }
 
+  // the words before the time, e.g. "Day 1" from "Day 1 10:00:00 AM"
   pub fn extract_category(input: &str) -> Option<String> {
-    let re = match regex::Regex::new(r"^(.*)\s\d{2}:\d{2}:\d{2}\s?(AM|PM)?") {
-      Ok(re) => re,
-      Err(_) => return None,
-    };
-
-    let captures = re.captures(input)?;
-
-    Some(captures.get(1).unwrap().as_str().to_string())
+    let words: Vec<&str> = input.split_whitespace().collect();
+    let at = words.iter().position(|w| w.contains(':'))?;
+    (at > 0).then(|| words[..at].join(" "))
   }
+
 }
 
 impl CsvToTmsSchedule for V1 {
@@ -325,5 +332,56 @@ impl CsvToTmsSchedule for V1 {
     }
 
     Ok(schedule)
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  fn hms(input: &str) -> (u32, u32, u32) {
+    let time = V1::extract_time(input).unwrap().time.unwrap();
+    (time.hour, time.minute, time.second)
+  }
+
+  #[test]
+  fn twelve_hour_times() {
+    assert_eq!(hms("9:40 AM"), (9, 40, 0));
+    assert_eq!(hms("9:40:00 AM"), (9, 40, 0));
+    assert_eq!(hms("1:00 PM"), (13, 0, 0));
+    assert_eq!(hms("12:40 PM"), (12, 40, 0));
+    assert_eq!(hms("12:15 AM"), (0, 15, 0));
+  }
+
+  #[test]
+  fn old_format_times() {
+    assert_eq!(hms("10:00:00 AM"), (10, 0, 0));
+    assert_eq!(hms("13:01:00 PM"), (13, 1, 0));
+    assert_eq!(hms("Day 1 16:34:00 PM"), (16, 34, 0));
+    assert_eq!(hms("09:00"), (9, 0, 0));
+  }
+
+  #[test]
+  fn bad_times() {
+    assert!(V1::extract_time("soon").is_err());
+    assert!(V1::extract_time("25:00:00").is_err());
+    assert!(V1::extract_time("10:00 XM").is_err());
+  }
+
+  #[test]
+  fn categories() {
+    assert_eq!(V1::extract_category("Day 1 16:34:00 PM").as_deref(), Some("Day 1"));
+    assert_eq!(V1::extract_category("9:40 AM"), None);
+  }
+
+  #[test]
+  fn test_imports_still_parse() {
+    for csv in [
+      include_str!("../../../test_imports/single_day.csv"),
+      include_str!("../../../test_imports/multi_day.csv"),
+    ] {
+      let schedule = V1::csv_to_tms_schedule(csv).unwrap();
+      assert!(!schedule.game_matches.is_empty());
+    }
   }
 }
